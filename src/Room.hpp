@@ -64,18 +64,25 @@ public:
 		return true;
 	}
 
-	// Returns a vector of the available rooms
-	std::vector<Room*> AvailableRoomList(){
-		std::vector<Room*> Available;
-		if (North)
-			Available.push_back(North);
-		if (West)
-			Available.push_back(West);
-		if (South)
-			Available.push_back(South);
-		if (East)
-			Available.push_back(East);
-		return Available;
+	// Returns a string where
+	//std::vector<Room*> AvailableRoomList(){
+	std::string AvailableRoomString() {
+		std::string result = "";
+		//std::vector<Room*> Available;
+		if (!North)
+			result.push_back('N');
+			//Available.push_back(North);
+		if (!West)
+			result.push_back('W');
+			//Available.push_back(West);
+		if (!South)
+			result.push_back('S');
+			//Available.push_back(South);
+		if (!East)
+			result.push_back('E');
+			//Available.push_back(East);
+		//return Available;
+		return result;
 	}
 
 };

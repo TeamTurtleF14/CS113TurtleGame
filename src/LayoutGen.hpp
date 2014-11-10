@@ -8,6 +8,8 @@
 #define LAYOUTGEN_HPP_
 
 #include "Room.hpp"
+#include <vector>
+#include <utility>	// std::pair, std::make_pair
 
 class LayoutGen {
 	int NumRooms;	// # of rooms for entire level
@@ -15,11 +17,15 @@ class LayoutGen {
 	int AdditionalRooms;	// # of rooms outside of Crit Path
 	int SidePathRooms;		// # of rooms are on the sides, leads to dead ends
 	int CircularPathRooms;	// # of rooms that are part of a circle, leads back to self
+	std::vector< std::pair<int, int> > RoomCoords;	// coordinates for layout generation
 	Room* HeadRoom;
 
 public:
 
 	LayoutGen(int AdditionalRooms);	// Creates total rooms, will add to NumRooms here
+
+	// Creates the critical path, in a set of coords
+	std::vector<std::pair<int, int> > CriticalPathGen();
 
 	void extendRooms(Room* Head);	// Attaches rooms, starting at first room
 
