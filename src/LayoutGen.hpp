@@ -35,6 +35,12 @@ public:
 	// creates the CriticalPath()
 	void generateCriticalPath();
 
+	// adds on the SidePaths
+	void generateSidePaths();
+
+	// adds on more rooms that will become a circular path
+	void generateCircularPaths();
+
 	Room* getHeadRoom();	// Returns room pointer to starting room
 
 

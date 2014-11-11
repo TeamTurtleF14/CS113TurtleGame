@@ -85,6 +85,7 @@ void LayoutGen::extendRooms(Room* current) {
 
 }
 
+
 // Will add Rooms based on Coordinates
 // the coords will be x and y, (1,0) will be a room to the west
 // and (-1, 0) will be a room to the east
@@ -116,6 +117,16 @@ void LayoutGen::generateCriticalPath(){
 		}
 		current = next;	// set current pointer to next
 	}
+}
+
+void LayoutGen::generateSidePaths(){
+
+	return;
+}
+
+void LayoutGen::generateCircularPaths(){
+
+	return;
 }
 
 // returns a Room*. pointer that points to first room, has references to other rooms if any

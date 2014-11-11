@@ -13,8 +13,6 @@
 #include <vector>
 #include <map>
 
-enum Type{EmptyRoom, isRoom};	// declare enumeration for checking rooms
-
 class Room{
 private:
 
