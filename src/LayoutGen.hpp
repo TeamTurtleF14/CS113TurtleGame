@@ -38,8 +38,6 @@ public:
 	Room* getHeadRoom();	// Returns room pointer to starting room
 
 
-
-
 };
 
 
