@@ -18,13 +18,18 @@ enum Type{EmptyRoom, isRoom};	// declare enumeration for checking rooms
 class Room{
 private:
 
+//	Room* North;
+//	Room* South;
+//	Room* West;
+//	Room* East;
+	std::map<const char, int> RoomDir;
+
+public:
+
 	Room* North;
 	Room* South;
 	Room* West;
 	Room* East;
-	std::map<const char, int> RoomDir;
-
-public:
 
 	Room()
 	:North(NULL), South(NULL), West(NULL), East(NULL)

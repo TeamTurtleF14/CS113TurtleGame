@@ -22,12 +22,18 @@ class LayoutGen {
 
 public:
 
-	LayoutGen(int AdditionalRooms);	// Creates total rooms, will add to NumRooms here
+	LayoutGen();	// Creates total rooms, will add to NumRooms here
 
 	// Creates the critical path, in a set of coords
 	std::vector<std::pair<int, int> > CriticalPathGen();
 
+	// helper function, checks to see if a pair is already in the Coordinate list
+	bool isinCoords(std::pair<int, int>);
+
 	void extendRooms(Room* Head);	// Attaches rooms, starting at first room
+
+	// creates the CriticalPath()
+	void generateCriticalPath();
 
 	Room* getHeadRoom();	// Returns room pointer to starting room
 
