@@ -120,11 +120,21 @@ void LayoutGen::generateCriticalPath(){
 }
 
 void LayoutGen::generateSidePaths(){
-
+	for (unsigned int i = 0; i < SidePathRooms; i++){
+		Room* current = HeadRoom;
+		bool assigned = false;
+		while (!assigned){
+			;// until another room is added on, assigned == false
+		}
+	}
 	return;
 }
 
 void LayoutGen::generateCircularPaths(){
+	// it'd be easiest if circular path rooms variable was always an even number
+	// go through headroom node
+	// stop, randomly, on one of the nodes
+	// determine how far forward from there the circular path will extend forward,
 
 	return;
 }

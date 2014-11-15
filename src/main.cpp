@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 int main()
 {
@@ -18,6 +19,9 @@ int main()
         window.clear();
         window.draw(shape);
         window.display();
+//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+//        	std::cout << "Left" << std::endl;
+//        }
     }
 
     return 0;
