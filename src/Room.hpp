@@ -28,9 +28,10 @@ public:
 	Room* South;
 	Room* West;
 	Room* East;
+	bool isEnd;
 
-	Room()
-	:North(NULL), South(NULL), West(NULL), East(NULL)
+	Room(bool end=false)
+	:North(NULL), South(NULL), West(NULL), East(NULL), isEnd(end)
 	{
 		RoomDir.insert(std::pair<const char, int>('N', 0));
 		RoomDir.insert(std::pair<const char, int>('W', 1));

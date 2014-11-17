@@ -19,6 +19,7 @@ class LayoutGen {
 	int CircularPathRooms;	// # of rooms that are part of a circle, leads back to self
 	std::vector< std::pair<int, int> > RoomCoords;	// coordinates for layout generation
 	Room* HeadRoom;
+	std::vector<Room*> RoomContainer; 		// Used to hold references to all Room* for deletion
 
 public:
 
@@ -41,7 +42,12 @@ public:
 	// adds on more rooms that will become a circular path
 	void generateCircularPaths();
 
+	// find a viable starting point for the circular paths
+	Room* findCircularPathStart();
+
 	Room* getHeadRoom();	// Returns room pointer to starting room
+
+	std::vector<Room*> getRoomList();	//Returns room list, makes for easy deletion
 
 
 };
