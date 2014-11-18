@@ -1,5 +1,5 @@
 /*
- * LayoutGen.cpp
+a * LayoutGen.cpp
  * Source file for LayoutGen.hpp
  * A class that will create the layout for the maze, can return the layout in the form of rooms
  *  Created on: Nov 8, 2014
