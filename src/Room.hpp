@@ -69,6 +69,19 @@ public:
 		return true;
 	}
 
+	std::vector<Room*> AvailableRoomVector(){
+		std::vector<Room*> result;
+		if (!North)
+			result.push_back(North);
+		if (!West)
+			result.push_back(West);
+		if (!South)
+			result.push_back(South);
+		if (!East)
+			result.push_back(East);
+		return result;
+	}
+
 	// Returns a string where each char represents an available room
 	//std::vector<Room*> AvailableRoomList(){
 	std::string AvailableRoomString() {
@@ -91,7 +104,18 @@ public:
 	}
 
 	// Change to returning a vector<Room*> instead of string????
-
+	std::vector<Room*> OccupiedRoomVector(){
+		std::vector<Room*> result;
+		if (North!=NULL)
+			result.push_back(North);
+		if (West!=NULL)
+			result.push_back(West);
+		if (South!=NULL)
+			result.push_back(South);
+		if (East!=NULL)
+			result.push_back(East);
+		return result;
+	}
 	// Returns a string where each character represents an occupied room
 	std::string OccupiedRoomString(){
 		std::string result = "";
