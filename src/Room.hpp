@@ -12,6 +12,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <stdexcept>
 
 class Room{
 private:
@@ -68,7 +69,7 @@ public:
 		return true;
 	}
 
-	// Returns a string where
+	// Returns a string where each char represents an available room
 	//std::vector<Room*> AvailableRoomList(){
 	std::string AvailableRoomString() {
 		std::string result = "";
@@ -87,6 +88,38 @@ public:
 			//Available.push_back(East);
 		//return Available;
 		return result;
+	}
+
+	// Change to returning a vector<Room*> instead of string????
+
+	// Returns a string where each character represents an occupied room
+	std::string OccupiedRoomString(){
+		std::string result = "";
+		if (North!=NULL)
+			result.push_back('N');
+		if (West!=NULL)
+			result.push_back('W');
+		if (South!=NULL)
+			result.push_back('S');
+		if (East!=NULL)
+			result.push_back('E');
+		return result;
+	}
+
+	// A get function based on chars
+	Room* getFromChar(char direction){
+		switch (direction){
+		case 'N':
+			return North;
+		case 'W':
+			return West;
+		case 'S':
+			return South;
+		case 'E':
+			return East;
+		default:
+			throw std::invalid_argument("Invalid Direction Received");
+		}
 	}
 
 };

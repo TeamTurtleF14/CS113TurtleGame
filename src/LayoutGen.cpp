@@ -71,10 +71,31 @@ std::vector<std::pair<int, int> > LayoutGen::CriticalPathGen() {
 ///////////////////////////////////// END CriticalPathGen
 
 
+bool LayoutGen::isinCriticalPath(Room* current){
+	return false;
+}
+
+
+bool LayoutGen::roomForwardCheck(Room* current, int forward){
+	for (int i = 0; i < forward; i++){
+
+	}
+	return true;
+}
+
 
 bool LayoutGen::isinCoords(std::pair<int, int> pair){
 	for (unsigned int i = 0; i < RoomCoords.size(); i++){
 		if (RoomCoords[i].first==pair.first && RoomCoords[i].second==pair.second){
+			return true;
+		}
+	}
+	return false;
+}
+
+bool LayoutGen::isinCoords(int x, int y){
+	for (unsigned int i = 0; i < RoomCoords.size(); i++){
+		if (RoomCoords[i].first==x && RoomCoords[i].second==y){
 			return true;
 		}
 	}
@@ -149,14 +170,8 @@ void LayoutGen::generateSidePaths(){
 }
 
 void LayoutGen::generateCircularPaths(){
-	// it'd be easiest if circular path rooms variable was always an even number
-	// go through headroom node
-	// stop, randomly, on one of the nodes
-	// determine how far forward from there the circular path will extend forward,
-	// only go forward (circular path rooms)/2, then just choose a side that is also free
-	// for (circular path rooms)/2
-
-
+	int start = rand()%((RoomContainer.size()- 4) + 1);		// - 4 to make far from end, +1 to avoid start
+	for (int i = start; i < )
 
 	return;
 }
@@ -164,7 +179,17 @@ void LayoutGen::generateCircularPaths(){
 
 // will find the start of a viable circular path, searches through coordinates list
 Room* LayoutGen::findCircularPathStart(){
-
+//	unsigned int counter = 0;
+//	while (counter != CircularPathRooms){
+//		int index = rand()%(RoomCoords.size()-1)+1;
+//		std::pair<int, int> current = RoomCoords[index];
+//		counter++;
+//		for (unsigned int i = 1; i < CircularPathRooms; i++){
+//			if (RoomCoords[index+i].first==RoomCoords[index + i - 1].first){
+//
+//			}
+//		}
+//	}
 }
 
 

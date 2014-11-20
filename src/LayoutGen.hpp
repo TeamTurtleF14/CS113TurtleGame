@@ -28,8 +28,21 @@ public:
 	// Creates the critical path, in a set of coords
 	std::vector<std::pair<int, int> > CriticalPathGen();
 
+	// Checks to see if there are 'forward' rooms ahead, without reaching end
+	bool roomForwardCheck(Room* current, int forward);
+
+	// Helper function, translates directions where previous room was in relation to current
+	// EX: go North into a new room, you came into new room from South
+	char incomingDirection(Room* prev, Room* current);
+
+	// returns true, if a room is within the critical path
+	bool isinCriticalPath(Room* current);
+
 	// helper function, checks to see if a pair is already in the Coordinate list
 	bool isinCoords(std::pair<int, int>);
+
+	// This versions takes in integer inputs
+	bool isinCoords(int x, int y);
 
 	void extendRooms(Room* Head);	// Attaches rooms, starting at first room
 
