@@ -29,7 +29,7 @@ public:
 	std::vector<std::pair<int, int> > CriticalPathGen();
 
 	// Checks to see if there are 'forward' rooms ahead, without reaching end
-	bool roomForwardCheck(Room* current, int forward);
+	bool roomForwardCheck(Room* start, Room* next, int forward);
 
 	// Helper function, translates directions where previous room was in relation to current
 	// EX: go North into a new room, you came into new room from South

@@ -42,19 +42,19 @@ public:
 
 	// sets the next room
 	void setNext(Room* newRoom, char Direction) {
-		switch (RoomDir[Direction])
+		switch (Direction)
 		{
-		case 0:
+		case 'N':
 			North = newRoom;
 			break;
-		case 1:
-			West = newRoom;
+		case 'E':
+			East = newRoom;
 			break;
-		case 2:
+		case 'S':
 			South = newRoom;
 			break;
-		case 3:
-			East = newRoom;
+		case 'W':
+			West = newRoom;
 			break;
 		default:
 			std::cout << "Error: Did not set Next Correctly" << std::endl;
@@ -68,6 +68,8 @@ public:
 			return false;
 		return true;
 	}
+
+	std::string
 
 	std::vector<Room*> AvailableRoomVector(){
 		std::vector<Room*> result;
@@ -144,6 +146,59 @@ public:
 		default:
 			throw std::invalid_argument("Invalid Direction Received");
 		}
+	}
+
+	// Returns the direction that the second is related to first by
+	// Returns '' if the two rooms are not related
+	char getRoomDirection(Room* second){
+		if (North == second)
+			return 'N';
+		if (East == second)
+			return 'E';
+		if (South == second)
+			return 'S';
+		if (West == second)
+			return 'W';
+		return ' ';
+	}
+
+	char OppositeDirection(char direction){
+		switch (direction){
+		case 'N':
+			return 'S';
+		case 'E':
+			return 'W';
+		case 'S':
+			return 'N';
+		case 'W':
+			return 'E';
+		default:
+			return '';
+		}
+	}
+
+	// Returns a true is the direction is adjacent to the direction and open
+	std::string AdjacentDirections(char direction){
+		switch (direction){
+		case 'N':
+			return "WE";
+		case 'E':
+			return "NS";
+		case 'S':
+			return "EW";
+		case 'W':
+			return "NS";
+		default:
+			return "";
+		}
+	}
+
+	// Checks char representation for room, sees if available
+	bool isAvailable(char room){
+		if (getFromChar(room)==NULL)
+			return true;
+		else
+			return false;
 	}
 
 };

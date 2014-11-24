@@ -9,6 +9,7 @@
 #include "LayoutGen.hpp"
 #include <vector>
 #include <stdlib.h>
+#include <algorithm>
 
 // LayoutGen constructor
 LayoutGen::LayoutGen() {
@@ -75,10 +76,25 @@ bool LayoutGen::isinCriticalPath(Room* current){
 	return false;
 }
 
-
-bool LayoutGen::roomForwardCheck(Room* current, int forward){
-	for (int i = 0; i < forward; i++){
-
+// This function assumes the layout is still in the critical path phase, so
+// 2 doors, 1 goes towards start, 1 goes towards end
+// NEEDS a DIRECTION
+bool LayoutGen::roomForwardCheck(Room* start, Room* next, int forward){
+	Room* current = next;
+	Room* prev = start;
+	for (int i = 1; i < forward; i++){
+		std::vector<Room*> tempContainer = current->OccupiedRoomVector();
+		if (current->isEnd)
+			return false;
+		for (int j = 0; j < tempContainer.size()-1; j++){
+			if (tempContainer[j]==prev){
+				;
+			}
+			else{
+				prev = current;
+				current = tempContainer[j];
+			}
+		}
 	}
 	return true;
 }
@@ -153,7 +169,7 @@ void LayoutGen::generateCriticalPath(){
 		}
 		current = next;	// set current pointer to next
 	}
-
+	current->isEnd = true;		// Gives the last Room a signal that says it is the end room
 }
 
 
@@ -170,13 +186,76 @@ void LayoutGen::generateSidePaths(){
 }
 
 void LayoutGen::generateCircularPaths(){
-	int start = rand()%((RoomContainer.size()- 4) + 1);		// - 4 to make far from end, +1 to avoid start
-	for (int i = start; i < )
+	int start = rand()%((RoomContainer.size()- 4) + 1);	// - 4 to make far from end, +1 to avoid start
+	Room* mainPath;
+	Room* addPathPrev;
+	Room* addPathNext;
+	std::vector<Room*> AvailableRooms;
+	int random;
+	int CircularLimit = CircularPathRooms/2;
 
+	while (true){
+		if (roomForwardCheck(RoomContainer[start], RoomContainer[start+1], CircularPathRooms/2)){
+			mainPath = RoomContainer[start];
+			AvailableRooms = mainPath->AvailableRoomVector();
+			random = rand() %(AvailableRooms.size());
+			addPathPrev = new Room();
+
+			std::string available = mainPath->AdjacentDirections(mainPath->getRoomDirection(RoomContainer[start+1]));
+			std::random_shuffle(available.begin(), available.end());
+			mainPath->setNext(addPathPrev, available[0]);		// Here, add one to side, adjacent to path towards end
+			RoomContainer.push_back(addPathPrev);
+
+			for (int i = 0; i < CircularLimit; i++){
+				// Follows the main paths' directions
+				mainPath = RoomContainer[start + i];
+				addPathNext = new Room();
+				addPathPrev->setNext(addPathNext, mainPath->getRoomDirection(RoomContainer[start+i+1]));
+				addPathNext->setNext(addPathPrev, RoomContainer[start+i+1]->getRoomDirection(mainPath));
+				RoomContainer.push_back(addPathNext);
+				addPathPrev = addPathNext;
+
+				// If the ending room reached of the circular limit is not reachable from the side,
+				// then keep going
+//				if (i==(CircularLimit - 1))
+//					if (!(RoomContainer[start + i + 1]->isAvailable(available[0])))
+//						CircularLimit++;
+			}
+			int incre = 0;
+			int decre = 0;
+			while (true){
+				mainPath = RoomContainer[start + CircularLimit];
+				if (mainPath->isAvailable(available[0])&addPathPrev->isAvailable(OppositeDirection(available[0]))){
+					addPathPrev->setNext(mainPath, OppositeDirection(available[0]));
+					mainPath->setNext(addPathPrev, available[0]);
+				} else {
+					;
+					/// instead, go through options and try to connect to rooms
+					/// if not then move down the main path
+				}
+			}
+
+		} else{
+			start = rand()%((RoomContainer.size() - 4) + 1);
+		}
+	}
 	return;
 }
 
-
+char OppositeDirection(char direction){
+	switch (direction){
+	case 'N':
+		return 'S';
+	case 'E':
+		return 'W';
+	case 'S':
+		return 'N';
+	case 'W':
+		return 'E';
+	default:
+		return '';
+	}
+}
 // will find the start of a viable circular path, searches through coordinates list
 Room* LayoutGen::findCircularPathStart(){
 //	unsigned int counter = 0;
