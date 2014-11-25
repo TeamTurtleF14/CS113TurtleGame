@@ -69,7 +69,6 @@ public:
 		return true;
 	}
 
-	std::string
 
 	std::vector<Room*> AvailableRoomVector(){
 		std::vector<Room*> result;
@@ -200,6 +199,7 @@ public:
 		else
 			return false;
 	}
+
 
 };
 

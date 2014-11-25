@@ -215,12 +215,8 @@ void LayoutGen::generateCircularPaths(){
 				RoomContainer.push_back(addPathNext);
 				addPathPrev = addPathNext;
 
-				// If the ending room reached of the circular limit is not reachable from the side,
-				// then keep going
-//				if (i==(CircularLimit - 1))
-//					if (!(RoomContainer[start + i + 1]->isAvailable(available[0])))
-//						CircularLimit++;
 			}
+			// Section below to connect the end of the add path back to main
 			int incre = 0;
 			int decre = 0;
 			while (true){
@@ -228,10 +224,21 @@ void LayoutGen::generateCircularPaths(){
 				if (mainPath->isAvailable(available[0])&addPathPrev->isAvailable(OppositeDirection(available[0]))){
 					addPathPrev->setNext(mainPath, OppositeDirection(available[0]));
 					mainPath->setNext(addPathPrev, available[0]);
+					break;
 				} else {
-					;
-					/// instead, go through options and try to connect to rooms
-					/// if not then move down the main path
+					std::string main = mainPath->AvailableRoomString();
+					bool roomSet = false;
+					for (int i = 0; i < main.size(); i++){
+						if (addPathPrev->isAvailable(OppositeDirection(main[i]))){
+							addPathPrev->setNext(mainPath, OppositeDirection(main[i]));
+							mainPath->setNext(addPathPrev, main[i]);
+							roomSet = true;
+						}
+						if (roomSet)
+							break;
+					}
+					if (roomSet)
+						break;
 				}
 			}
 
@@ -257,7 +264,8 @@ char OppositeDirection(char direction){
 	}
 }
 // will find the start of a viable circular path, searches through coordinates list
-Room* LayoutGen::findCircularPathStart(){
+//Room* LayoutGen::findCircularPathStart(){
+
 //	unsigned int counter = 0;
 //	while (counter != CircularPathRooms){
 //		int index = rand()%(RoomCoords.size()-1)+1;
@@ -269,7 +277,7 @@ Room* LayoutGen::findCircularPathStart(){
 //			}
 //		}
 //	}
-}
+//}
 
 
 // returns a Room*. pointer that points to first room, has references to other rooms if any
