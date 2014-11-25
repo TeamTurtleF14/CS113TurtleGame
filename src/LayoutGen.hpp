@@ -58,6 +58,9 @@ public:
 	// find a viable starting point for the circular paths
 	Room* findCircularPathStart();
 
+	// Helper function to help simplify getting directions from string
+	char OppositeDirection(char direction);
+
 	Room* getHeadRoom();	// Returns room pointer to starting room
 
 	std::vector<Room*> getRoomList();	//Returns room list, makes for easy deletion

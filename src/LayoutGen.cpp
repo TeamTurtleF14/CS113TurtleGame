@@ -86,7 +86,7 @@ bool LayoutGen::roomForwardCheck(Room* start, Room* next, int forward){
 		std::vector<Room*> tempContainer = current->OccupiedRoomVector();
 		if (current->isEnd)
 			return false;
-		for (int j = 0; j < tempContainer.size()-1; j++){
+		for (int j = 0; j < (int)(tempContainer.size())-1; j++){
 			if (tempContainer[j]==prev){
 				;
 			}
@@ -136,6 +136,7 @@ void LayoutGen::extendRooms(Room* current) {
 // and (-1, 0) will be a room to the east
 void LayoutGen::generateCriticalPath(){
 	Room* current = HeadRoom;
+	current->isEnd = true;
 	RoomContainer.push_back(current);
 	Room* next;
 	for (unsigned int i = 1; i < RoomCoords.size(); i++){
@@ -175,11 +176,37 @@ void LayoutGen::generateCriticalPath(){
 
 
 void LayoutGen::generateSidePaths(){
-	for (unsigned int i = 0; i < SidePathRooms; i++){
-		Room* current = HeadRoom;
-		bool assigned = false;
-		while (!assigned){
-			;// until another room is added on, assigned == false
+	bool assigned = false;		// serves as a flag
+	Room* addRoom;				// initialize new rooms
+	Room* addRoomNext;
+	Room* current;
+	int random;					// random int, goes into RoomContainer randomly to add rooms
+	for (int i = 0; i < SidePathRooms; i++){
+		addRoom = new Room();
+		random = rand()%(RoomContainer.size())-1;
+		current = RoomContainer[random];
+		if (current->isEnd){
+			i--;
+		} else if (!(current->checkAvailable())){
+			i--;
+		} else{
+			std::string available = current->AvailableRoomString();
+			std::random_shuffle(available.begin(), available.end());
+			current->setNext(addRoom, available[0]);
+			addRoom->setNext(current, OppositeDirection(available[0]));
+			random = rand()% 2;
+			while (random){
+				available = addRoom->AvailableRoomString();
+				std::random_shuffle(available.begin(), available.end());
+				addRoomNext = new Room();
+				addRoom->setNext(addRoomNext, available[0]);
+				addRoomNext->setNext(addRoom, OppositeDirection(available[0]));
+				i++;
+				if (i>=SidePathRooms)
+					break;
+				else
+					random = rand()%2;
+			}
 		}
 	}
 	return;
@@ -217,8 +244,6 @@ void LayoutGen::generateCircularPaths(){
 
 			}
 			// Section below to connect the end of the add path back to main
-			int incre = 0;
-			int decre = 0;
 			while (true){
 				mainPath = RoomContainer[start + CircularLimit];
 				if (mainPath->isAvailable(available[0])&addPathPrev->isAvailable(OppositeDirection(available[0]))){
@@ -249,7 +274,7 @@ void LayoutGen::generateCircularPaths(){
 	return;
 }
 
-char OppositeDirection(char direction){
+char LayoutGen::OppositeDirection(char direction){
 	switch (direction){
 	case 'N':
 		return 'S';
@@ -259,8 +284,8 @@ char OppositeDirection(char direction){
 		return 'N';
 	case 'W':
 		return 'E';
-	default:
-		return '';
+//	default:
+//		return ' ';
 	}
 }
 // will find the start of a viable circular path, searches through coordinates list
