@@ -35,8 +35,8 @@ public:
 	// EX: go North into a new room, you came into new room from South
 	char incomingDirection(Room* prev, Room* current);
 
-	// returns true, if a room is within the critical path
-	bool isinCriticalPath(Room* current);
+//	// returns true, if a room is within the critical path
+//	bool isinCriticalPath(Room* current);
 
 	// helper function, checks to see if a pair is already in the Coordinate list
 	bool isinCoords(std::pair<int, int>);
@@ -54,9 +54,6 @@ public:
 
 	// adds on more rooms that will become a circular path
 	void generateCircularPaths();
-
-	// find a viable starting point for the circular paths
-	Room* findCircularPathStart();
 
 	// Helper function to help simplify getting directions from string
 	char OppositeDirection(char direction);
