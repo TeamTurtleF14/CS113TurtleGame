@@ -296,8 +296,8 @@ char LayoutGen::OppositeDirection(char direction){
 		return 'N';
 	case 'W':
 		return 'E';
-//	default:
-//		return ' ';
+	default:
+		return ' ';
 	}
 }
 

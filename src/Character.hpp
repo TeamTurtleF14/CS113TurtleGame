@@ -10,19 +10,14 @@
 #define SRC_CHARACTER_HPP_
 
 #include <utility>
-<<<<<<< HEAD
-=======
 #include <string>
->>>>>>> origin/sani
 
 class Character
 {
 private:
 	unsigned int HitPoints;
-<<<<<<< HEAD
 	float Speed;
 	unsigned int Attack;
-=======
 	unsigned int HitPointsMax;
 	unsigned int ShieldPoints;
 	unsigned int ShieldPointsMax;
@@ -40,7 +35,6 @@ private:
 	float AbilityCooldown3Max;
 	float AbilityCooldown4Current;
 	float AbilityCooldown4Max;
->>>>>>> origin/sani
 
 public:
 	std::pair<int, int> Coordinates;	// Stores current position (X, Y) of the character
