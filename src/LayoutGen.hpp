@@ -25,6 +25,8 @@ public:
 
 	LayoutGen();	// Creates total rooms, will add to NumRooms here
 
+	~LayoutGen();	// Destructor
+
 	// Creates the critical path, in a set of coords
 	std::vector<std::pair<int, int> > CriticalPathGen();
 
@@ -57,6 +59,9 @@ public:
 
 	// Helper function to help simplify getting directions from string
 	char OppositeDirection(char direction);
+
+
+	// Functions below are for outside calls
 
 	Room* getHeadRoom();	// Returns room pointer to starting room
 

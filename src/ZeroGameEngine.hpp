@@ -11,23 +11,48 @@
 #define SRC_ZEROGAMEENGINE_HPP_
 
 #include "LayoutGen.hpp"
+#include <SFML/Graphics.hpp>
 
+namespace ZGE
+{
 
 class ZeroGameEngine {
 
+	LayoutGen* LayoutMaker;
+	Room* Headroom;
+	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting};
+	static GameState _gameState;
+	static sf::RenderWindow _mainWindow;
+
+public:
+
+	// Constructor
+	ZeroGameEngine();
+
+	// Destructor
+	~ZeroGameEngine();
+
+	// Starts the game and enters the main loop
+	static void Start();
+
+	// Returns bool that signals if game is ending
+	static bool isExiting();
+
+	// Main Game loop
+	static void GameLoop();
+
 	// Update the gui, will need to take positions from the characters
 	void UpdateFrame();
-
-	// Takes the LayoutGen, produces a layout for the GUI, from LayoutGen
-	void GenerateLayout();
 
 	// Takes a room and displays its content
 	void DisplayRoom(Room* current);
 
 	// Display HUD: Health Bar, enemy highlighting, etc.
 	void DisplayHUD();
+
+
 };
 
-
+} // namespace ZGE
 
 #endif /* SRC_ZEROGAMEENGINE_HPP_ */

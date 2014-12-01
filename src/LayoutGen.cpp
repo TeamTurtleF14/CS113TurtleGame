@@ -22,10 +22,19 @@ LayoutGen::LayoutGen() {
 
 	// Start the layout generation process
 	std::vector<std::pair<int, int> > RoomCoords = CriticalPathGen();
-	Room* HeadRoom = new Room();		// This starts as the head room
-	std::vector<Room*> RoomContainer;
-	RoomContainer.push_back(HeadRoom);
-	extendRooms(HeadRoom);
+	HeadRoom = new Room();				// This starts as the head room
+	std::vector<Room*> RoomContainer;	// Contains all the rooms that will be created
+	RoomContainer.push_back(HeadRoom);	// Adds headroom into the vector
+	extendRooms(HeadRoom);				// adds the Circular/Side Paths
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+// Need to confirm, is this needed?
+LayoutGen::~LayoutGen(){
+	for (unsigned int i = 0; i < RoomContainer.size(); i++){
+		delete RoomContainer[i];
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
