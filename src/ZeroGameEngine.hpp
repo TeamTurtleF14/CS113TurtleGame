@@ -23,6 +23,8 @@ class ZeroGameEngine {
 	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting};
 	static GameState _gameState;
 	static sf::RenderWindow _mainWindow;
+	static std::string Doors;
+	static std::vector<sf::Sprite> SpriteList;
 
 public:
 
@@ -40,6 +42,9 @@ public:
 
 	// Main Game loop
 	static void GameLoop();
+
+	// Takes a character, N | E | S | W , does what is necessary to display that door
+	void DisplayDoors(char Direction);
 
 	// Update the gui, will need to take positions from the characters
 	void UpdateFrame();

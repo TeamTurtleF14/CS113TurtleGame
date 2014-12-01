@@ -11,7 +11,8 @@
 namespace ZGE
 {
 
-ZeroGameEngine::GameState ZeroGameEngine::_gameState = Uninitialized;
+//ZeroGameEngine::GameState ZeroGameEngine::_gameState = Uninitialized;
+ZeroGameEngine::GameState ZeroGameEngine::_gameState = MainMenu;
 sf::RenderWindow ZeroGameEngine::_mainWindow;
 
 // Constructor
@@ -33,7 +34,7 @@ void ZeroGameEngine::Start(){
 		return;
 
 	_mainWindow.create(sf::VideoMode(1080, 720), "The Zeroth Law");
-	_gameState = ZeroGameEngine::Playing;
+	_gameState = ZeroGameEngine::MainMenu;
 
 	while (!isExiting()){
 		// While there is no exit signal, go into the game loop
@@ -55,14 +56,53 @@ bool ZeroGameEngine::isExiting(){
 // The main game loop, called by Start()
 void ZeroGameEngine::GameLoop(){
 	sf::Event currentEvent;
+	sf::Texture Background;
+	Background.setRepeated(true);
+	sf::Sprite BG;
 	while (_mainWindow.pollEvent(currentEvent)){
+//		enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting};
+		switch (_gameState){
+		case ZeroGameEngine::Uninitialized:
+			// Should never reach this point
+			// Should never be Uninitialized going into the GameLoop
+			break;
+		case ZeroGameEngine::MainMenu:
+			// Display the mainmenu stuff
+			if (!Background.loadFromFile("src/Images/MainMenu.jpg"))
+				return;
+			BG.setTexture(Background);
+			BG.setTextureRect(sf::IntRect(0, 0, 1024, 768));
 
+			break;
+		case ZeroGameEngine::Playing:
+			// Do game stuff hereeeeee
+			break;
+		case ZeroGameEngine::Paused:
+			// Pause the game. What should we display?
+			break;
+		case ZeroGameEngine::Exiting:
+			// Exit the game here?
+			return;
+
+		}
+		//_mainWindow.update()?
+		_mainWindow.clear();
+		_mainWindow.draw(BG);
+		_mainWindow.display;
+		return;
 	}
+}
+
+// Takes a char direction Does stuff to display the doors
+void ZeroGameEngine::DisplayDoors(char Direction){
+
 }
 
 // Updates what is seen in the window
 void ZeroGameEngine::UpdateFrame(){
-
+	_mainWindow.clear();
+//	_mainWindow.draw();
+	_mainWindow.display();
 }
 
 
