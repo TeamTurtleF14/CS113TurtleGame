@@ -15,6 +15,9 @@
 class Character
 {
 private:
+
+	//Space Marine, Monster character variables.
+
 	unsigned int HitPoints;
 	float Speed;
 	unsigned int Attack;
@@ -27,6 +30,8 @@ private:
 	unsigned int Armor;
 	float InvulnerablityTime;
 
+	//Space Marine character Variables.
+
 	float AbilityCooldown1Current;
 	float AbilityCooldown1Max;
 	float AbilityCooldown2Current;
@@ -35,6 +40,19 @@ private:
 	float AbilityCooldown3Max;
 	float AbilityCooldown4Current;
 	float AbilityCooldown4Max;
+
+	//AI-specific character variables.
+
+	float Energy;
+	float EnergyMaximum;
+	float EnergyRechargeRate;
+
+
+	//Variables that dictate the direction that the Character is facing and moving.
+	std::string DirectionFacing;
+	std::string DirectionMoving;
+
+
 
 public:
 	std::pair<int, int> Coordinates;	// Stores current position (X, Y) of the character
@@ -46,6 +64,26 @@ public:
 	int getY(){
 		return Coordinates.second;
 	}
+
+	char getDirectionFacing(){
+		return DirectionFacing;
+	}
+
+	char getDirectionMoving(){
+		return DirectionMoving;
+	}
+
+	//Take a string from either inputs or from the AI and dictate the directionFacing and directionMoving.
+	//Inputs are: 'N', 'E', 'W', 'S', 'NE', 'NW', 'SE', 'SW'
+	void setDirectionFacing(string Direction){
+		DirectionFacing = Direction
+	}
+
+	void setDirectionMoving(string Direction){
+		DirectionMoving = Direction
+	}
+
+
 };
 
 
