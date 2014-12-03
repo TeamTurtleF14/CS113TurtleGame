@@ -75,12 +75,12 @@ public:
 
 	//Take a string from either inputs or from the AI and dictate the directionFacing and directionMoving.
 	//Inputs are: 'N', 'E', 'W', 'S', 'NE', 'NW', 'SE', 'SW'
-	void setDirectionFacing(string Direction){
-		DirectionFacing = Direction
+	void setDirectionFacing(std::string Direction){
+		DirectionFacing = Direction;
 	}
 
-	void setDirectionMoving(string Direction){
-		DirectionMoving = Direction
+	void setDirectionMoving(std::string Direction){
+		DirectionMoving = Direction;
 	}
 
 
