@@ -17,24 +17,27 @@ sf::RenderWindow ZeroGameEngine::_mainWindow;
 
 // Constructor
 ZeroGameEngine::ZeroGameEngine(){
-	LayoutMaker = new LayoutGen();
-	Headroom = LayoutMaker->getHeadRoom();
+//	std::cout << "one" << std::endl;
+////	LayoutMaker = new LayoutGen();
+//	std::cout << "two" << std::endl;
+//	Headroom = LayoutMaker->getHeadRoom();
+	std::cout << "TESTING STILL, LayoutGen and code here (ZGE) needs work" << std::endl;
 }
 
 
 // Destructor
 ZeroGameEngine::~ZeroGameEngine(){
-	delete LayoutMaker;
+//	delete LayoutMaker;
 }
 
 // Starts the game
 void ZeroGameEngine::Start(){
 	// If the game has been Initialized already, return
-	if (_gameState != Uninitialized)
+	if (_gameState != MainMenu)
 		return;
 
 	_mainWindow.create(sf::VideoMode(1080, 720), "The Zeroth Law");
-	_gameState = ZeroGameEngine::MainMenu;
+//	_gameState = ZeroGameEngine::MainMenu;
 
 	while (!isExiting()){
 		// While there is no exit signal, go into the game loop
@@ -72,13 +75,22 @@ void ZeroGameEngine::GameLoop(){
 				return;
 			BG.setTexture(Background);
 			BG.setTextureRect(sf::IntRect(0, 0, 1024, 768));
-
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+					_gameState = Exiting;
+					break;
+//			     	std::cout << "Left" << std::endl;
+			}
 			break;
 		case ZeroGameEngine::Playing:
 			// Do game stuff hereeeeee
 			break;
 		case ZeroGameEngine::Paused:
 			// Pause the game. What should we display?
+			if (!Background.loadFromFile("src/Images/Pause.jpg"))
+				return;
+			BG.setTexture(Background);
+			BG.setTextureRect(sf::IntRect(0, 0, 1024, 768));
+
 			break;
 		case ZeroGameEngine::Exiting:
 			// Exit the game here?
@@ -88,7 +100,7 @@ void ZeroGameEngine::GameLoop(){
 		//_mainWindow.update()?
 		_mainWindow.clear();
 		_mainWindow.draw(BG);
-		_mainWindow.display;
+		_mainWindow.display();
 		return;
 	}
 }
