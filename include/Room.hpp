@@ -64,7 +64,7 @@ public:
 
 	// Checks to see if there are any available rooms
 	bool checkAvailable(){
-		if ((North!=NULL) && (West!=NULL) && (South!=NULL) && (East!=NULL))
+		if ((North!=NULL) && (East!=NULL) && (South!=NULL) && (West!=NULL))
 			return false;
 		return true;
 	}
@@ -74,12 +74,12 @@ public:
 		std::vector<Room*> result;
 		if (!North)
 			result.push_back(North);
-		if (!West)
-			result.push_back(West);
-		if (!South)
-			result.push_back(South);
 		if (!East)
 			result.push_back(East);
+		if (!South)
+			result.push_back(South);
+		if (!West)
+			result.push_back(West);
 		return result;
 	}
 
@@ -91,30 +91,30 @@ public:
 		if (!North)
 			result.push_back('N');
 			//Available.push_back(North);
-		if (!West)
-			result.push_back('W');
+		if (!East)
+			result.push_back('E');
 			//Available.push_back(West);
 		if (!South)
 			result.push_back('S');
 			//Available.push_back(South);
-		if (!East)
-			result.push_back('E');
+		if (!West)
+			result.push_back('W');
 			//Available.push_back(East);
 		//return Available;
 		return result;
 	}
 
-	// Change to returning a vector<Room*> instead of string????
+	// returns a vector containing all the available rooms
 	std::vector<Room*> OccupiedRoomVector(){
 		std::vector<Room*> result;
 		if (North!=NULL)
 			result.push_back(North);
-		if (West!=NULL)
-			result.push_back(West);
-		if (South!=NULL)
-			result.push_back(South);
 		if (East!=NULL)
 			result.push_back(East);
+		if (South!=NULL)
+			result.push_back(South);
+		if (West!=NULL)
+			result.push_back(West);
 		return result;
 	}
 	// Returns a string where each character represents an occupied room
@@ -122,12 +122,12 @@ public:
 		std::string result = "";
 		if (North!=NULL)
 			result.push_back('N');
-		if (West!=NULL)
-			result.push_back('W');
-		if (South!=NULL)
-			result.push_back('S');
 		if (East!=NULL)
 			result.push_back('E');
+		if (South!=NULL)
+			result.push_back('S');
+		if (West!=NULL)
+			result.push_back('W');
 		return result;
 	}
 
@@ -136,12 +136,12 @@ public:
 		switch (direction){
 		case 'N':
 			return North;
-		case 'W':
-			return West;
-		case 'S':
-			return South;
 		case 'E':
 			return East;
+		case 'S':
+			return South;
+		case 'W':
+			return West;
 		default:
 			throw std::invalid_argument("Invalid Direction Received");
 		}

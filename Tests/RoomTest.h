@@ -10,3 +10,6 @@
 //void twoEqualTest();
 //void setNextTest();
 //void isAvailableTest();
+//void StringTest();
+//void OccupiedRoomTest();
+//void getFromCharTest();
