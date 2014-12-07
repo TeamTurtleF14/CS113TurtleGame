@@ -15,7 +15,7 @@
 LayoutGen::LayoutGen() {
 	// Initialize some variables
 	int NumRooms = 20;	// # of rooms for entire level
-	int CriticalPathRooms = 10;	// # of rooms from from start to end, including entrance/exit
+	unsigned int CriticalPathRooms = 10;	// # of rooms from from start to end, including entrance/exit
 	int AdditionalRooms = NumRooms - CriticalPathRooms;	// # of rooms outside of Crit Path
 	int SidePathRooms = 6;		// # of rooms are on the sides, leads to dead ends
 	int CircularPathRooms = 4;	// # of rooms that are part of a circle, leads back to self
@@ -25,7 +25,10 @@ LayoutGen::LayoutGen() {
 	HeadRoom = new Room();				// This starts as the head room
 	std::vector<Room*> RoomContainer;	// Contains all the rooms that will be created
 	RoomContainer.push_back(HeadRoom);	// Adds headroom into the vector
-	extendRooms(HeadRoom);				// adds the Circular/Side Paths
+//	extendRooms(HeadRoom&, 0);				// adds the Circular/Side Paths
+	generateCriticalPath(RoomContainer, CriticalPathRooms, RoomCoords);
+//	generateCircularPaths(RoomContainer, SidePathRooms); // first, as it will be easier to create this first
+//	generateSidePaths(RoomContainer, CircularPathRooms);		// second, will extend wherever possible
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,26 +137,28 @@ bool LayoutGen::isinCoords(int x, int y){
 	return false;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-
-// member function to set up rooms with directions to other rooms
-// current = room to be added to
-void LayoutGen::extendRooms(Room* current) {
-//	if (!(current->checkAvailable()))
-//		return;
-	generateCriticalPath();
-	generateCircularPaths(); // first, as it will be easier to create this first
-	generateSidePaths();		// second, will extend wherever possible
-
-}
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//// member function to set up rooms with directions to other rooms
+//// current = room to be added to
+//void LayoutGen::extendRooms(std::vector<Room*> RoomContainer, int CritPathNum,
+//				std::vector<std::pair<int,int> > RoomCoords){
+////	if (!(current->checkAvailable()))
+////		return;
+//	generateCriticalPath(RoomContainer, CritPathNum, RoomCoords);
+////	generateCircularPaths(); // first, as it will be easier to create this first
+////	generateSidePaths();		// second, will extend wherever possible
+//
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////
 
 // Will add Rooms based on Coordinates
 // the coords will be x and y, (1,0) will be a room to the west
 // and (-1, 0) will be a room to the east
-void LayoutGen::generateCriticalPath(){
-	Room* current = HeadRoom;
+void LayoutGen::generateCriticalPath(std::vector<Room*> RoomContainer, int CritPathNum,
+									std::vector<std::pair<int,int> > RoomCoords){
+	Room* current = RoomContainer[0];
 	current->isEnd = true;
 	//RoomContainer.push_back(current);
 	Room* next;
@@ -192,7 +197,7 @@ void LayoutGen::generateCriticalPath(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-void LayoutGen::generateSidePaths(){
+void LayoutGen::generateSidePaths(std::vector<Room*> RoomContainer, int SidePathRooms){
 	bool assigned = false;		// serves as a flag
 	Room* addRoom;				// initialize new rooms
 	Room* addRoomNext;
@@ -231,7 +236,7 @@ void LayoutGen::generateSidePaths(){
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void LayoutGen::generateCircularPaths(){
+void LayoutGen::generateCircularPaths(std::vector<Room*> RoomContainer, int CircularPathRooms){
 	int start = rand()%((RoomContainer.size()- 4) + 1);	// - 4 to make far from end, +1 to avoid start
 	Room* mainPath;
 	Room* addPathPrev;

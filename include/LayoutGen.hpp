@@ -4,16 +4,17 @@
  * Creates room objects, attaches rooms properly when directed.
  */
 
-#ifndef LAYOUTGEN_HPP_
-#define LAYOUTGEN_HPP_
+#ifndef _LAYOUTGEN_HPP_
+#define _LAYOUTGEN_HPP_
 
 #include "Room.hpp"
 #include <vector>
 #include <utility>	// std::pair, std::make_pair
 
 class LayoutGen {
+private:
 	int NumRooms;	// # of rooms for entire level
-	int CriticalPathRooms;	// # of rooms from from start to end, including entrance/exit
+	unsigned int CriticalPathRooms;	// # of rooms from from start to end, including entrance/exit
 	int AdditionalRooms;	// # of rooms outside of Crit Path
 	int SidePathRooms;		// # of rooms are on the sides, leads to dead ends
 	int CircularPathRooms;	// # of rooms that are part of a circle, leads back to self
@@ -46,16 +47,18 @@ public:
 	// This versions takes in integer inputs
 	bool isinCoords(int x, int y);
 
-	void extendRooms(Room* Head);	// Attaches rooms, starting at first room
+	void extendRooms(std::vector<Room*> RoomContainer, int CritPathNum,
+					std::vector<std::pair<int,int> > RoomCoords);
 
 	// creates the CriticalPath()
-	void generateCriticalPath();
+	void generateCriticalPath(std::vector<Room*> RoomContainer, int CritPathNum,
+					std::vector<std::pair<int,int> > RoomCoords);
 
 	// adds on the SidePaths
-	void generateSidePaths();
+	void generateSidePaths(std::vector<Room*> RoomContainer, int SidePathRooms);
 
 	// adds on more rooms that will become a circular path
-	void generateCircularPaths();
+	void generateCircularPaths(std::vector<Room*> RoomContainer, int CircularPathRooms);
 
 	// Helper function to help simplify getting directions from string
 	char OppositeDirection(char direction);
@@ -72,4 +75,4 @@ public:
 
 
 
-#endif /* SRC_LAYOUTGEN_HPP_ */
+#endif /* _LAYOUTGEN_HPP_ */

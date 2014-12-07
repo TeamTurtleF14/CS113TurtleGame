@@ -6,8 +6,8 @@
  *      Author: Tony
  */
 
-#ifndef SRC_ROOM_HPP_
-#define SRC_ROOM_HPP_
+#ifndef ROOM_HPP_
+#define ROOM_HPP_
 
 #include <iostream>
 #include <vector>
