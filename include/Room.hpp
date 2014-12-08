@@ -57,7 +57,7 @@ public:
 			West = newRoom;
 			break;
 		default:
-			std::cout << "Error: Did not set Next Correctly" << std::endl;
+			std::cout << "Error: Direction "<<  Direction <<" Cannot Be Used" << std::endl;
 			break;
 		}
 	}
@@ -88,16 +88,16 @@ public:
 	std::string AvailableRoomString() {
 		std::string result = "";
 		//std::vector<Room*> Available;
-		if (!North)
+		if (North==NULL)
 			result.push_back('N');
 			//Available.push_back(North);
-		if (!East)
+		if (East==NULL)
 			result.push_back('E');
 			//Available.push_back(West);
-		if (!South)
+		if (South==NULL)
 			result.push_back('S');
 			//Available.push_back(South);
-		if (!West)
+		if (West==NULL)
 			result.push_back('W');
 			//Available.push_back(East);
 		//return Available;

@@ -12,9 +12,9 @@
 #include <utility>	// std::pair, std::make_pair
 
 class LayoutGen {
-private:
+public:
 	int NumRooms;	// # of rooms for entire level
-	unsigned int CriticalPathRooms;	// # of rooms from from start to end, including entrance/exit
+	int CriticalPathRooms;	// # of rooms from from start to end, including entrance/exit
 	int AdditionalRooms;	// # of rooms outside of Crit Path
 	int SidePathRooms;		// # of rooms are on the sides, leads to dead ends
 	int CircularPathRooms;	// # of rooms that are part of a circle, leads back to self
@@ -22,7 +22,6 @@ private:
 	Room* HeadRoom;
 	std::vector<Room*> RoomContainer; 		// Used to hold references to all Room* for deletion
 
-public:
 
 	LayoutGen();	// Creates total rooms, will add to NumRooms here
 
@@ -30,6 +29,8 @@ public:
 
 	// Creates the critical path, in a set of coords
 	std::vector<std::pair<int, int> > CriticalPathGen();
+
+	std::vector<std::pair<int,int> > CriticalPathGen(unsigned int CriticalPathRooms);
 
 	// Checks to see if there are 'forward' rooms ahead, without reaching end
 	bool roomForwardCheck(Room* start, Room* next, int forward);
@@ -50,15 +51,16 @@ public:
 	void extendRooms(std::vector<Room*> RoomContainer, int CritPathNum,
 					std::vector<std::pair<int,int> > RoomCoords);
 
+	void extendRooms();
+
 	// creates the CriticalPath()
-	void generateCriticalPath(std::vector<Room*> RoomContainer, int CritPathNum,
-					std::vector<std::pair<int,int> > RoomCoords);
+	void generateCriticalPath();
 
 	// adds on the SidePaths
-	void generateSidePaths(std::vector<Room*> RoomContainer, int SidePathRooms);
+	void generateSidePaths();
 
 	// adds on more rooms that will become a circular path
-	void generateCircularPaths(std::vector<Room*> RoomContainer, int CircularPathRooms);
+	void generateCircularPaths();
 
 	// Helper function to help simplify getting directions from string
 	char OppositeDirection(char direction);
@@ -70,6 +72,7 @@ public:
 
 	std::vector<Room*> getRoomList();	//Returns room list, makes for easy deletion
 
+//	void getRoomList(std::vector<Room*> RoomList);
 
 };
 

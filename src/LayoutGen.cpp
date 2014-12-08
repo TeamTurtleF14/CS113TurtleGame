@@ -14,29 +14,41 @@
 // LayoutGen constructor
 LayoutGen::LayoutGen() {
 	// Initialize some variables
-	int NumRooms = 20;	// # of rooms for entire level
-	unsigned int CriticalPathRooms = 10;	// # of rooms from from start to end, including entrance/exit
-	int AdditionalRooms = NumRooms - CriticalPathRooms;	// # of rooms outside of Crit Path
-	int SidePathRooms = 6;		// # of rooms are on the sides, leads to dead ends
-	int CircularPathRooms = 4;	// # of rooms that are part of a circle, leads back to self
+	NumRooms = 20;	// # of rooms for entire level
+	CriticalPathRooms = 10;	// # of rooms from from start to end, including entrance/exit
+	AdditionalRooms = NumRooms - CriticalPathRooms;	// # of rooms outside of Crit Path
+	SidePathRooms = 6;		// # of rooms are on the sides, leads to dead ends
+	CircularPathRooms = 4;	// # of rooms that are part of a circle, leads back to self
 
 	// Start the layout generation process
-	std::vector<std::pair<int, int> > RoomCoords = CriticalPathGen();
+	RoomCoords = CriticalPathGen();
 	HeadRoom = new Room();				// This starts as the head room
-	std::vector<Room*> RoomContainer;	// Contains all the rooms that will be created
+	RoomContainer.clear();// Contains all the rooms that will be created
 	RoomContainer.push_back(HeadRoom);	// Adds headroom into the vector
 //	extendRooms(HeadRoom&, 0);				// adds the Circular/Side Paths
-	generateCriticalPath(RoomContainer, CriticalPathRooms, RoomCoords);
-//	generateCircularPaths(RoomContainer, SidePathRooms); // first, as it will be easier to create this first
-//	generateSidePaths(RoomContainer, CircularPathRooms);		// second, will extend wherever possible
+//	extendRooms();
+	std::cout << "start ::" << std::endl;
+	generateCriticalPath();
+//	std::cout << RoomContainer.size() << " CriticalPath generated" << std::endl;
+	generateCircularPaths(); // first, as it will be easier to create this first
+//	std::cout << RoomContainer.size() << " CircularPath generated" << std::endl;
+	generateSidePaths();		// second, will extend wherever possible
+//	std::cout << RoomContainer.size() << " SidePaths generated " << std::endl;
+
+//	for (std::vector<Room*>::iterator room = RoomContainer.begin(); room != RoomContainer.end();
+//			room++){
+//		std::cout << (*room)->OccupiedRoomString() << " ===" << std::endl;
+//	}
+
+//	std::cout << RoomContainer.size() << " ==============" << std::endl;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 // Need to confirm, is this needed?
 LayoutGen::~LayoutGen(){
-	for (unsigned int i = 0; i < RoomContainer.size(); i++){
-		delete RoomContainer[i];
+	for (unsigned int i = 0; i < this->RoomContainer.size(); i++){
+		delete this->RoomContainer[i];
 	}
 }
 
@@ -46,11 +58,12 @@ LayoutGen::~LayoutGen(){
 std::vector<std::pair<int, int> > LayoutGen::CriticalPathGen() {
 	std::vector<std::pair<int, int> > Coordinates;
 	Coordinates.push_back(std::make_pair<int, int>(0,0));	//inserts initial space, entrance
+	Coordinates.push_back(std::make_pair<int, int>(0,1));	// inserts so that second is North
 	std::pair<int, int> addCoord;	//placeholder for the coordinates to be added in
-	int selector;
+	int selector = 0;
 	bool Contains = 0;				// Used for the checking of new coords in vector
 
-	while (Coordinates.size() < CriticalPathRooms - 1) {
+	while (Coordinates.size() < CriticalPathRooms + 1) {
 		selector = rand() % 4;	// selects the direction for the next room
 
 		switch (selector) {
@@ -69,7 +82,6 @@ std::vector<std::pair<int, int> > LayoutGen::CriticalPathGen() {
 		default:
 			break;
 		}
-
 		// Performs a check to make sure that the Coordinates are not already set as a room
 		for (unsigned int i = 0; i < Coordinates.size(); i++) {
 			Contains = 0;
@@ -141,35 +153,31 @@ bool LayoutGen::isinCoords(int x, int y){
 //
 //// member function to set up rooms with directions to other rooms
 //// current = room to be added to
-//void LayoutGen::extendRooms(std::vector<Room*> RoomContainer, int CritPathNum,
-//				std::vector<std::pair<int,int> > RoomCoords){
-////	if (!(current->checkAvailable()))
-////		return;
+void LayoutGen::extendRooms(){
+//	if (!(current->checkAvailable()))
+//		return;
+//	std::cout << RoomCoords.size() << std::endl;
 //	generateCriticalPath(RoomContainer, CritPathNum, RoomCoords);
-////	generateCircularPaths(); // first, as it will be easier to create this first
-////	generateSidePaths();		// second, will extend wherever possible
-//
-//}
+//	generateCircularPaths(); // first, as it will be easier to create this first
+//	generateSidePaths();		// second, will extend wherever possible
+
+}
 
 ////////////////////////////////////////////////////////////////////////////////////
 
 // Will add Rooms based on Coordinates
 // the coords will be x and y, (1,0) will be a room to the west
 // and (-1, 0) will be a room to the east
-void LayoutGen::generateCriticalPath(std::vector<Room*> RoomContainer, int CritPathNum,
-									std::vector<std::pair<int,int> > RoomCoords){
-	Room* current = RoomContainer[0];
+void LayoutGen::generateCriticalPath(){
+//	std::cout << RoomContainer.size() << std::endl;
+	Room* current = HeadRoom;
 	current->isEnd = true;
 	//RoomContainer.push_back(current);
 	Room* next;
 	for (unsigned int i = 1; i < RoomCoords.size(); i++){
-
-		if (i == RoomCoords.size()-1)
-			next = new Room(true);	// signals that the room is the last, or the end
-		else
-			next = new Room();
+		next = new Room();
 		RoomContainer.push_back(next);
-		if (RoomCoords[i].first - RoomCoords[i-1].first == 0){
+		if (RoomCoords[i].first == RoomCoords[i-1].first){
 			if (RoomCoords[i].second > RoomCoords[i-1].second){
 				// Add a room to the north
 				current->North = next;		// make current's north to be next
@@ -179,7 +187,7 @@ void LayoutGen::generateCriticalPath(std::vector<Room*> RoomContainer, int CritP
 				current->South = next;
 				next->North = current;
 			}
-		} else if (RoomCoords[i].second - RoomCoords[i-1].second == 0) {
+		} else if (RoomCoords[i].second == RoomCoords[i-1].second) {
 			if (RoomCoords[i].first > RoomCoords[i-1].first) {
 				// Add a room to the West
 				current->West = next;
@@ -197,38 +205,44 @@ void LayoutGen::generateCriticalPath(std::vector<Room*> RoomContainer, int CritP
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-void LayoutGen::generateSidePaths(std::vector<Room*> RoomContainer, int SidePathRooms){
-	bool assigned = false;		// serves as a flag
+void LayoutGen::generateSidePaths(){
 	Room* addRoom;				// initialize new rooms
 	Room* addRoomNext;
 	Room* current;
 	int random;					// random int, goes into RoomContainer randomly to add rooms
-	for (int i = 0; i < SidePathRooms; i++){
-		addRoom = new Room();
-		random = rand()%(RoomContainer.size())-1;
+
+
+	for (int i = 0; i < SidePathRooms + 1; i++){
+		random = rand()%(RoomContainer.size()-1);
 		current = RoomContainer[random];
 		if (current->isEnd){
 			i--;
 		} else if (!(current->checkAvailable())){
 			i--;
 		} else{
+			addRoom = new Room();
 			std::string available = current->AvailableRoomString();
 			std::random_shuffle(available.begin(), available.end());
 			current->setNext(addRoom, available[0]);
 			addRoom->setNext(current, OppositeDirection(available[0]));
+			RoomContainer.push_back(addRoom);
 			random = rand()% 2;
+
 			while (random){
 				available = addRoom->AvailableRoomString();
 				std::random_shuffle(available.begin(), available.end());
 				addRoomNext = new Room();
+				RoomContainer.push_back(addRoomNext);
 				addRoom->setNext(addRoomNext, available[0]);
 				addRoomNext->setNext(addRoom, OppositeDirection(available[0]));
+				addRoom = addRoomNext;
 				i++;
 				if (i>=SidePathRooms)
 					break;
 				else
 					random = rand()%2;
 			}
+//			current = addRoom;
 		}
 	}
 	return;
@@ -236,15 +250,15 @@ void LayoutGen::generateSidePaths(std::vector<Room*> RoomContainer, int SidePath
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void LayoutGen::generateCircularPaths(std::vector<Room*> RoomContainer, int CircularPathRooms){
+void LayoutGen::generateCircularPaths(){
 	int start = rand()%((RoomContainer.size()- 4) + 1);	// - 4 to make far from end, +1 to avoid start
 	Room* mainPath;
 	Room* addPathPrev;
 	Room* addPathNext;
+	bool endisSet = false;
 	std::vector<Room*> AvailableRooms;
 	int random;
 	int CircularLimit = CircularPathRooms/2;
-
 	while (true){
 		if (roomForwardCheck(RoomContainer[start], RoomContainer[start+1], CircularPathRooms/2)){
 			mainPath = RoomContainer[start];
@@ -270,30 +284,34 @@ void LayoutGen::generateCircularPaths(std::vector<Room*> RoomContainer, int Circ
 			// Section below to connect the end of the add path back to main
 			while (true){
 				mainPath = RoomContainer[start + CircularLimit];
-				if (mainPath->isAvailable(available[0])&addPathPrev->isAvailable(OppositeDirection(available[0]))){
+				if (mainPath->isAvailable(available[0]) & addPathPrev->isAvailable(OppositeDirection(available[0]))){
 					addPathPrev->setNext(mainPath, OppositeDirection(available[0]));
 					mainPath->setNext(addPathPrev, available[0]);
-					break;
+					endisSet = true;
+//					break;
 				} else {
 					std::string main = mainPath->AvailableRoomString();
-					bool roomSet = false;
-					for (int i = 0; i < main.size(); i++){
+					for (unsigned int i = 0; i < main.size(); i++){
 						if (addPathPrev->isAvailable(OppositeDirection(main[i]))){
 							addPathPrev->setNext(mainPath, OppositeDirection(main[i]));
 							mainPath->setNext(addPathPrev, main[i]);
-							roomSet = true;
+							endisSet = true;
 						}
-						if (roomSet)
+						if (endisSet)
 							break;
 					}
-					if (roomSet)
+					if (endisSet)
 						break;
 				}
+				if (endisSet){
+					break;
+				}
 			}
-
 		} else{
 			start = rand()%((RoomContainer.size() - 4) + 1);
 		}
+		if (endisSet)
+			break;
 	}
 	return;
 }
@@ -310,8 +328,8 @@ char LayoutGen::OppositeDirection(char direction){
 		return 'N';
 	case 'W':
 		return 'E';
-	default:
-		return ' ';
+//	default:
+//		return ' ';
 	}
 }
 
@@ -326,5 +344,6 @@ Room* LayoutGen::getHeadRoom(){
 
 // Returns the Room list vector, makes it easy to delete later
 std::vector<Room*> LayoutGen::getRoomList(){
+//	std::cout << this->RoomContainer.size() << "++++++++++++" << std::endl;
 	return RoomContainer;
 }
