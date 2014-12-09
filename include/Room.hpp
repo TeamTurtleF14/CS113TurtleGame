@@ -17,10 +17,6 @@
 class Room{
 private:
 
-//	Room* North;
-//	Room* South;
-//	Room* West;
-//	Room* East;
 	std::map<const char, int> RoomDir;
 
 public:

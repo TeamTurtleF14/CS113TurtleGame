@@ -17,17 +17,15 @@ sf::RenderWindow ZeroGameEngine::_mainWindow;
 
 // Constructor
 ZeroGameEngine::ZeroGameEngine(){
-//	std::cout << "one" << std::endl;
-////	LayoutMaker = new LayoutGen();
-//	std::cout << "two" << std::endl;
-//	Headroom = LayoutMaker->getHeadRoom();
-	std::cout << "TESTING STILL, LayoutGen and code here (ZGE) needs work" << std::endl;
+	LayoutMaker = new LayoutGen();
+	Headroom = LayoutMaker->getHeadRoom();
+	current = Headroom;
 }
 
 
 // Destructor
 ZeroGameEngine::~ZeroGameEngine(){
-//	delete LayoutMaker;
+	delete LayoutMaker;
 }
 
 // Starts the game
@@ -71,13 +69,13 @@ void ZeroGameEngine::GameLoop(){
 			break;
 		case ZeroGameEngine::MainMenu:
 			// Display the mainmenu stuff
-			if (!Background.loadFromFile("src/Images/MainMenu.jpg"))
+			if (!Background.loadFromFile("Images/titleScreen.png"))
 				return;
 			BG.setTexture(Background);
 			BG.setTextureRect(sf::IntRect(0, 0, 1024, 768));
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
 					_gameState = Exiting;
-					break;
+//					break;
 //			     	std::cout << "Left" << std::endl;
 			}
 			break;
@@ -86,7 +84,7 @@ void ZeroGameEngine::GameLoop(){
 			break;
 		case ZeroGameEngine::Paused:
 			// Pause the game. What should we display?
-			if (!Background.loadFromFile("src/Images/Pause.jpg"))
+			if (!Background.loadFromFile("Images/pause.jpg"))
 				return;
 			BG.setTexture(Background);
 			BG.setTextureRect(sf::IntRect(0, 0, 1024, 768));
@@ -113,7 +111,9 @@ void ZeroGameEngine::DisplayDoors(char Direction){
 // Updates what is seen in the window
 void ZeroGameEngine::UpdateFrame(){
 	_mainWindow.clear();
-//	_mainWindow.draw();
+	for (std::vector<sf::Sprite>::iterator spr = SpriteList.begin(); spr!=SpriteList.end(); spr++){
+		; // do stuff here, render the image w/e
+	}
 	_mainWindow.display();
 }
 

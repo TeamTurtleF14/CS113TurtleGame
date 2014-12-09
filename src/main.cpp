@@ -5,12 +5,9 @@
 using namespace ZGE;
 // Testing stuff will go in here, old references will go into the commented main()
 int main(){
-	std::cout << "zero" << std::endl;
 	ZeroGameEngine* game = new ZeroGameEngine();
-//	std::cout << "one" << std::endl;
-//	game->Start();
+	game->Start();
 	delete game;
-	std::cout << "gasfasfds" << std::endl;
 }
 
 //int main()

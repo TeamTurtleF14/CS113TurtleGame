@@ -48,11 +48,6 @@ public:
 	// This versions takes in integer inputs
 	bool isinCoords(int x, int y);
 
-	void extendRooms(std::vector<Room*> RoomContainer, int CritPathNum,
-					std::vector<std::pair<int,int> > RoomCoords);
-
-	void extendRooms();
-
 	// creates the CriticalPath()
 	void generateCriticalPath();
 

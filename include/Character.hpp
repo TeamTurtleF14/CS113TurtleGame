@@ -18,6 +18,11 @@ private:
 
 	//Space Marine, Monster character variables.
 
+	std::string ImageLocation;
+	std::string ImageNorth;
+	std::string ImageEast;
+	std::string ImageSouth;
+	std::string ImageWest;
 	unsigned int HitPoints;
 	float Speed;
 	unsigned int Attack;
@@ -56,6 +61,11 @@ private:
 
 public:
 	std::pair<int, int> Coordinates;	// Stores current position (X, Y) of the character
+
+	virtual std::string StandingImage();		// Returns the location of the image
+
+	// This version can take input, first should be preferred
+	virtual std::string StandingImage(std::string Direction);
 
 	int getX(){
 		return Coordinates.first;
