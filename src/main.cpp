@@ -2,8 +2,9 @@
 #include "ZeroGameEngine.hpp"
 #include <iostream>
 
-using namespace ZGE;
+//using namespace ZGE;
 // Testing stuff will go in here, old references will go into the commented main()
+
 int main(){
 	ZeroGameEngine* game = new ZeroGameEngine();
 	game->Start();
@@ -17,7 +18,7 @@ int main(){
 //    sf::RenderWindow window(sf::VideoMode(1024, 768), "Zeroth Law");
 //
 //    sf::Texture background;
-//    if (!background.loadFromFile("src/Images/Pause.jpg"))
+////    if (!background.loadFromFile("images/Door/North/door.png"))
 //    		return -1;
 //
 //    background.setRepeated(true);

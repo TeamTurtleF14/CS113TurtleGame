@@ -53,19 +53,21 @@ private:
 	float EnergyRechargeRate;
 
 
-	//Variables that dictate the direction that the Character is facing and moving.
-	std::string DirectionFacing;
-	std::string DirectionMoving;
-
-
-
 public:
+
+	//Variables that dictate the direction that the Character is facing and moving.
+//	std::string DirectionFacing;
+//	std::string DirectionMoving;
+
+	char DirectionFacing;
+	char DirectionMoving;
+
 	std::pair<int, int> Coordinates;	// Stores current position (X, Y) of the character
 
-	virtual std::string StandingImage();		// Returns the location of the image
+	std::string StandingImage();		// Returns the location of the image
 
 	// This version can take input, first should be preferred
-	virtual std::string StandingImage(std::string Direction);
+	std::string StandingImage(std::string Direction);
 
 	int getX(){
 		return Coordinates.first;
@@ -75,21 +77,37 @@ public:
 		return Coordinates.second;
 	}
 
-	char getDirectionFacing(){
+//	std::string getDirectionFacing(){
+//		return DirectionFacing;
+//	}
+//
+//	std::string getDirectionMoving(){
+//		return DirectionMoving;
+//	}
+
+	char getDirectionFacing() {
 		return DirectionFacing;
 	}
 
-	char getDirectionMoving(){
+	char getDirectionMoving() {
 		return DirectionMoving;
 	}
 
 	//Take a string from either inputs or from the AI and dictate the directionFacing and directionMoving.
 	//Inputs are: 'N', 'E', 'W', 'S', 'NE', 'NW', 'SE', 'SW'
-	void setDirectionFacing(std::string Direction){
+//	void setDirectionFacing(std::string Direction){
+//		DirectionFacing = Direction;
+//	}
+
+	void setDirectionFacing(char Direction){
 		DirectionFacing = Direction;
 	}
 
-	void setDirectionMoving(std::string Direction){
+//	void setDirectionMoving(std::string Direction){
+//		DirectionMoving = Direction;
+//	}
+
+	void setDirectionMoving(char Direction){
 		DirectionMoving = Direction;
 	}
 

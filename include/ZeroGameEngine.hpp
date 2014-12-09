@@ -11,13 +11,17 @@
 #define SRC_ZEROGAMEENGINE_HPP_
 
 #include "LayoutGen.hpp"
+#include "Hero.hpp"
 #include <SFML/Graphics.hpp>
 
-namespace ZGE
-{
 
 class ZeroGameEngine {
 public:
+	int _xSize;
+	int _ySize;
+
+	Hero* Player;
+
 	LayoutGen* LayoutMaker;
 	Room* Headroom;
 	Room* current;
@@ -26,6 +30,18 @@ public:
 	sf::RenderWindow _mainWindow;
 	std::string Doors;
 	std::vector<sf::Sprite> SpriteList;
+
+	sf::Texture HeroImage;
+	sf::Sprite HeroSpr;
+
+	sf::Texture NorthDoor;
+	sf::Texture EastDoor;
+	sf::Texture SouthDoor;
+	sf::Texture WestDoor;
+	sf::Sprite NorthDoorSpr;
+	sf::Sprite EastDoorSpr;
+	sf::Sprite SouthDoorSpr;
+	sf::Sprite WestDoorSpr;
 
 //public:
 
@@ -48,17 +64,16 @@ public:
 	void UpdateFrame();
 
 	// Takes a character, N | E | S | W , does what is necessary to display that door
-	void DisplayDoors(char Direction);
+	void DrawDoors(Room* currentRoom);
 
 	// Takes a room and displays its content
-	void DisplayRoom(Room* current);
+	void DrawRoom(Room* current);
 
 	// Display HUD: Health Bar, enemy highlighting, etc. if state is Playing
-	void DisplayHUD();
+	void DrawHUD();
 
 
 };
 
-} // namespace ZGE
 
 #endif /* SRC_ZEROGAMEENGINE_HPP_ */

@@ -9,12 +9,19 @@
 #ifndef SRC_HERO_HPP_
 #define SRC_HERO_HPP_
 
-class Hero: public Character
-{
+#include "Character.hpp"
+
+class Hero: public Character {
+
 public:
 
+	Hero() {
+		// Initializes the Hero as facing up
+		DirectionFacing = 'N';
+	}
+
 	// Returns the image location to render the Hero just standing
-	std::string Hero::StandingImage(){
+	std::string StandingImage(){
 		switch (DirectionFacing){
 		case 'N':
 			return "/images/Hero/HeroMovement/BackWalk/HeroWalk_1b.png";
