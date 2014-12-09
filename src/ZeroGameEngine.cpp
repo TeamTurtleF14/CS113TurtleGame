@@ -12,14 +12,16 @@ namespace ZGE
 {
 
 //ZeroGameEngine::GameState ZeroGameEngine::_gameState = Uninitialized;
-ZeroGameEngine::GameState ZeroGameEngine::_gameState = MainMenu;
-sf::RenderWindow ZeroGameEngine::_mainWindow;
+//ZeroGameEngine::GameState ZGE::_gameState = MainMenu;
+////sf::RenderWindow _mainWindow;
 
 // Constructor
 ZeroGameEngine::ZeroGameEngine(){
 	LayoutMaker = new LayoutGen();
 	Headroom = LayoutMaker->getHeadRoom();
 	current = Headroom;
+	_mainWindow;
+	_gameState = MainMenu;
 }
 
 
@@ -33,13 +35,22 @@ void ZeroGameEngine::Start(){
 	// If the game has been Initialized already, return
 	if (_gameState != MainMenu)
 		return;
+//	_gameState = Paused;
 
 	_mainWindow.create(sf::VideoMode(1080, 720), "The Zeroth Law");
-//	_gameState = ZeroGameEngine::MainMenu;
+	_gameState = MainMenu;
+
+//	if (_gameState == MainMenu)
+//		std::cout << "MainMenu" << std::endl;
+//	if (_gameState == Playing)
+//		std::cout << "Playing" << std::endl;
+//	if (_gameState == Paused)
+//		std::cout << "Paused" << std::endl;
 
 	while (!isExiting()){
-		// While there is no exit signal, go into the game loop
+//		 While there is no exit signal, go into the game loop
 		GameLoop();
+//		break;
 	}
 
 	_mainWindow.close();
@@ -64,41 +75,68 @@ void ZeroGameEngine::GameLoop(){
 //		enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting};
 		switch (_gameState){
 		case ZeroGameEngine::Uninitialized:
-			// Should never reach this point
 			// Should never be Uninitialized going into the GameLoop
 			break;
+
 		case ZeroGameEngine::MainMenu:
-			// Display the mainmenu stuff
-			if (!Background.loadFromFile("Images/titleScreen.png"))
+			// Display the Main Menu stuff
+			if (!Background.loadFromFile("images/titleScreen.png"))
+				return;
+			BG.setTexture(Background);
+			BG.setTextureRect(sf::IntRect(0, 0, 1080, 720));
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+				_gameState = Exiting;
+				break;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+				_gameState = Playing;
+				break;
+			}
+			_mainWindow.clear();
+			_mainWindow.draw(BG);
+			_mainWindow.display();
+			break;
+
+		case ZeroGameEngine::Playing:
+			if (!Background.loadFromFile("images/Backgrounds/Blue_Background-wall.jpg"))
+				return;
+			BG.setTexture(Background);
+			BG.setTextureRect(sf::IntRect(0, 0, 1080, 720));
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+				_gameState = Paused;
+//				_gameState = Exiting;
+				break;
+			}
+			_mainWindow.clear();
+			_mainWindow.draw(BG);
+			_mainWindow.display();
+			break;
+
+		case ZeroGameEngine::Paused:
+			if (!Background.loadFromFile("images/pause.jpg"))
 				return;
 			BG.setTexture(Background);
 			BG.setTextureRect(sf::IntRect(0, 0, 1024, 768));
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-					_gameState = Exiting;
-//					break;
-//			     	std::cout << "Left" << std::endl;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+				_gameState = Exiting;
+				break;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+				_gameState = Playing;
+				break;
+			}
+			_mainWindow.clear();
+			_mainWindow.draw(BG);
+			_mainWindow.display();
+			break;
+
+		case ZeroGameEngine::Exiting:
+			// Exit the game
+			if (_gameState==Exiting){
+				return;
 			}
 			break;
-		case ZeroGameEngine::Playing:
-			// Do game stuff hereeeeee
-			break;
-		case ZeroGameEngine::Paused:
-			// Pause the game. What should we display?
-			if (!Background.loadFromFile("Images/pause.jpg"))
-				return;
-			BG.setTexture(Background);
-			BG.setTextureRect(sf::IntRect(0, 0, 1024, 768));
-
-			break;
-		case ZeroGameEngine::Exiting:
-			// Exit the game here?
-			return;
-
 		}
-		//_mainWindow.update()?
-		_mainWindow.clear();
-		_mainWindow.draw(BG);
-		_mainWindow.display();
 		return;
 	}
 }
@@ -123,11 +161,12 @@ void ZeroGameEngine::DisplayRoom(Room* current){
 
 }
 
-// Displays the HUD
+// Alters the sprite imaging for HP/MP on the HUD
 void ZeroGameEngine::DisplayHUD(){
 	// Link the Hero's HP to the bar that will display on the top left?
-	//
+
 }
 
-} //namespace ZGE
+
+} ///// namespace ZGE
 

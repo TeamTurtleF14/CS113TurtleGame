@@ -17,17 +17,17 @@ namespace ZGE
 {
 
 class ZeroGameEngine {
-
+public:
 	LayoutGen* LayoutMaker;
 	Room* Headroom;
 	Room* current;
 	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting};
-	static GameState _gameState;
-	static sf::RenderWindow _mainWindow;
-	static std::string Doors;
+	GameState _gameState;
+	sf::RenderWindow _mainWindow;
+	std::string Doors;
 	std::vector<sf::Sprite> SpriteList;
 
-public:
+//public:
 
 	// Constructor
 	ZeroGameEngine();
@@ -36,13 +36,13 @@ public:
 	~ZeroGameEngine();
 
 	// Starts the game and enters the main loop
-	static void Start();
+	void Start();
 
 	// Returns bool that signals if game is ending
-	static bool isExiting();
+	bool isExiting();
 
 	// Main Game loop
-	static void GameLoop();
+	void GameLoop();
 
 	// Update the gui, will need to take positions from the characters
 	void UpdateFrame();
