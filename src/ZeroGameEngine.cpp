@@ -16,7 +16,7 @@ ZeroGameEngine::ZeroGameEngine(){
 	_xSize = 1080;
 	_ySize = 720;
 
-	Player = new Hero();
+	Player = new Hero(1000, _xSize, _ySize);
 
 	LayoutMaker = new LayoutGen();
 	Headroom = LayoutMaker->getHeadRoom();
@@ -24,10 +24,11 @@ ZeroGameEngine::ZeroGameEngine(){
 	_mainWindow;
 	_gameState = MainMenu;
 
+
 	if (!NorthDoor.loadFromFile("images/Door/North/door.png"))
 		return;
 	NorthDoorSpr.setTexture(NorthDoor);
-	NorthDoorSpr.setPosition(sf::Vector2f(_xSize/2 - 50,_ySize/32));
+	NorthDoorSpr.setPosition(sf::Vector2f(_xSize/2 - 50, _ySize/32));
 	// North Door Coordinates = (515 to 565, 22)
 
 	if (!EastDoor.loadFromFile("images/Door/sidedoor.png"))
@@ -136,6 +137,9 @@ void ZeroGameEngine::GameLoop(){
 			_mainWindow.draw(BG);
 			// Draw other crap here, before display is called
 			DrawDoors(current);
+			DrawHealthBar();
+//			DrawHero();
+			DrawHero(Player);
 			_mainWindow.display();
 			break;
 
@@ -203,10 +207,35 @@ void ZeroGameEngine::DrawRoom(Room* current){
 //	DrawDoors(current);
 }
 
-// Alters the sprite imaging for HP/MP on the HUD
-void ZeroGameEngine::DrawHUD(){
-	// Link the Hero's HP to the bar that will display on the top left?
+void ZeroGameEngine::DrawHero(Hero* hero){
+	if (!HeroImage.loadFromFile(hero->StandingImage()))
+		return;
+	HeroSpr.setTexture(HeroImage);
+	HeroSpr.setPosition(sf::Vector2f(hero->getX(), hero->getY()));
+	_mainWindow.draw(HeroSpr);
+}
 
+void ZeroGameEngine::DrawHero() {
+	if (!HeroImage.loadFromFile("images/Hero/HeroMovement/BackWalk/HeroWalk_1b.png"))
+		return;
+	HeroSpr.setTexture(HeroImage);
+	HeroSpr.setPosition(sf::Vector2f(_xSize/2, _ySize/2));
+	_mainWindow.draw(HeroSpr);
+}
+
+// Alters the sprite imaging for HP/MP on the HUD
+//void ZeroGameEngine::DrawHealthBar(Hero Player) {
+void ZeroGameEngine::DrawHealthBar(){
+	// after Hero is ore complete, implement an algorithm to display
+	//	based on Hero's current health
+//	Full Health Bar is 12 squares
+//  Red = Health
+//	Green = Shield
+	if (!HealthBar.loadFromFile("images/HealthBar/HealthBarContainer.png"))
+		return;
+	HealthBarSpr.setTexture(HealthBar);
+	HealthBarSpr.setPosition(sf::Vector2f(20, 20));
+	_mainWindow.draw(HealthBarSpr);
 }
 
 

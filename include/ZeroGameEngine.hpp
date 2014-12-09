@@ -17,6 +17,9 @@
 
 class ZeroGameEngine {
 public:
+	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting};
+	GameState _gameState;
+	sf::RenderWindow _mainWindow;
 	int _xSize;
 	int _ySize;
 
@@ -25,14 +28,14 @@ public:
 	LayoutGen* LayoutMaker;
 	Room* Headroom;
 	Room* current;
-	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting};
-	GameState _gameState;
-	sf::RenderWindow _mainWindow;
 	std::string Doors;
 	std::vector<sf::Sprite> SpriteList;
 
 	sf::Texture HeroImage;
 	sf::Sprite HeroSpr;
+
+	sf::Texture HealthBar;
+	sf::Sprite HealthBarSpr;
 
 	sf::Texture NorthDoor;
 	sf::Texture EastDoor;
@@ -69,8 +72,17 @@ public:
 	// Takes a room and displays its content
 	void DrawRoom(Room* current);
 
+	// Uses Hero's attributes to draw the Hero's position, attributes
+	void DrawHero(Hero* hero);
+
+	void DrawHero();		// For Testing
+
 	// Display HUD: Health Bar, enemy highlighting, etc. if state is Playing
-	void DrawHUD();
+	//	Full Health Bar is 12 squares
+	//  Red = Health
+	//	Green = Shield
+	void DrawHealthBar();
+//	void DrawHealthBar(Hero player);
 
 
 };

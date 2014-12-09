@@ -23,6 +23,11 @@ private:
 	std::string ImageEast;
 	std::string ImageSouth;
 	std::string ImageWest;
+
+//	Used to help simplify calculations within class, such as starting positions
+	int SizeX;
+	int SizeY;
+
 	unsigned int HitPoints;
 	float Speed;
 	unsigned int Attack;
@@ -62,12 +67,30 @@ public:
 	char DirectionFacing;
 	char DirectionMoving;
 
+	Character(){
+
+	}
+
+	Character(int HP, int SizeX, int SizeY)
+	: HitPoints {HP}, SizeX {SizeX}, SizeY {SizeY}
+	{
+
+	}
+
 	std::pair<int, int> Coordinates;	// Stores current position (X, Y) of the character
 
 	std::string StandingImage();		// Returns the location of the image
 
 	// This version can take input, first should be preferred
 	std::string StandingImage(std::string Direction);
+
+	void setX(int x){
+		Coordinates.first = x;
+	}
+
+	void setY(int y){
+		Coordinates.second = y;
+	}
 
 	int getX(){
 		return Coordinates.first;
