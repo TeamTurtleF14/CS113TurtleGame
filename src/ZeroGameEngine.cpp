@@ -31,8 +31,10 @@ ZeroGameEngine::ZeroGameEngine(){
 
 // Destructor
 ZeroGameEngine::~ZeroGameEngine(){
+	delete currentHeroAnimation;
 	delete Player;
 	delete LayoutMaker;
+
 }
 
 
@@ -44,6 +46,7 @@ void ZeroGameEngine::Start(){
 		return;
 
 	_mainWindow.create(sf::VideoMode(_xSize, _ySize), "The Zeroth Law");
+	_mainWindow.setFramerateLimit(60);
 	_gameState = MainMenu;
 
 	while (!isExiting()){
@@ -68,6 +71,57 @@ bool ZeroGameEngine::isExiting(){
 ///// Sprite Crap Start
 
 void ZeroGameEngine::initSprites(){
+// Hero Animation Crap Start
+
+//    HeroWalkUp;
+	if (!HeroBackSprSht.loadFromFile("images/Hero/HeroBackSprSheet.png"))
+		return;
+    HeroWalkUp.setSpriteSheet(HeroBackSprSht);
+    HeroWalkUp.addFrame(sf::IntRect(0, 0, 88, 91));
+    HeroWalkUp.addFrame(sf::IntRect(89, 0, 88, 91));
+    HeroWalkUp.addFrame(sf::IntRect(0, 92, 88, 91));
+    HeroWalkUp.addFrame(sf::IntRect(89, 92, 88, 91));
+
+//    HeroWalkDown;
+	if (!HeroForwardSprSht.loadFromFile("images/Hero/HeroForwardSprSheet.png"))
+		return;
+    HeroWalkDown.setSpriteSheet(HeroForwardSprSht);
+    HeroWalkDown.addFrame(sf::IntRect(0, 0, 88, 91));
+    HeroWalkDown.addFrame(sf::IntRect(89, 0, 88, 91));
+    HeroWalkDown.addFrame(sf::IntRect(0, 92, 88, 91));
+    HeroWalkDown.addFrame(sf::IntRect(89, 92, 88, 91));
+
+//    HeroWalkLeft;
+	if (!HeroLeftSprSht.loadFromFile("images/Hero/HeroLeftSprSheet.png"))
+		return;
+    HeroWalkLeft.setSpriteSheet(HeroLeftSprSht);
+    HeroWalkLeft.addFrame(sf::IntRect(0, 0, 88, 91));
+    HeroWalkLeft.addFrame(sf::IntRect(89, 0, 88, 91));
+    HeroWalkLeft.addFrame(sf::IntRect(0, 92, 88, 91));
+    HeroWalkLeft.addFrame(sf::IntRect(89, 92, 88, 91));
+
+
+//    HeroWalkRight;
+	if (!HeroRightSprSht.loadFromFile("images/Hero/HeroRightSprSheet.png"))
+		return;
+    HeroWalkRight.setSpriteSheet(HeroRightSprSht);
+    HeroWalkRight.addFrame(sf::IntRect(0, 0, 88, 91));
+    HeroWalkRight.addFrame(sf::IntRect(89, 0, 88, 91));
+    HeroWalkRight.addFrame(sf::IntRect(0, 92, 88, 91));
+    HeroWalkRight.addFrame(sf::IntRect(89, 92, 88, 91));
+
+    currentHeroAnimation = &HeroWalkUp;
+//    animatedHeroSprite {sf::seconds(0.05), true, false};
+    animatedHeroSprite.setPosition(sf::Vector2f(_xSize/2 - 50, _ySize - (_ySize/5)));
+
+    speed = 80.f;
+    noKeyWasPressed = true;
+    frameTime = frameClock.restart();
+
+
+// Hero Animation Crap End
+
+
 // Health Bar sprite crap, Health and Shield
 	if (!HealthBar.loadFromFile("images/HealthBar/HealthBarContainer.png"))
 		return;
@@ -179,17 +233,18 @@ void ZeroGameEngine::GameLoop(){
 				sf::sleep(sf::milliseconds(50));
 				break;
 			}
+			ControlHero();			// Logic for controlling Hero
 			_mainWindow.clear(sf::Color::Black);
 			_mainWindow.draw(BG);
 			// Draw other crap here, before display is called
 			DrawDoors(current);
 			DrawHealthBar();
 //			DrawHealthBar(Player);
-//			DrawHero();
-			DrawHero(Player);
+//			DrawHero(Player);
+			_mainWindow.draw(animatedHeroSprite);
 			_mainWindow.display();
-			break;
 
+			break;
 
 		case ZeroGameEngine::Paused:
 			if (!Background.loadFromFile("images/pause.jpg"))
@@ -273,6 +328,7 @@ void ZeroGameEngine::DrawRoom(Room* current){
 //	DrawDoors(current);
 }
 
+// Deprecated?? As of implementation of Hero animation sprites
 void ZeroGameEngine::DrawHero(Hero* hero){
 	if (!HeroImage.loadFromFile(hero->StandingImage()))
 		return;
@@ -281,16 +337,96 @@ void ZeroGameEngine::DrawHero(Hero* hero){
 	_mainWindow.draw(HeroSpr);
 }
 
-void ZeroGameEngine::DrawHero() {
-	if (!HeroImage.loadFromFile("images/Hero/HeroMovement/BackWalk/HeroWalk_1b.png"))
-		return;
-	HeroSpr.setTexture(HeroImage);
-	HeroSpr.setPosition(sf::Vector2f(_xSize/2, _ySize/2));
-	_mainWindow.draw(HeroSpr);
+void ZeroGameEngine::ControlHero() {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)
+		&& sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+		Player->setDirectionFacing('N');
+		HeroMovement.y = -Player->getSpeed();
+		HeroMovement.x = -Player->getSpeed();
+		currentHeroAnimation = &HeroWalkUp;
+		Player->setVX(-1);
+		Player->setVY(-1);
+		noKeyWasPressed = false;
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)
+		&& sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+		Player->setDirectionFacing('N');
+		HeroMovement.y = -Player->getSpeed();
+		HeroMovement.x = Player->getSpeed();
+		currentHeroAnimation = &HeroWalkUp;
+		Player->setVX(1);
+		Player->setVY(-1);
+		noKeyWasPressed = false;
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)
+		&& sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+		Player->setDirectionFacing('S');
+		HeroMovement.y = Player->getSpeed();
+		HeroMovement.x = -Player->getSpeed();
+		currentHeroAnimation = &HeroWalkDown;
+		Player->setVX(-1);
+		Player->setVY(1);
+		noKeyWasPressed = false;
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)
+		&& sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+		Player->setDirectionFacing('S');
+		HeroMovement.y = Player->getSpeed();
+		HeroMovement.x = Player->getSpeed();
+		currentHeroAnimation = &HeroWalkDown;
+		Player->setVX(1);
+		Player->setVY(1);
+		noKeyWasPressed = false;
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+		Player->setDirectionFacing('N');
+		HeroMovement.y = -Player->getSpeed();
+		HeroMovement.x = 0;
+		currentHeroAnimation = &HeroWalkUp;
+		Player->setVX(0);
+		Player->setVY(-1);
+		noKeyWasPressed = false;
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+		Player->setDirectionFacing('S');
+		HeroMovement.y = Player->getSpeed();
+		HeroMovement.x = 0;
+		currentHeroAnimation = &HeroWalkDown;
+		Player->setVX(0);
+		Player->setVY(1);
+		noKeyWasPressed = false;
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+		Player->setDirectionFacing('W');
+		HeroMovement.y = 0;
+		HeroMovement.x = -Player->getSpeed();
+		currentHeroAnimation = &HeroWalkLeft;
+		Player->setVX(-1);
+		Player->setVY(0);
+		noKeyWasPressed = false;
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+		Player->setDirectionFacing('E');
+		HeroMovement.y = 0;
+		HeroMovement.x = Player->getSpeed();
+		currentHeroAnimation = &HeroWalkRight;
+		Player->setVX(1);
+		Player->setVY(0);
+		noKeyWasPressed = false;
+	} else{
+		HeroMovement.x = 0;
+		HeroMovement.y = 0;
+		Player->setVX(0);
+		Player->setVY(0);
+	}
+	animatedHeroSprite.play(*currentHeroAnimation);
+    animatedHeroSprite.move(HeroMovement * frameTime.asSeconds());
+
+    // if no key was pressed stop the animation
+    if (noKeyWasPressed)
+    {
+        animatedHeroSprite.stop();
+    }
+    noKeyWasPressed = true;
+    // update AnimatedSprite
+    animatedHeroSprite.update(frameTime);
+    Player->setXY(animatedHeroSprite.getPosition());
 }
 
 // Alters the sprite imaging for HP/MP on the HUD
-//void ZeroGameEngine::DrawHealthBar(Hero Player) {
 void ZeroGameEngine::DrawHealthBar(){
 	// after Hero is ore complete, implement an algorithm to display
 	//	based on Hero's current health

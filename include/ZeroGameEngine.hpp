@@ -13,6 +13,8 @@
 #include "LayoutGen.hpp"
 #include "Hero.hpp"
 #include <SFML/Graphics.hpp>
+#include "Animation.hpp"
+#include "AnimatedSprite.hpp"
 
 
 class ZeroGameEngine {
@@ -25,14 +27,36 @@ public:
 
 	Hero* Player;
 
+	sf::Texture HeroImage;
+	sf::Sprite HeroSpr;
+
+	sf::Texture HeroBackSprSht;
+	sf::Texture HeroForwardSprSht;
+	sf::Texture HeroRightSprSht;
+	sf::Texture HeroLeftSprSht;
+
+	Animation HeroWalkUp;
+	Animation HeroWalkLeft;
+	Animation HeroWalkRight;
+	Animation HeroWalkDown;
+
+	sf::Vector2f HeroMovement{0.f, 0.f};
+    Animation* currentHeroAnimation;
+    AnimatedSprite animatedHeroSprite{sf::seconds(0.05), true, false};
+//   AnimatedSprite animatedHeroSprite(sf::seconds(0.05), true, false);
+
+
+    sf::Clock frameClock;
+    float speed;
+    bool noKeyWasPressed;
+    sf::Time frameTime;
+
+
 	LayoutGen* LayoutMaker;
 	Room* Headroom;
 	Room* current;
 	std::string Doors;
 	std::vector<sf::Sprite> SpriteList;
-
-	sf::Texture HeroImage;
-	sf::Sprite HeroSpr;
 
 	sf::Texture HealthBar;
 	sf::Sprite HealthBarSpr;
@@ -94,7 +118,7 @@ public:
 	// Uses Hero's attributes to draw the Hero's position, attributes
 	void DrawHero(Hero* hero);
 
-	void DrawHero();		// For Testing
+	void ControlHero();		// Controls the Hero's basic movements
 
 	// Display HUD: Health Bar, enemy highlighting, etc. if state is Playing
 	//	Full Health Bar is 12 squares

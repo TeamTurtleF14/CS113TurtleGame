@@ -1,0 +1,4 @@
+HeroWalk_1b = 0 0 88 91
+HeroWalk_2b = 89 0 88 91
+HeroWalk_3b = 0 92 88 91
+HeroWalk_4b = 89 92 88 91

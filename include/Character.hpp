@@ -11,12 +11,15 @@
 
 #include <utility>
 #include <string>
+#include <SFML/Graphics.hpp>
 
 class Character
 {
 private:
 
+
 	//Space Marine, Monster character variables.
+
 
 	// Used to store the strings where the images are located.
 	std::string ImageLocation;
@@ -60,7 +63,30 @@ private:
 	float EnergyRechargeRate;
 
 
+//public:
+
+// Movement Objects Crap
+	sf::CircleShape shape;
+	float unitRadius{10.f};
+	sf::Vector2f velocity{0, 0};
+
 public:
+
+	std::pair<float, float> Coordinates;	// Stores current position (X, Y) of the character
+
+	sf::CircleShape getShape() { return shape;}
+
+	void update(){
+		shape.move(velocity);
+	}
+
+	void setVX(float moveX){
+		velocity.x = moveX;
+	}
+
+	void setVY(float moveY){
+		velocity.y = moveY;
+	}
 
 	//Variables that dictate the direction that the Character is facing and moving.
 //	std::string DirectionFacing;
@@ -74,6 +100,12 @@ public:
 	{
 
 	}
+	Character(float x, float y){
+		shape.setPosition(x,y);
+		shape.setRadius(unitRadius);
+		shape.setFillColor(sf::Color::Cyan);
+		shape.setOrigin(unitRadius, unitRadius);
+	}
 
 	Character(int startHP, int ScreenSizeX, int ScreenSizeY)
 	: HitPoints {startHP}, ScreenSizeX {ScreenSizeX}, ScreenSizeY {ScreenSizeY}
@@ -81,13 +113,16 @@ public:
 
 	}
 
+//	For Hero
 	Character(int startHP, int startSP, int ScreenSizeX, int ScreenSizeY)
-	: HitPoints {startHP}, ShieldPoints {startSP},  ScreenSizeX {ScreenSizeX}, ScreenSizeY {ScreenSizeY}
+	: HitPoints {startHP}, ShieldPoints {startSP},  ScreenSizeX {ScreenSizeX},
+	  ScreenSizeY {ScreenSizeY}, velocity{0, 0}
 	{
-
+		shape.setPosition(ScreenSizeX/2 - 50, ScreenSizeY - (ScreenSizeY/5));
+		shape.setRadius(unitRadius);
+		shape.setFillColor(sf::Color::Cyan);
+		shape.setOrigin(unitRadius, unitRadius);
 	}
-
-	std::pair<int, int> Coordinates;	// Stores current position (X, Y) of the character
 
 	std::string StandingImage();		// Returns the location of the image
 
@@ -159,22 +194,35 @@ public:
 	}
 
 ///////////////////////////////////////////////
-/////////////// HP and SP Crap
+/////////////// HP and SP Crap END
 ////////////////////////////////////////
 
-	void setX(int x){
+	void setX(float x){
 		Coordinates.first = x;
 	}
 
-	void setY(int y){
+	void setY(float y){
 		Coordinates.second = y;
 	}
 
-	int getX(){
+	void setXY(sf::Vector2f coordinate){
+		Coordinates.first = coordinate.x;
+		Coordinates.second = coordinate.y;
+	}
+
+	void moveX(float add){
+		Coordinates.first += add;
+	}
+
+	void moveY(float add){
+		Coordinates.second += add;
+	}
+
+	float getX(){
 		return Coordinates.first;
 	}
 
-	int getY(){
+	float getY(){
 		return Coordinates.second;
 	}
 
@@ -187,7 +235,13 @@ public:
 		return DirectionMoving;
 	}
 
+	float getSpeed(){
+		return Speed;
+	}
 
+	void setSpeed(float speed){
+		Speed = speed;
+	}
 
 
 };
