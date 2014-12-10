@@ -174,6 +174,11 @@ void ZeroGameEngine::GameLoop(){
 //				_gameState = Exiting;
 				break;
 			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+				_gameState = GameOver;
+				sf::sleep(sf::milliseconds(50));
+				break;
+			}
 			_mainWindow.clear(sf::Color::Black);
 			_mainWindow.draw(BG);
 			// Draw other crap here, before display is called
@@ -207,6 +212,21 @@ void ZeroGameEngine::GameLoop(){
 
 			break;
 
+		case ZeroGameEngine::GameOver:
+			//
+			if (!Background.loadFromFile("images/GameOverScreen.png"))
+				return;
+			BG.setTexture(Background);
+			BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
+			_mainWindow.clear();
+			_mainWindow.draw(BG);
+			_mainWindow.display();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+				_gameState = MainMenu;
+				sf::sleep(sf::milliseconds(10));
+				break;
+			}
+
 		case ZeroGameEngine::Exiting:
 			// Exit the game
 			if (_gameState==Exiting){
@@ -220,7 +240,7 @@ void ZeroGameEngine::GameLoop(){
 
 // Takes a char direction Does stuff to display the doors
 void ZeroGameEngine::DrawDoors(Room* currentRoom){
-	std::cout << current->OccupiedRoomString() << std::endl;
+//	std::cout << current->OccupiedRoomString() << std::endl;
 	if (!current->isAvailable('N')){
 		_mainWindow.draw(NorthDoorSpr);
 	}

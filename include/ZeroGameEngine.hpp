@@ -17,7 +17,7 @@
 
 class ZeroGameEngine {
 public:
-	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting};
+	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver};
 	GameState _gameState;
 	sf::RenderWindow _mainWindow;
 	int _xSize;
