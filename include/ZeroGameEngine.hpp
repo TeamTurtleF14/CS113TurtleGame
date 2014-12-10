@@ -120,6 +120,8 @@ public:
 
 	void ControlHero();		// Controls the Hero's basic movements
 
+	void WallLimit();		// Sets the limiting bounds for where the player can move
+
 	// Display HUD: Health Bar, enemy highlighting, etc. if state is Playing
 	//	Full Health Bar is 12 squares
 	//  Red = Health

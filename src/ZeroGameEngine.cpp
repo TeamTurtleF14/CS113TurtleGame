@@ -243,6 +243,7 @@ void ZeroGameEngine::GameLoop(){
 //			DrawHero(Player);
 			_mainWindow.draw(animatedHeroSprite);
 			_mainWindow.display();
+//			std::cout << Player->getX() << " " << Player->getY() << std::endl;
 
 			break;
 
@@ -412,6 +413,7 @@ void ZeroGameEngine::ControlHero() {
 		Player->setVX(0);
 		Player->setVY(0);
 	}
+	WallLimit();
 	animatedHeroSprite.play(*currentHeroAnimation);
     animatedHeroSprite.move(HeroMovement * frameTime.asSeconds());
 
@@ -487,6 +489,22 @@ void ZeroGameEngine::DrawHealthBar(Hero* player){
 		}
 	}
 
+}
+
+// Current Implementaion for Hero
+// Implementation for all units, after movements -> check every coord in vector
+void ZeroGameEngine::WallLimit() {
+	if (animatedHeroSprite.getPosition().y<48){
+		animatedHeroSprite.setPosition(animatedHeroSprite.getPosition().x, 48);
+	}
+	else if (animatedHeroSprite.getPosition().y>635){
+		animatedHeroSprite.setPosition(animatedHeroSprite.getPosition().x, 635);
+	}
+	if (animatedHeroSprite.getPosition().x<-20) {
+		animatedHeroSprite.setPosition(-20, animatedHeroSprite.getPosition().y);
+	} else if (animatedHeroSprite.getPosition().x > 1015){
+		animatedHeroSprite.setPosition(1015, animatedHeroSprite.getPosition().y);
+	}
 }
 
 
