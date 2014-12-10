@@ -18,6 +18,7 @@ private:
 
 	//Space Marine, Monster character variables.
 
+	// Used to store the strings where the images are located.
 	std::string ImageLocation;
 	std::string ImageNorth;
 	std::string ImageEast;
@@ -25,13 +26,14 @@ private:
 	std::string ImageWest;
 
 //	Used to help simplify calculations within class, such as starting positions
-	int SizeX;
-	int SizeY;
+	int ScreenSizeX;
+	int ScreenSizeY;
 
 	unsigned int HitPoints;
+	unsigned int HitPointsMax;
+
 	float Speed;
 	unsigned int Attack;
-	unsigned int HitPointsMax;
 	unsigned int ShieldPoints;
 	unsigned int ShieldPointsMax;
 	float MovementSpeed;
@@ -41,15 +43,15 @@ private:
 	float InvulnerablityTime;
 
 	//Space Marine character Variables.
-
-	float AbilityCooldown1Current;
-	float AbilityCooldown1Max;
-	float AbilityCooldown2Current;
-	float AbilityCooldown2Max;
-	float AbilityCooldown3Current;
-	float AbilityCooldown3Max;
-	float AbilityCooldown4Current;
-	float AbilityCooldown4Max;
+	// ABL = Ability
+	float ABLCooldown1Current;
+	float ABLCooldown1Max;
+	float ABLCooldown2Current;
+	float ABLCooldown2Max;
+	float ABLCooldown3Current;
+	float ABLCooldown3Max;
+	float ABLCooldown4Current;
+	float ABLCooldown4Max;
 
 	//AI-specific character variables.
 
@@ -67,12 +69,20 @@ public:
 	char DirectionFacing;
 	char DirectionMoving;
 
-	Character(){
+	Character()
+	: HitPoints { 0 }
+	{
 
 	}
 
-	Character(int HP, int SizeX, int SizeY)
-	: HitPoints {HP}, SizeX {SizeX}, SizeY {SizeY}
+	Character(int startHP, int ScreenSizeX, int ScreenSizeY)
+	: HitPoints {startHP}, ScreenSizeX {ScreenSizeX}, ScreenSizeY {ScreenSizeY}
+	{
+
+	}
+
+	Character(int startHP, int startSP, int ScreenSizeX, int ScreenSizeY)
+	: HitPoints {startHP}, ShieldPoints {startSP},  ScreenSizeX {ScreenSizeX}, ScreenSizeY {ScreenSizeY}
 	{
 
 	}
@@ -83,6 +93,74 @@ public:
 
 	// This version can take input, first should be preferred
 	std::string StandingImage(std::string Direction);
+
+	//Take a string from either inputs or from the AI and dictate the directionFacing and directionMoving.
+	//Inputs are: 'N', 'E', 'W', 'S', 'NE', 'NW', 'SE', 'SW'
+
+	void setDirectionFacing(char Direction){
+		DirectionFacing = Direction;
+	}
+
+	void setDirectionMoving(char Direction){
+		DirectionMoving = Direction;
+	}
+
+///////////
+//	Character Attributes Below: HP, HP setting etc.
+//////////
+
+	unsigned int getCurrentHP() {
+		return HitPoints;
+	}
+
+	// Change can be either negative or positive, needs checks to ensure current stays within
+	// bounds
+	// can be used to take damage, gain health, w/e
+	void changeCurrentHP(int change) {
+		if ((HitPoints + change) <= 0){
+			HitPoints = 0;
+		} else if ((HitPoints + change) >= HitPointsMax){
+			HitPoints = HitPointsMax;
+		} else{
+			HitPoints = HitPoints + change;
+		}
+	}
+
+	unsigned int getMaxHP() {
+		return HitPointsMax;
+	}
+
+	// Change can be negative or positive
+	void changeMaxHP(int change) {
+		HitPointsMax = HitPointsMax + change;
+	}
+
+	unsigned int getCurrentSP() {
+		return ShieldPoints;
+	}
+
+	void changeCurrentSP(int change) {
+		if ((ShieldPoints + change) <= 0){
+			ShieldPoints = 0;
+		} else if ((ShieldPoints + change) >= ShieldPointsMax){
+			ShieldPoints = ShieldPointsMax;
+		} else{
+			ShieldPoints = ShieldPoints + change;
+		}
+	}
+
+	unsigned int getMaxSP() {
+		return ShieldPointsMax;
+	}
+
+	// Change can be negative or positive
+	void changeMaxSP(int change) {
+		ShieldPointsMax = ShieldPointsMax + change;
+	}
+
+///////////////////////////////////////////////
+/////////////// HP and SP Crap
+////////////////////////////////////////
 
 	void setX(int x){
 		Coordinates.first = x;
@@ -100,13 +178,6 @@ public:
 		return Coordinates.second;
 	}
 
-//	std::string getDirectionFacing(){
-//		return DirectionFacing;
-//	}
-//
-//	std::string getDirectionMoving(){
-//		return DirectionMoving;
-//	}
 
 	char getDirectionFacing() {
 		return DirectionFacing;
@@ -116,23 +187,7 @@ public:
 		return DirectionMoving;
 	}
 
-	//Take a string from either inputs or from the AI and dictate the directionFacing and directionMoving.
-	//Inputs are: 'N', 'E', 'W', 'S', 'NE', 'NW', 'SE', 'SW'
-//	void setDirectionFacing(std::string Direction){
-//		DirectionFacing = Direction;
-//	}
 
-	void setDirectionFacing(char Direction){
-		DirectionFacing = Direction;
-	}
-
-//	void setDirectionMoving(std::string Direction){
-//		DirectionMoving = Direction;
-//	}
-
-	void setDirectionMoving(char Direction){
-		DirectionMoving = Direction;
-	}
 
 
 };

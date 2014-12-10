@@ -16,7 +16,7 @@ ZeroGameEngine::ZeroGameEngine(){
 	_xSize = 1080;
 	_ySize = 720;
 
-	Player = new Hero(1000, _xSize, _ySize);
+	Player = new Hero(1000, 0, _xSize, _ySize);
 
 	LayoutMaker = new LayoutGen();
 	Headroom = LayoutMaker->getHeadRoom();
@@ -24,30 +24,7 @@ ZeroGameEngine::ZeroGameEngine(){
 	_mainWindow;
 	_gameState = MainMenu;
 
-
-	if (!NorthDoor.loadFromFile("images/Door/North/door.png"))
-		return;
-	NorthDoorSpr.setTexture(NorthDoor);
-	NorthDoorSpr.setPosition(sf::Vector2f(_xSize/2 - 50, _ySize/32));
-	// North Door Coordinates = (515 to 565, 22)
-
-	if (!EastDoor.loadFromFile("images/Door/sidedoor.png"))
-		return;
-	EastDoorSpr.setTexture(EastDoor);
-	EastDoorSpr.setTextureRect(sf::IntRect(0, 0, 15, 80));
-	EastDoorSpr.setPosition(sf::Vector2f(_xSize - 15, _ySize/2));
-
-	if (!WestDoor.loadFromFile("images/Door/sidedoor.png"))
-		return;
-	WestDoorSpr.setTexture(WestDoor);
-	WestDoorSpr.setTextureRect(sf::IntRect(0, 0, 15, 80));
-	WestDoorSpr.setPosition(sf::Vector2f(0, _ySize/2));
-
-	if (!SouthDoor.loadFromFile("images/Door/North/door.png"))
-		return;
-	SouthDoorSpr.setTexture(SouthDoor);
-//	SouthDoorSpr.setTextureRect(sf::IntRect(0, 0, 0, 0));
-//	SouthDoorSpr.setPosition(sf::Vector2f(_xSize/2 -50, _ySize));
+	initSprites();
 
 }
 
@@ -57,6 +34,8 @@ ZeroGameEngine::~ZeroGameEngine(){
 	delete Player;
 	delete LayoutMaker;
 }
+
+
 
 // Starts the game
 void ZeroGameEngine::Start(){
@@ -84,6 +63,68 @@ bool ZeroGameEngine::isExiting(){
 	else
 		return false;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+///// Sprite Crap Start
+
+void ZeroGameEngine::initSprites(){
+// Health Bar sprite crap, Health and Shield
+	if (!HealthBar.loadFromFile("images/HealthBar/HealthBarContainer.png"))
+		return;
+	HealthBarSpr.setTexture(HealthBar);
+	HealthBarSpr.setPosition(sf::Vector2f(20, 20));
+
+	if (!HPBitFirst.loadFromFile("images/HealthBar/FirstRedHealthBarPiece.png"))
+		return;
+	HPBitFirstSpr.setTexture(HPBitFirst);
+
+	if (!HPBit.loadFromFile("images/HealthBar/RestOfRedHealthBarPieces.png"))
+		return;
+	HPBitSpr.setTexture(HPBit);
+
+	if (!SPBitFirst.loadFromFile("images/HealthBar/FirstGreenHealthBarPiece.png"))
+		return;
+	SPBitFirstSpr.setTexture(SPBitFirst);
+
+	if (!SPBit.loadFromFile("images/HealthBar/RestofGreenHealthBarPieces.png"))
+		return;
+	SPBitSpr.setTexture(SPBit);
+
+	// Reusing the bit sprites, set the positiion as you draw
+
+
+
+// Health bar sprite crap end
+
+// Door Sprite
+	if (!NorthDoor.loadFromFile("images/Door/North/door.png"))
+		return;
+	NorthDoorSpr.setTexture(NorthDoor);
+	NorthDoorSpr.setPosition(sf::Vector2f(_xSize/2 - 50, _ySize/32));
+	// North Door Coordinates = (515 to 565, 22)
+
+	if (!EastDoor.loadFromFile("images/Door/sidedoor.png"))
+		return;
+	EastDoorSpr.setTexture(EastDoor);
+	EastDoorSpr.setTextureRect(sf::IntRect(0, 0, 15, 80));
+	EastDoorSpr.setPosition(sf::Vector2f(_xSize - 15, _ySize/2));
+
+	if (!WestDoor.loadFromFile("images/Door/sidedoor.png"))
+		return;
+	WestDoorSpr.setTexture(WestDoor);
+	WestDoorSpr.setTextureRect(sf::IntRect(0, 0, 15, 80));
+	WestDoorSpr.setPosition(sf::Vector2f(0, _ySize/2));
+
+	if (!SouthDoor.loadFromFile("images/Door/North/door.png"))
+		return;
+	SouthDoorSpr.setTexture(SouthDoor);
+//	SouthDoorSpr.setTextureRect(sf::IntRect(0, 0, 0, 0));
+	SouthDoorSpr.setPosition(sf::Vector2f(_xSize/2 -50, _ySize - 20));
+// Door sprite crap end
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
 
 // The main game loop, called by Start()
 void ZeroGameEngine::GameLoop(){
@@ -138,6 +179,7 @@ void ZeroGameEngine::GameLoop(){
 			// Draw other crap here, before display is called
 			DrawDoors(current);
 			DrawHealthBar();
+//			DrawHealthBar(Player);
 //			DrawHero();
 			DrawHero(Player);
 			_mainWindow.display();
@@ -178,18 +220,22 @@ void ZeroGameEngine::GameLoop(){
 
 // Takes a char direction Does stuff to display the doors
 void ZeroGameEngine::DrawDoors(Room* currentRoom){
+	std::cout << current->OccupiedRoomString() << std::endl;
 	if (!current->isAvailable('N')){
 		_mainWindow.draw(NorthDoorSpr);
 	}
-	if (current->isAvailable('E')){
+	if (!current->isAvailable('E')){
+//	if (current->isAvailable('E')){		//testing
 		_mainWindow.draw(EastDoorSpr);
 	}
-	if (current->isAvailable('W')){
+	if (!current->isAvailable('W')){
+//	if (current->isAvailable('W')){		// testing
 		_mainWindow.draw(WestDoorSpr);
 	}
-//	if (current->isAvailable('S')){
-//		_mainWindow.draw(SouthDoorSpr);
-//	}
+	if (!current->isAvailable('S')){
+//	if (current->isAvailable('S')){		//testing
+		_mainWindow.draw(SouthDoorSpr);
+	}
 }
 
 // Updates what is seen in the window
@@ -231,11 +277,60 @@ void ZeroGameEngine::DrawHealthBar(){
 //	Full Health Bar is 12 squares
 //  Red = Health
 //	Green = Shield
-	if (!HealthBar.loadFromFile("images/HealthBar/HealthBarContainer.png"))
-		return;
-	HealthBarSpr.setTexture(HealthBar);
-	HealthBarSpr.setPosition(sf::Vector2f(20, 20));
 	_mainWindow.draw(HealthBarSpr);
+	HPBitFirstSpr.setPosition(sf::Vector2f(92, 28));
+	_mainWindow.draw(HPBitFirstSpr);
+	int incrementAmt = 8;
+	int placementX = 92;
+	for (unsigned int HP = 0; HP < 12; HP++){
+		placementX = placementX + incrementAmt;
+		HPBitSpr.setPosition(sf::Vector2f(placementX, 28));
+		_mainWindow.draw(HPBitSpr);
+	}
+
+	placementX = 92;
+	SPBitFirstSpr.setPosition(sf::Vector2f(placementX, 48));
+	_mainWindow.draw(SPBitFirstSpr);
+	for (int SP = 0; SP < 12; SP++){
+		placementX = placementX + incrementAmt;
+		SPBitSpr.setPosition(sf::Vector2f(placementX, 48));
+		_mainWindow.draw(SPBitSpr);
+	}
+}
+
+void ZeroGameEngine::DrawHealthBar(Hero* player){
+// after Hero is more complete, implement an algorithm to display based on Hero's current health
+//	Full Health Bar is 12 squares Red = Health Green = Shield
+	// First Draw the Health Bar
+	_mainWindow.draw(HealthBarSpr);
+
+// Then Analyze Hero's health to display the bits that show on the Health Bar
+//  The single pieces are about 8 bits long, going X direction, 92 is startX, 28 startY
+	int currentHP = player->getCurrentHP();
+	int incrementAmt = 8;
+	int placementX = 92;
+	if (currentHP > 0){
+		HPBitFirstSpr.setPosition(sf::Vector2f(placementX, 28));
+		_mainWindow.draw(HPBitFirstSpr);
+		for (int HP = currentHP/12; HP <= currentHP; HP += currentHP/12){
+			placementX = placementX + incrementAmt;
+			HPBitSpr.setPosition(sf::Vector2f(placementX, 28));
+			_mainWindow.draw(HPBitSpr);
+		}
+	}
+
+	int currentSP = player->getCurrentSP();
+	placementX = 92;
+	if (currentSP > 0) {
+		SPBitFirstSpr.setPosition(sf::Vector2f(placementX, 28));
+		_mainWindow.draw(SPBitFirstSpr);
+		for (int HP = currentHP/12; HP <= currentHP; HP += currentHP/12){
+			placementX = placementX + incrementAmt;
+			SPBitSpr.setPosition(sf::Vector2f(placementX, 28));
+			_mainWindow.draw(SPBitSpr);
+		}
+	}
+
 }
 
 

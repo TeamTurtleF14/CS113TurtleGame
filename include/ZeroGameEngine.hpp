@@ -37,6 +37,9 @@ public:
 	sf::Texture HealthBar;
 	sf::Sprite HealthBarSpr;
 
+	sf::Sprite HealthBarSprC;
+
+	// Door Art Containers
 	sf::Texture NorthDoor;
 	sf::Texture EastDoor;
 	sf::Texture SouthDoor;
@@ -46,6 +49,19 @@ public:
 	sf::Sprite SouthDoorSpr;
 	sf::Sprite WestDoorSpr;
 
+	// First is art for first bit in container, not first is the rest
+	sf::Texture HPBitFirst;
+	sf::Texture HPBit;
+	sf::Sprite HPBitFirstSpr;
+	sf::Sprite HPBitSpr;
+
+	sf::Texture SPBitFirst;
+	sf::Texture SPBit;
+	sf::Sprite SPBitFirstSpr;
+	sf::Sprite SPBitSpr;
+
+
+
 //public:
 
 	// Constructor
@@ -53,6 +69,9 @@ public:
 
 	// Destructor
 	~ZeroGameEngine();
+
+	// Loads up all the starting sprites
+	void initSprites();
 
 	// Starts the game and enters the main loop
 	void Start();
@@ -82,7 +101,7 @@ public:
 	//  Red = Health
 	//	Green = Shield
 	void DrawHealthBar();
-//	void DrawHealthBar(Hero player);
+	void DrawHealthBar(Hero* player);
 
 
 };

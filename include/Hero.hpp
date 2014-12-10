@@ -23,8 +23,8 @@ public:
 		DirectionFacing = 'N';
 	}
 
-	Hero(unsigned int HP, int SizeX, int SizeY)
-		: Character(HP, SizeX, SizeY)
+	Hero(unsigned int startHP, unsigned int startSP, int SizeX, int SizeY)
+		: Character(startHP, startSP, SizeX, SizeY)
 	{
 		DirectionFacing = 'N';
 		setX(SizeX/2 - 50);
