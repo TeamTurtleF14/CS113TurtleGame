@@ -38,7 +38,7 @@ private:
 	float Speed;
 	unsigned int Attack;
 	unsigned int ShieldPoints;
-	unsigned int ShieldPointsMax;
+	unsigned int ShieldPointsMax;		// Should be normally 12, no?
 	float MovementSpeed;
 	unsigned int AttackDamage;
 	unsigned int AttackSpeed;

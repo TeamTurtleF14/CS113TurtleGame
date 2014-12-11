@@ -10,20 +10,21 @@
 #ifndef SRC_ZEROGAMEENGINE_HPP_
 #define SRC_ZEROGAMEENGINE_HPP_
 
-#include "LayoutGen.hpp"
-#include "Hero.hpp"
-#include <SFML/Graphics.hpp>
-#include "Animation.hpp"
-#include "AnimatedSprite.hpp"
+//#include "LayoutGen.hpp"
+//#include "Hero.hpp"
+//#include <SFML/Graphics.hpp>
+//#include "Animation.hpp"
+//#include "AnimatedSprite.hpp"
+#include "CollisionDet.hpp"
 
 
-class ZeroGameEngine {
+class ZeroGameEngine : public CollisionDet {
 public:
 	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver};
 	GameState _gameState;
 	sf::RenderWindow _mainWindow;
-	int _xSize;
-	int _ySize;
+	float _xSize;
+	float _ySize;
 
 	Hero* Player;
 
@@ -120,7 +121,7 @@ public:
 
 	void ControlHero();		// Controls the Hero's basic movements
 
-	void WallLimit();		// Sets the limiting bounds for where the player can move
+
 
 	// Display HUD: Health Bar, enemy highlighting, etc. if state is Playing
 	//	Full Health Bar is 12 squares
@@ -128,6 +129,7 @@ public:
 	//	Green = Shield
 	void DrawHealthBar();
 	void DrawHealthBar(Hero* player);
+
 
 
 };

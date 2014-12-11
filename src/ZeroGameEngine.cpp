@@ -196,7 +196,7 @@ void ZeroGameEngine::GameLoop(){
 
 		case ZeroGameEngine::MainMenu:
 			// Display the Main Menu stuff
-			if (!Background.loadFromFile("images/titleScreen.png"))
+			if (!Background.loadFromFile("images/Backgrounds/titleScreen.png"))
 				return;
 			BG.setTexture(Background);
 			BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
@@ -248,7 +248,7 @@ void ZeroGameEngine::GameLoop(){
 			break;
 
 		case ZeroGameEngine::Paused:
-			if (!Background.loadFromFile("images/pause.jpg"))
+			if (!Background.loadFromFile("images/Backgrounds/PauseScreen.png"))
 				return;
 			BG.setTexture(Background);
 			BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
@@ -270,7 +270,7 @@ void ZeroGameEngine::GameLoop(){
 
 		case ZeroGameEngine::GameOver:
 			//
-			if (!Background.loadFromFile("images/GameOverScreen.png"))
+			if (!Background.loadFromFile("images/Backgrounds/Player1_WinsScreen.png"))
 				return;
 			BG.setTexture(Background);
 			BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
@@ -300,16 +300,16 @@ void ZeroGameEngine::DrawDoors(Room* currentRoom){
 	if (!current->isAvailable('N')){
 		_mainWindow.draw(NorthDoorSpr);
 	}
-	if (!current->isAvailable('E')){
-//	if (current->isAvailable('E')){		//testing
+//	if (!current->isAvailable('E')){
+	if (current->isAvailable('E')){		//testing
 		_mainWindow.draw(EastDoorSpr);
 	}
-	if (!current->isAvailable('W')){
-//	if (current->isAvailable('W')){		// testing
+//	if (!current->isAvailable('W')){
+	if (current->isAvailable('W')){		// testing
 		_mainWindow.draw(WestDoorSpr);
 	}
-	if (!current->isAvailable('S')){
-//	if (current->isAvailable('S')){		//testing
+//	if (!current->isAvailable('S')){
+	if (current->isAvailable('S')){		//testing
 		_mainWindow.draw(SouthDoorSpr);
 	}
 }
@@ -413,7 +413,9 @@ void ZeroGameEngine::ControlHero() {
 		Player->setVX(0);
 		Player->setVY(0);
 	}
-	WallLimit();
+	WallLimit(animatedHeroSprite);
+//	ApproachDoor();
+	EnterRoom(current, Player);
 	animatedHeroSprite.play(*currentHeroAnimation);
     animatedHeroSprite.move(HeroMovement * frameTime.asSeconds());
 
@@ -491,20 +493,49 @@ void ZeroGameEngine::DrawHealthBar(Hero* player){
 
 }
 
-// Current Implementaion for Hero
-// Implementation for all units, after movements -> check every coord in vector
-void ZeroGameEngine::WallLimit() {
-	if (animatedHeroSprite.getPosition().y<48){
-		animatedHeroSprite.setPosition(animatedHeroSprite.getPosition().x, 48);
-	}
-	else if (animatedHeroSprite.getPosition().y>635){
-		animatedHeroSprite.setPosition(animatedHeroSprite.getPosition().x, 635);
-	}
-	if (animatedHeroSprite.getPosition().x<-20) {
-		animatedHeroSprite.setPosition(-20, animatedHeroSprite.getPosition().y);
-	} else if (animatedHeroSprite.getPosition().x > 1015){
-		animatedHeroSprite.setPosition(1015, animatedHeroSprite.getPosition().y);
-	}
-}
+//// Current Implementaion for Hero
+//// Implementation for all units, after movements -> check every coord in vector
+//void ZeroGameEngine::WallLimit() {
+//	if (animatedHeroSprite.getPosition().y<48){
+//		animatedHeroSprite.setPosition(animatedHeroSprite.getPosition().x, 48);
+//	}
+//	else if (animatedHeroSprite.getPosition().y>635){
+//		animatedHeroSprite.setPosition(animatedHeroSprite.getPosition().x, 635);
+//	}
+//	if (animatedHeroSprite.getPosition().x<-20) {
+//		animatedHeroSprite.setPosition(-20, animatedHeroSprite.getPosition().y);
+//	} else if (animatedHeroSprite.getPosition().x > 1015){
+//		animatedHeroSprite.setPosition(1015, animatedHeroSprite.getPosition().y);
+//	}
+//}
+//
+//void ZeroGameEngine::ApproachDoor(){
+//	// Operates the opening door animation on the North and the South
+////	NorthDoorSpr.setPosition(sf::Vector2f(_xSize/2 - 50, _ySize/32));
+//	// Currently for North Logic
+//	float posX = Player->getX();
+//	float posY = Player->getY();
+//
+//	if (posX > _xSize/2 - 100 && posX < _xSize/2 && posY < _ySize/32 +100)
+//		std::cout << "HERO IS NEAR" << std::endl << std::endl;
+//}
 
+//void ZeroGameEngine::EnterRoom() {
+//	float posX = Player->getX();
+//	float posY = Player->getY();
+//
+//	if (posX > _xSize/2 - 100 && posX < _xSize/2){
+//		if (posY < _ySize/32 + 32)
+//			std::cout << "Enter NORTH" << std::endl << std::endl;
+//		else if (posY > _ySize - 90)
+//			std::cout << "Enter SOUTH" << std::endl << std::endl;
+//	}
+//	if (posY > _ySize/2 - 60 && posY < _ySize/2 + 10 ){
+//		if (posX < -10)
+//			std::cout << "Enter WEST" << std::endl << std::endl;
+//		else if (posX > _xSize - 70)
+//			std::cout << "Enter EAST" << std::endl << std::endl;
+//	}
+//
+//}
 
