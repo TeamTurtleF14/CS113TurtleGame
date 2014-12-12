@@ -198,6 +198,10 @@ void ZeroGameEngine::GameLoop(){
 	Background.setRepeated(true);
 	sf::Sprite BG;
 	while (_mainWindow.pollEvent(currentEvent)){
+		if (currentEvent.type == sf::Event::Closed){
+			_gameState = Exiting;
+		}
+
 //		enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting};
 		switch (_gameState){
 		case ZeroGameEngine::Uninitialized:
@@ -260,17 +264,13 @@ void ZeroGameEngine::GameLoop(){
 		case ZeroGameEngine::Paused:
 			if (!Background.loadFromFile("images/Backgrounds/PauseScreen.png"))
 				return;
-			BG.setTexture(Background);
-			BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
+
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 				_gameState = Exiting;
 				sf::sleep(sf::milliseconds(10));
 				break;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
-//				_gameState = Playing;
-//				sf::sleep(sf::milliseconds(10));
-//				break;
 				if (ptContinue)
 					_gameState = Playing;
 				else
@@ -291,6 +291,7 @@ void ZeroGameEngine::GameLoop(){
 				pauseCursor.setPosition(415, 405);		// On Continue
 			else
 				pauseCursor.setPosition(415, 475); 		// On Quit
+
 			BG.setTexture(Background);
 			BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
 			_mainWindow.clear();
@@ -324,6 +325,7 @@ void ZeroGameEngine::GameLoop(){
 		}
 		return;
 	}
+	return;
 }
 
 // Takes a char direction Does stuff to display the doors
