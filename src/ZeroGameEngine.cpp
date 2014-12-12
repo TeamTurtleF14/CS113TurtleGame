@@ -49,6 +49,7 @@ void ZeroGameEngine::Start(){
 	_mainWindow.setFramerateLimit(60);
 	_gameState = MainMenu;
 
+	ptContinue = true;
 	while (!isExiting()){
 //		 While there is no exit signal, go into the game loop
 		GameLoop();
@@ -118,7 +119,6 @@ void ZeroGameEngine::initSprites(){
     noKeyWasPressed = true;
     frameTime = frameClock.restart();
 
-
 // Hero Animation Crap End
 
 
@@ -175,6 +175,16 @@ void ZeroGameEngine::initSprites(){
 //	SouthDoorSpr.setTextureRect(sf::IntRect(0, 0, 0, 0));
 	SouthDoorSpr.setPosition(sf::Vector2f(_xSize/2 -50, _ySize - 20));
 // Door sprite crap end
+
+//	Menu Cursor
+	pauseCursor.setPointCount(3);
+	pauseCursor.setFillColor(sf::Color(100, 250, 50));
+	pauseCursor.setPoint(0, sf::Vector2f(0,0));
+	pauseCursor.setPoint(1, sf::Vector2f(20, 20));
+	pauseCursor.setPoint(2, sf::Vector2f(0, 40));
+//	pauseCursor.setPosition(415, 405);		// On Continue
+//	pauseCursor.setPosition(415, 475);		// On Quit
+//	Menu Cursor END
 
 }
 
@@ -252,19 +262,41 @@ void ZeroGameEngine::GameLoop(){
 				return;
 			BG.setTexture(Background);
 			BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
-			_mainWindow.clear();
-			_mainWindow.draw(BG);
-			_mainWindow.display();
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 				_gameState = Exiting;
 				sf::sleep(sf::milliseconds(10));
 				break;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
-				_gameState = Playing;
+//				_gameState = Playing;
+//				sf::sleep(sf::milliseconds(10));
+//				break;
+				if (ptContinue)
+					_gameState = Playing;
+				else
+					_gameState = Exiting;
+
 				sf::sleep(sf::milliseconds(10));
 				break;
 			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)
+				|| sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+				if (ptContinue)
+					ptContinue = 0;
+				else
+					ptContinue = 1;
+			}
+
+			if (ptContinue)
+				pauseCursor.setPosition(415, 405);		// On Continue
+			else
+				pauseCursor.setPosition(415, 475); 		// On Quit
+			BG.setTexture(Background);
+			BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
+			_mainWindow.clear();
+			_mainWindow.draw(BG);
+			_mainWindow.draw(pauseCursor);
+			_mainWindow.display();
 
 			break;
 

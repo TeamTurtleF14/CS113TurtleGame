@@ -26,6 +26,9 @@ public:
 	float _xSize;
 	float _ySize;
 
+	sf::ConvexShape pauseCursor;
+	bool ptContinue;
+
 	Hero* Player;
 
 	sf::Texture HeroImage;
