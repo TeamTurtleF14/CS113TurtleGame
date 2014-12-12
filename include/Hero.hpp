@@ -8,7 +8,7 @@
 
 #ifndef SRC_HERO_HPP_
 #define SRC_HERO_HPP_
-
+#include <iostream>
 #include "Character.hpp"
 
 class Hero: public Character {
@@ -32,17 +32,27 @@ public:
 	}
 
 	// Returns the image location to render the Hero just standing
-	std::string StandingImage(){
+	std::string StandingImage()
+	{
+		std::string img;
 		switch (DirectionFacing){
 		case 'N':
-			return "images/Hero/HeroMovement/BackWalk/HeroWalk_1b.png";
+			img = "images/Hero/HeroMovement/BackWalk/HeroWalk_1b.png";
+			break;
 		case 'E':
-			return "images/Hero/HeroMovement/RightWalk/HeroWalk_1r.png";
+			img = "images/Hero/HeroMovement/RightWalk/HeroWalk_1r.png";
+			break;
 		case 'S':
-			return "images/Hero/HeroMovement/ForwardWalk/HeroWalk_1l.png";
+			img = "images/Hero/HeroMovement/ForwardWalk/HeroWalk_1l.png";
+			break;
 		case 'W':
-			return "images/Hero/HeroMovement/LeftWalk/HeroWalk_1l.png";
+			img = "images/Hero/HeroMovement/LeftWalk/HeroWalk_1l.png";
+			break;
+		default:
+			img = "images/Hero/HeroMovement/BackWalk/HeroWalk_1b.png";
+			break;
 		}
+		return img;
 	}
 
 };

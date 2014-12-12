@@ -9,8 +9,11 @@
 #ifndef SRC_CHARACTER_HPP_
 #define SRC_CHARACTER_HPP_
 
+#include <SFML/Graphics.hpp>
 #include <utility>
 #include <string>
+#include "Animation.hpp"
+#include "AnimatedSprite.hpp"
 
 class Character
 {
@@ -25,10 +28,11 @@ private:
 	std::string ImageWest;
 
 //	Used to help simplify calculations within class, such as starting positions
+	unsigned int HitPoints;
 	int SizeX;
 	int SizeY;
 
-	unsigned int HitPoints;
+
 	float Speed;
 	unsigned int Attack;
 	unsigned int HitPointsMax;
@@ -67,9 +71,7 @@ public:
 	char DirectionFacing;
 	char DirectionMoving;
 
-	Character(){
-
-	}
+	Character();
 
 	Character(int HP, int SizeX, int SizeY)
 	: HitPoints {HP}, SizeX {SizeX}, SizeY {SizeY}

@@ -5,41 +5,65 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Shape.hpp>
 #include <iostream>
+#include <cmath>
 
-struct Unit
+// base class for:
+// monster
+// spawner
+// bullets
+// character?
+
+class Unit
 {
-//public:
-	sf::CircleShape shape;
-	float unitRadius{10.f};
-	sf::Vector2f velocity{0, 0};
-/*
+public:
+
 	Unit();
 
-	Unit(const Unit& u);
-
-	~Unit();
-
-	Unit& operator=(const Unit& u);
-*/
-	Unit(float x, float y)
+	Unit(float x, float y, float width, float height)
+		:x{x}, y{y}, width{width}, height{height}
 	{
-		shape.setPosition(x,y);
-		shape.setRadius(unitRadius);
-		shape.setFillColor(sf::Color::Cyan);
-		shape.setOrigin(unitRadius, unitRadius);
+		position.x = x;
+		position.y = y;
+		active = false;
 	}
 
-	void update()
-	{
-		shape.move(velocity);
-	}
+	virtual ~Unit() = default;
+	void activate();
+	virtual void update();
 
-	float x()		{return shape.getPosition().x;}
-	float y()		{return shape.getPosition().y;}
-	float left()	{return x() - shape.getRadius();}
-	float right()	{return x() + shape.getRadius();}
-	float bottom()	{return y() + shape.getRadius();}
-	float top()		{return y() - shape.getRadius();}
+	void setX(float xVal);
+	void setY(float yVal);
+	float getX();
+	float getY();
+
+	void setWidth(float w);
+	void setHeight(float h);
+	float getWidth();
+	float getHeight();
+
+	void setPosition(sf::Vector2f pos);
+	sf::Vector2f getPosition();
+
+	float distance(sf::Vector2f pos);
+
+	//boundaries
+	float left();
+	float right();
+	float top();
+	float bottom();
+
+	bool contains(Unit u);
+	bool contains(sf::Vector2f pos);
+
+private:
+	float x;
+	float y;
+	float width;
+	float height;
+	sf::Vector2f position;
+	bool active;
+	sf::Texture texture;
+
 };
 
 

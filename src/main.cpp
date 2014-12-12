@@ -5,9 +5,9 @@
 #include "Animation.hpp"
 #include "AnimatedSprite.hpp"
 int wWidth(1080), wHeight(720);
-float unitVelocity{1.f};
+//float unitVelocity{1.f};
 
-<<<<<<< HEAD
+/*
 int main()
 {
 	Unit unit(wWidth/2, wHeight/2);
@@ -151,7 +151,7 @@ int main()
 
     return 0;
 }
-=======
+*/
 //using namespace ZGE;
 // Testing stuff will go in here, old references will go into the commented main()
 
@@ -199,4 +199,4 @@ int main(){
 //
 //    return 0;
 //}
->>>>>>> origin/master
+

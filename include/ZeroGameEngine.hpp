@@ -13,6 +13,9 @@
 #include "LayoutGen.hpp"
 #include "Hero.hpp"
 #include <SFML/Graphics.hpp>
+#include "Animation.hpp"
+#include "AnimatedSprite.hpp"
+#include <cmath>
 
 
 class ZeroGameEngine {
@@ -61,6 +64,8 @@ public:
 	bool isExiting();
 
 	// Main Game loop
+	void MenuLoop();
+
 	void GameLoop();
 
 	// Update the gui, will need to take positions from the characters

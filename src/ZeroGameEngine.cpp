@@ -65,11 +65,12 @@ void ZeroGameEngine::Start(){
 		return;
 
 	_mainWindow.create(sf::VideoMode(_xSize, _ySize), "The Zeroth Law");
+	_mainWindow.setFramerateLimit(60);
 	_gameState = MainMenu;
 
 	while (!isExiting()){
 //		 While there is no exit signal, go into the game loop
-		GameLoop();
+		MenuLoop();
 //		break;
 	}
 
@@ -86,10 +87,9 @@ bool ZeroGameEngine::isExiting(){
 }
 
 // The main game loop, called by Start()
-void ZeroGameEngine::GameLoop(){
+void ZeroGameEngine::MenuLoop(){
 	sf::Event currentEvent;
 	sf::Texture Background;
-
 	Background.setRepeated(true);
 	sf::Sprite BG;
 	while (_mainWindow.pollEvent(currentEvent)){
@@ -109,38 +109,30 @@ void ZeroGameEngine::GameLoop(){
 			_mainWindow.draw(BG);
 			_mainWindow.display();
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+			//=====================
+			if (currentEvent.type == sf::Event::Closed)
 				_gameState = Exiting;
-//				sf::sleep(sf::milliseconds(10));
-				break;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+			if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::Escape)
+            	_gameState = Exiting;
+			if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::Return)
+				//State currentState;
 				_gameState = Playing;
-//				sf::sleep(sf::milliseconds(10));
-				break;
-			}
+			//=====================
 
 			break;
 
 		case ZeroGameEngine::Playing:
-			if (!Background.loadFromFile("images/Backgrounds/Blue_Background-wall.jpg"))
-				return;
-			BG.setTexture(Background);
-			BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-				_gameState = Paused;
-				sf::sleep(sf::milliseconds(50));
-//				_gameState = Exiting;
-				break;
-			}
-			_mainWindow.clear(sf::Color::Black);
-			_mainWindow.draw(BG);
-			// Draw other crap here, before display is called
-			DrawDoors(current);
-			DrawHealthBar();
-//			DrawHero();
-			DrawHero(Player);
-			_mainWindow.display();
+			//Run GameLoop Here
+			GameLoop();
+			//GameLoop(currentState);
+
+			//State is a struct with Attributes:
+				// vector of units
+					// units are all enemies and traps, and hero
+						// has current hp, attack
+				// state of player stats
+				// state / level
+
 			break;
 
 
@@ -152,29 +144,132 @@ void ZeroGameEngine::GameLoop(){
 			_mainWindow.clear();
 			_mainWindow.draw(BG);
 			_mainWindow.display();
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+
+			//=====================
+			if (currentEvent.type == sf::Event::Closed)
 				_gameState = Exiting;
-				sf::sleep(sf::milliseconds(10));
-				break;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+			if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::Escape)
+				_gameState = Exiting;
+			if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::Return)
 				_gameState = Playing;
-				sf::sleep(sf::milliseconds(10));
-				break;
-			}
+			//=====================
 
 			break;
 
 		case ZeroGameEngine::Exiting:
 			// Exit the game
-			if (_gameState==Exiting){
-				return;
-			}
+			//=====================
+			_mainWindow.close();
+			//=====================
 			break;
 		}
 		return;
 	}
 }
+
+
+// main game loop // meat of the program
+void ZeroGameEngine::GameLoop()
+{
+
+	sf::RectangleShape mouseDrag;
+
+	sf::Texture Background;
+	Background.setRepeated(true);
+	sf::Sprite BG;
+	if (!Background.loadFromFile("images/Backgrounds/Blue_Background-wall.jpg"))
+	{
+		std::cout << "Failed to load Background!" << std::endl;
+		return;
+	}
+	BG.setTexture(Background);
+	BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
+
+
+	sf::Vector2i mouseStart, mouseRelease, mouseRight, mouseRightRelease;
+
+
+	while(_gameState == Playing)
+	{
+		sf::Event event;
+		while (_mainWindow.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				_gameState = Exiting;
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+				_gameState = Paused;
+
+//===================== MOUSE PRESSES ===========================================
+
+			//========= LEFT CLICKS =============================================
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+			{
+				mouseStart.x = event.mouseButton.x;
+			    mouseStart.y = event.mouseButton.y;
+			}
+
+			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+			{
+				mouseRelease.x = event.mouseButton.x;
+				mouseRelease.y = event.mouseButton.y;
+
+				//select all selectable units within area
+
+
+
+			    mouseStart.x = 0;
+			    mouseStart.y = 0;
+			}
+
+            //======== RIGHT CLICKS =============================================
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
+			{
+				mouseRight.x = event.mouseButton.x;
+			    mouseRight.y = event.mouseButton.y;
+			}
+
+			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Right)
+			{
+				mouseRightRelease.x = event.mouseButton.x;
+			    mouseRightRelease.y = event.mouseButton.y;
+			}
+
+		}//end while pollevent
+
+        sf::Vector2i mouseEnd;
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+      	{
+        	mouseEnd = sf::Mouse::getPosition(_mainWindow);
+        }
+        float widthDrag, heightDrag;
+        sf::Vector2f origin;
+        widthDrag = mouseEnd.x - mouseStart.x;
+        heightDrag = mouseEnd.y - mouseStart.y;
+
+		sf::Vector2f size(widthDrag, heightDrag);
+		mouseDrag.setSize(size);
+
+
+		mouseDrag.setPosition(mouseStart.x, mouseStart.y);
+
+		//255 opacity = 100%
+		mouseDrag.setFillColor(sf::Color(0,255,255,50));
+
+
+
+		_mainWindow.clear();
+		_mainWindow.draw(BG); // always first to be drawn
+
+		_mainWindow.draw(mouseDrag); // drawn right before HUD
+		DrawHealthBar();
+		// draw energy bar
+
+		// draw health over health bar
+		// draw energy over energy bar
+		_mainWindow.display();
+	}
+}
+
 
 // Takes a char direction Does stuff to display the doors
 void ZeroGameEngine::DrawDoors(Room* currentRoom){
