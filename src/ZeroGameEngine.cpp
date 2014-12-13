@@ -52,6 +52,8 @@ void ZeroGameEngine::Start(){
 
 	ptContinue = true;				// Variable just for the cursor on the pause screen to work properly
 	tutorialSwitch = false;
+	showCredits = false;
+	HeroWon = false;
 
 	while (!isExiting()){
 //		 While there is no exit signal, go into the game loop
@@ -78,7 +80,7 @@ void ZeroGameEngine::initSprites(){
 // Hero Animation Crap Start
 
 //    HeroWalkUp;
-	if (!HeroBackSprSht.loadFromFile("images/Hero/HeroBackSprSheet.png"))
+	if (!HeroBackSprSht.loadFromFile("images/Hero/HeroWalkSpriteSht/HeroBackSprSheet.png"))
 		return;
     HeroWalkUp.setSpriteSheet(HeroBackSprSht);
     HeroWalkUp.addFrame(sf::IntRect(0, 0, 88, 91));
@@ -87,7 +89,7 @@ void ZeroGameEngine::initSprites(){
     HeroWalkUp.addFrame(sf::IntRect(89, 92, 88, 91));
 
 //    HeroWalkDown;
-	if (!HeroForwardSprSht.loadFromFile("images/Hero/HeroForwardSprSheet.png"))
+	if (!HeroForwardSprSht.loadFromFile("images/Hero/HeroWalkSpriteSht/HeroForwardSprSheet.png"))
 		return;
     HeroWalkDown.setSpriteSheet(HeroForwardSprSht);
     HeroWalkDown.addFrame(sf::IntRect(0, 0, 88, 91));
@@ -96,7 +98,7 @@ void ZeroGameEngine::initSprites(){
     HeroWalkDown.addFrame(sf::IntRect(89, 92, 88, 91));
 
 //    HeroWalkLeft;
-	if (!HeroLeftSprSht.loadFromFile("images/Hero/HeroLeftSprSheet.png"))
+	if (!HeroLeftSprSht.loadFromFile("images/Hero/HeroWalkSpriteSht/HeroLeftSprSheet.png"))
 		return;
     HeroWalkLeft.setSpriteSheet(HeroLeftSprSht);
     HeroWalkLeft.addFrame(sf::IntRect(0, 0, 88, 91));
@@ -106,13 +108,50 @@ void ZeroGameEngine::initSprites(){
 
 
 //    HeroWalkRight;
-	if (!HeroRightSprSht.loadFromFile("images/Hero/HeroRightSprSheet.png"))
+	if (!HeroRightSprSht.loadFromFile("images/Hero/HeroWalkSpriteSht/HeroRightSprSheet.png"))
 		return;
     HeroWalkRight.setSpriteSheet(HeroRightSprSht);
     HeroWalkRight.addFrame(sf::IntRect(0, 0, 88, 91));
     HeroWalkRight.addFrame(sf::IntRect(89, 0, 88, 91));
     HeroWalkRight.addFrame(sf::IntRect(0, 92, 88, 91));
     HeroWalkRight.addFrame(sf::IntRect(89, 92, 88, 91));
+
+//    Hero Walk Diagonal Left Back
+    if (!HeroLBSprSht.loadFromFile("images/Hero/HeroWalkSpriteSht/HeroDiagonalWalk_LB.png"))
+    	return;
+    HeroWalkLB.setSpriteSheet(HeroLBSprSht);
+    HeroWalkLB.addFrame(sf::IntRect(0, 0, 88, 91));
+    HeroWalkLB.addFrame(sf::IntRect(89, 0, 88, 91));
+    HeroWalkLB.addFrame(sf::IntRect(0, 92, 88, 91));
+    HeroWalkLB.addFrame(sf::IntRect(89, 92, 88, 91));
+
+//    Hero Walk Diagonal Left Forward
+    if (!HeroLFSprSht.loadFromFile("images/Hero/HeroWalkSpriteSht/HeroDiagonalWalk_LF.png"))
+    	return;
+    HeroWalkLF.setSpriteSheet(HeroLFSprSht);
+    HeroWalkLF.addFrame(sf::IntRect(0, 0, 88, 91));
+    HeroWalkLF.addFrame(sf::IntRect(89, 0, 88, 91));
+    HeroWalkLF.addFrame(sf::IntRect(0, 92, 88, 91));
+    HeroWalkLF.addFrame(sf::IntRect(89, 92, 88, 91));
+
+//    Hero Walk Diagonal Right Back
+    if (!HeroRBSprSht.loadFromFile("images/Hero/HeroWalkSpriteSht/HeroDiagonalWalk_RB.png"))
+    	return;
+    HeroWalkRB.setSpriteSheet(HeroRBSprSht);
+    HeroWalkRB.addFrame(sf::IntRect(0, 0, 88, 91));
+    HeroWalkRB.addFrame(sf::IntRect(89, 0, 88, 91));
+    HeroWalkRB.addFrame(sf::IntRect(0, 92, 88, 91));
+    HeroWalkRB.addFrame(sf::IntRect(89, 92, 88, 91));
+
+//    Hero Walk Diagonal Right Forward
+    if (!HeroRFSprSht.loadFromFile("images/Hero/HeroWalkSpriteSht/HeroDiagonalWalk_RF.png"))
+    	return;
+    HeroWalkRF.setSpriteSheet(HeroRFSprSht);
+    HeroWalkRF.addFrame(sf::IntRect(0, 0, 88, 91));
+    HeroWalkRF.addFrame(sf::IntRect(89, 0, 88, 91));
+    HeroWalkRF.addFrame(sf::IntRect(0, 92, 88, 91));
+    HeroWalkRF.addFrame(sf::IntRect(89, 92, 88, 91));
+
 
     currentHeroAnimation = &HeroWalkUp;
 //    animatedHeroSprite {sf::seconds(0.05), true, false};
@@ -321,16 +360,26 @@ void ZeroGameEngine::MenuLoop(){
 
 		case ZeroGameEngine::GameOver:
 			//
-			if (!Background.loadFromFile("images/Backgrounds/Player1_WinsScreen.png"))
-				return;
+			if (showCredits){
+				if (!Background.loadFromFile("images/Backgrounds/CreditScreen.png"))
+					return;
+			} else if (HeroWon){
+				if (!Background.loadFromFile("images/Backgrounds/Player1_WinsScreen.png"))
+					return;
+			} else{
+				if (!Background.loadFromFile("images/Backgrounds/ROGUEAI_WINScreen.png"))
+					return;
+			}
 			BG.setTexture(Background);
 			BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
 			_mainWindow.clear();
 			_mainWindow.draw(BG);
 			_mainWindow.display();
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
-				_gameState = MainMenu;
-				sf::sleep(sf::milliseconds(10));
+				if (showCredits)
+					_gameState = MainMenu;
+				else
+					showCredits = true;
 				break;
 			}
 
@@ -541,7 +590,7 @@ void ZeroGameEngine::ControlHero() {
 		Player->setDirectionFacing('N');
 		HeroMovement.y = -Player->getSpeed();
 		HeroMovement.x = -Player->getSpeed();
-		currentHeroAnimation = &HeroWalkUp;
+		currentHeroAnimation = &HeroWalkLB;
 //		Player->setVX(-1);
 //		Player->setVY(-1);
 		noKeyWasPressed = false;
@@ -549,7 +598,7 @@ void ZeroGameEngine::ControlHero() {
 		Player->setDirectionFacing('N');
 		HeroMovement.y = -Player->getSpeed();
 		HeroMovement.x = Player->getSpeed();
-		currentHeroAnimation = &HeroWalkUp;
+		currentHeroAnimation = &HeroWalkRB;
 //		Player->setVX(1);
 //		Player->setVY(-1);
 		noKeyWasPressed = false;
@@ -557,7 +606,7 @@ void ZeroGameEngine::ControlHero() {
 		Player->setDirectionFacing('S');
 		HeroMovement.y = Player->getSpeed();
 		HeroMovement.x = -Player->getSpeed();
-		currentHeroAnimation = &HeroWalkDown;
+		currentHeroAnimation = &HeroWalkLF;
 //		Player->setVX(-1);
 //		Player->setVY(1);
 		noKeyWasPressed = false;
@@ -565,7 +614,7 @@ void ZeroGameEngine::ControlHero() {
 		Player->setDirectionFacing('S');
 		HeroMovement.y = Player->getSpeed();
 		HeroMovement.x = Player->getSpeed();
-		currentHeroAnimation = &HeroWalkDown;
+		currentHeroAnimation = &HeroWalkRF;
 //		Player->setVX(1);
 //		Player->setVY(1);
 		noKeyWasPressed = false;

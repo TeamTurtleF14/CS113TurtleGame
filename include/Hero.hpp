@@ -32,7 +32,7 @@ public:
 		setX(SizeX/2 - 50);
 		setY(SizeY - (SizeY/5));
 		number = 0;
-		setSpeed(10.f);
+		setSpeed(40.f);
 	}
 
 	// Returns the image location to render the Hero just standing

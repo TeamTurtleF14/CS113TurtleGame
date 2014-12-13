@@ -30,6 +30,8 @@ public:
 	sf::ConvexShape pauseCursor;
 	bool ptContinue;
 	bool tutorialSwitch;
+	bool showCredits;
+	bool HeroWon;
 
 	Hero* Player;
 
@@ -40,15 +42,23 @@ public:
 	sf::Texture HeroForwardSprSht;
 	sf::Texture HeroRightSprSht;
 	sf::Texture HeroLeftSprSht;
+	sf::Texture HeroLBSprSht;
+	sf::Texture HeroLFSprSht;
+	sf::Texture HeroRBSprSht;
+	sf::Texture HeroRFSprSht;
 
 	Animation HeroWalkUp;
 	Animation HeroWalkLeft;
 	Animation HeroWalkRight;
 	Animation HeroWalkDown;
+	Animation HeroWalkLB;
+	Animation HeroWalkLF;
+	Animation HeroWalkRB;
+	Animation HeroWalkRF;
 
 	sf::Vector2f HeroMovement{0.f, 0.f};
     Animation* currentHeroAnimation;
-    AnimatedSprite animatedHeroSprite{sf::seconds(1), true, false};
+    AnimatedSprite animatedHeroSprite{sf::seconds(0.5), true, false};
 //   AnimatedSprite animatedHeroSprite{sf::seconds(0.05), true, false};
 
 
