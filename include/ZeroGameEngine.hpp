@@ -15,12 +15,13 @@
 //#include <SFML/Graphics.hpp>
 //#include "Animation.hpp"
 //#include "AnimatedSprite.hpp"
+#include <SFML/Audio.hpp>
 #include "CollisionDet.hpp"
 
 
 class ZeroGameEngine : public CollisionDet {
 public:
-	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver};
+	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver, Tutorial};
 	GameState _gameState;
 	sf::RenderWindow _mainWindow;
 	float _xSize;
@@ -28,6 +29,7 @@ public:
 
 	sf::ConvexShape pauseCursor;
 	bool ptContinue;
+	bool tutorialSwitch;
 
 	Hero* Player;
 
@@ -46,9 +48,12 @@ public:
 
 	sf::Vector2f HeroMovement{0.f, 0.f};
     Animation* currentHeroAnimation;
-    AnimatedSprite animatedHeroSprite{sf::seconds(0.05), true, false};
-//   AnimatedSprite animatedHeroSprite(sf::seconds(0.05), true, false);
+    AnimatedSprite animatedHeroSprite{sf::seconds(1), true, false};
+//   AnimatedSprite animatedHeroSprite{sf::seconds(0.05), true, false};
 
+
+    sf::RectangleShape mouseDrag;
+    sf::Vector2i mouseStart, mouseRelease, mouseRight, mouseRightRelease;
 
     sf::Clock frameClock;
     float speed;
@@ -88,6 +93,12 @@ public:
 	sf::Sprite SPBitFirstSpr;
 	sf::Sprite SPBitSpr;
 
+//////////////////////
+////// END TEXTURE/SPRITES
+///////////////////////
+
+	sf::Music BGM;
+
 
 
 //public:
@@ -107,7 +118,9 @@ public:
 	// Returns bool that signals if game is ending
 	bool isExiting();
 
-	// Main Game loop
+	// Main Game loop and Menu Loop
+	void MenuLoop();
+
 	void GameLoop();
 
 	// Update the gui, will need to take positions from the characters
@@ -122,6 +135,8 @@ public:
 	// Uses Hero's attributes to draw the Hero's position, attributes
 	void DrawHero(Hero* hero);
 
+	void ControlMouse(sf::Event event); 	// Controls the mouses' basic controls
+
 	void ControlHero();		// Controls the Hero's basic movements
 
 
@@ -132,6 +147,9 @@ public:
 	//	Green = Shield
 	void DrawHealthBar();
 	void DrawHealthBar(Hero* player);
+
+	// Resets the Heros position to be near the door the hero entered from
+	void setHero(char cameFrom, Hero* player, AnimatedSprite& playerSprite);
 
 
 

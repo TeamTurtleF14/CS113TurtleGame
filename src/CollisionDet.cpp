@@ -14,7 +14,7 @@ CollisionDet::CollisionDet(){
 }
 
 
-void CollisionDet::EnterRoom(Room* current, Hero* Player) {
+bool CollisionDet::willEnterRoom(Room* current, Hero* Player) {
 	float posX = Player->getX();
 	float posY = Player->getY();
 
@@ -30,6 +30,11 @@ void CollisionDet::EnterRoom(Room* current, Hero* Player) {
 		else if (posX > _xSize - 70)
 			std::cout << "Enter EAST" << std::endl << std::endl;
 	}
+
+}
+
+// Should only be called if the function above returns a 1, signals that he is near a room
+char CollisionDet::whichRoom(Room* current, Hero* player){
 
 }
 

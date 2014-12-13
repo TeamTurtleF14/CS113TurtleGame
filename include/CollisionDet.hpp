@@ -30,10 +30,12 @@ public:
 	void ApproachDoor(Room* current, Hero* Player);	// Detects if the Hero is near the door
 
 	// Logic for what happens when Hero approaches and enters a door
-	void EnterRoom(Room* current, Hero* Player);
+	bool willEnterRoom(Room* current, Hero* Player);
 
 	// Transitions to next room
 	void transitionRoom(Room* current, Hero* Player);
+
+	char whichRoom(Room* current, Hero* player);
 };
 
 

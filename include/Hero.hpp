@@ -25,14 +25,14 @@ public:
 		DirectionFacing = 'N';
 	}
 
-	Hero(unsigned int startHP, unsigned int startSP, int SizeX, int SizeY)
-		: Character(startHP, startSP, SizeX, SizeY)
+	Hero(unsigned int startHP, unsigned int maxHP, unsigned int startSP, unsigned int maxSP, int SizeX, int SizeY)
+		: Character(startHP, maxHP, startSP, maxSP, SizeX, SizeY)
 	{
 		DirectionFacing = 'N';
 		setX(SizeX/2 - 50);
 		setY(SizeY - (SizeY/5));
 		number = 0;
-		setSpeed(100.f);
+		setSpeed(10.f);
 	}
 
 	// Returns the image location to render the Hero just standing
@@ -119,22 +119,7 @@ public:
 //		}
 //	}
 
-	void changeAnimationLevel(){
-		switch (number){
-		case 0:
-			number = 1;
-			break;
-		case 1:
-			number = 2;
-			break;
-		case 2:
-			number = 3;
-			break;
-		case 3:
-			number = 0;
-		break;
-		}
-	}
+
 };
 
 

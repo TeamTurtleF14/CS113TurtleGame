@@ -12,6 +12,8 @@
 #include <utility>
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "Animation.hpp"
+#include "AnimatedSprite.hpp"
 
 class Character
 {
@@ -114,9 +116,9 @@ public:
 	}
 
 //	For Hero
-	Character(int startHP, int startSP, int ScreenSizeX, int ScreenSizeY)
-	: HitPoints {startHP}, ShieldPoints {startSP},  ScreenSizeX {ScreenSizeX},
-	  ScreenSizeY {ScreenSizeY}, velocity{0, 0}
+	Character(unsigned int startHP, unsigned int maxHP, unsigned int startSP, unsigned int maxSP, int ScreenSizeX, int ScreenSizeY)
+	: HitPoints {startHP}, HitPointsMax {maxHP}, ShieldPoints {startSP}, ShieldPointsMax {maxSP},
+	  ScreenSizeX {ScreenSizeX}, ScreenSizeY {ScreenSizeY}, velocity{0, 0}
 	{
 		shape.setPosition(ScreenSizeX/2 - 50, ScreenSizeY - (ScreenSizeY/5));
 		shape.setRadius(unitRadius);
