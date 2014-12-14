@@ -16,6 +16,8 @@ ZeroGameEngine::ZeroGameEngine(){
 	_xSize = 1080;
 	_ySize = 720;
 
+	timetest = 0;
+
 	Player = new Hero(1200, 1200, 6, 12, _xSize, _ySize);
 
 	LayoutMaker = new LayoutGen();
@@ -151,6 +153,49 @@ void ZeroGameEngine::initSprites(){
     HeroWalkRF.addFrame(sf::IntRect(89, 0, 88, 91));
     HeroWalkRF.addFrame(sf::IntRect(0, 92, 88, 91));
     HeroWalkRF.addFrame(sf::IntRect(89, 92, 88, 91));
+
+    if (!HeroShootSprSht.loadFromFile("images/Hero/HeroShooting/HeroShooting.png"))
+    	return;
+	HeroShootUp.setSpriteSheet(HeroShootSprSht);
+    HeroShootUp.addFrame(sf::IntRect(0, 0, 88, 91));
+    HeroShootUp.addFrame(sf::IntRect(89, 0, 88, 91));
+    HeroShootUp.addFrame(sf::IntRect(0, 92, 88, 91));
+    HeroShootUp.addFrame(sf::IntRect(89, 92, 88, 91));
+    HeroShootRB.setSpriteSheet(HeroShootSprSht);
+    HeroShootRB.addFrame(sf::IntRect(0, 276, 88, 91));
+    HeroShootRB.addFrame(sf::IntRect(178, 184, 88, 91));
+    HeroShootRB.addFrame(sf::IntRect(89, 276, 88, 91));
+    HeroShootRB.addFrame(sf::IntRect(267, 184, 88, 91));
+    HeroShootRight.setSpriteSheet(HeroShootSprSht);
+    HeroShootRight.addFrame(sf::IntRect(445, 276, 88, 91));
+    HeroShootRight.addFrame(sf::IntRect(623, 184, 88, 91));
+    HeroShootRight.addFrame(sf::IntRect(534, 276, 88, 91));
+    HeroShootRight.addFrame(sf::IntRect(623, 276, 88, 91));
+    HeroShootRF.setSpriteSheet(HeroShootSprSht);
+    HeroShootRF.addFrame(sf::IntRect(178, 276, 88, 91));
+    HeroShootRF.addFrame(sf::IntRect(356, 184, 88, 91));
+    HeroShootRF.addFrame(sf::IntRect(267, 276, 88, 91));
+    HeroShootRF.addFrame(sf::IntRect(356, 276, 88, 91));
+    HeroShootDown.setSpriteSheet(HeroShootSprSht);
+    HeroShootDown.addFrame(sf::IntRect(445, 0, 88, 91));
+    HeroShootDown.addFrame(sf::IntRect(534, 0, 88, 91));
+    HeroShootDown.addFrame(sf::IntRect(445, 92, 88, 91));
+    HeroShootDown.addFrame(sf::IntRect(623, 0, 88, 91));
+    HeroShootLF.setSpriteSheet(HeroShootSprSht);
+    HeroShootLF.addFrame(sf::IntRect(267, 92, 88, 91));
+    HeroShootLF.addFrame(sf::IntRect(356, 92, 88, 91));
+    HeroShootLF.addFrame(sf::IntRect(0, 184, 88, 91));
+    HeroShootLF.addFrame(sf::IntRect(89, 184, 88, 91));
+    HeroShootLeft.setSpriteSheet(HeroShootSprSht);
+    HeroShootLeft.addFrame(sf::IntRect(534, 92, 88, 91));
+    HeroShootLeft.addFrame(sf::IntRect(445, 184, 88, 91));
+    HeroShootLeft.addFrame(sf::IntRect(623, 92, 88, 91));
+    HeroShootLeft.addFrame(sf::IntRect(534, 184, 88, 91));
+    HeroShootLB.setSpriteSheet(HeroShootSprSht);
+    HeroShootLB.addFrame(sf::IntRect(178, 0, 88, 91));
+    HeroShootLB.addFrame(sf::IntRect(267, 0, 88, 91));
+    HeroShootLB.addFrame(sf::IntRect(178, 92, 88, 91));
+    HeroShootLB.addFrame(sf::IntRect(356, 0, 88, 91));
 
 
     currentHeroAnimation = &HeroWalkUp;
@@ -463,19 +508,15 @@ void ZeroGameEngine::GameLoop(){
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 				_gameState = GameOver;
 
-				ControlHero();			// Logic for controlling Hero
+				ControlHero(currentEvent);			// Logic for controlling Hero
 				std::cout << animatedHeroSprite.getPosition().x << " " << animatedHeroSprite.getPosition().y << std::endl << std::endl;
 				ControlMouse(currentEvent);
-//				_mainWindow.clear(sf::Color::Black);
-//				_mainWindow.draw(BG);
-//				// Draw other crap here, before display is called
-//				DrawDoors(current);
-//				DrawHealthBar();
-////				DrawHealthBar(Player);
-////				DrawHero(Player);
-//				_mainWindow.draw(animatedHeroSprite);
-//				_mainWindow.display();
 		}
+
+	    timetest += frameTime.asSeconds();
+	    if (timetest > 50)
+	    	std::cout << "START" << std::endl;
+
 		_mainWindow.clear(sf::Color::Black);
 		_mainWindow.draw(BG);
 		// Draw other crap here, before display is called
@@ -484,6 +525,7 @@ void ZeroGameEngine::GameLoop(){
 		DrawHealthBar(Player);
 //			DrawHero(Player);
 		_mainWindow.draw(animatedHeroSprite);
+		_mainWindow.draw(Player->getShape());
 		_mainWindow.draw(mouseDrag);
 		_mainWindow.display();
 	}
@@ -585,76 +627,124 @@ void ZeroGameEngine::DrawHero(Hero* hero){
 	_mainWindow.draw(HeroSpr);
 }
 
-void ZeroGameEngine::ControlHero() {
+void ZeroGameEngine::ControlHero(sf::Event event) {
+	float moveSpeed = Player->getSpeed();
+
+	if (event.type == sf::Event::KeyPressed &&
+			(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Left))){
+		HeroMovement.x = 0;
+		HeroMovement.y = 0;
+		currentHeroAnimation = &HeroShootLB;
+		noKeyWasPressed = false;
+	} else if (event.type == sf::Event::KeyPressed &&
+			(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)))  {
+		HeroMovement.x = 0;
+		HeroMovement.y = 0;
+		currentHeroAnimation = &HeroShootRB;
+		noKeyWasPressed = false;
+	} else if (event.type == sf::Event::KeyPressed &&
+			(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Keyboard::isKeyPressed(sf::Keyboard::Left))) {
+		HeroMovement.x = 0;
+		HeroMovement.y = 0;
+		currentHeroAnimation = &HeroShootLF;
+		noKeyWasPressed = false;
+	} else if (event.type == sf::Event::KeyPressed &&
+			(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))) {
+		HeroMovement.x = 0;
+		HeroMovement.y = 0;
+		currentHeroAnimation = &HeroShootRF;
+		noKeyWasPressed = false;
+	} else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+		HeroMovement.x = 0;
+		HeroMovement.y = 0;
+		currentHeroAnimation = &HeroShootUp;
+		noKeyWasPressed = false;
+	} else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		HeroMovement.x = 0;
+		HeroMovement.y = 0;
+		currentHeroAnimation = &HeroShootRight;
+		noKeyWasPressed = false;
+	} else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		HeroMovement.x = 0;
+		HeroMovement.y = 0;
+		currentHeroAnimation = &HeroShootLeft;
+		noKeyWasPressed = false;
+	} else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		HeroMovement.x = 0;
+		HeroMovement.y = 0;
+		currentHeroAnimation = &HeroShootDown;
+		noKeyWasPressed = false;
+	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
 		Player->setDirectionFacing('N');
-		HeroMovement.y = -Player->getSpeed();
-		HeroMovement.x = -Player->getSpeed();
+		HeroMovement.y = -moveSpeed;
+		HeroMovement.x = -moveSpeed;
 		currentHeroAnimation = &HeroWalkLB;
-//		Player->setVX(-1);
-//		Player->setVY(-1);
+		Player->setVY(-moveSpeed);
+		Player->setVX(-moveSpeed);
 		noKeyWasPressed = false;
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
 		Player->setDirectionFacing('N');
-		HeroMovement.y = -Player->getSpeed();
-		HeroMovement.x = Player->getSpeed();
+		HeroMovement.y = -moveSpeed;
+		HeroMovement.x = moveSpeed;
 		currentHeroAnimation = &HeroWalkRB;
-//		Player->setVX(1);
-//		Player->setVY(-1);
+		Player->setVY(-moveSpeed);
+		Player->setVX(moveSpeed);
 		noKeyWasPressed = false;
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
 		Player->setDirectionFacing('S');
-		HeroMovement.y = Player->getSpeed();
-		HeroMovement.x = -Player->getSpeed();
+		HeroMovement.y = moveSpeed;
+		HeroMovement.x = -moveSpeed;
 		currentHeroAnimation = &HeroWalkLF;
-//		Player->setVX(-1);
-//		Player->setVY(1);
+		Player->setVY(moveSpeed);
+		Player->setVX(-moveSpeed);
 		noKeyWasPressed = false;
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
 		Player->setDirectionFacing('S');
-		HeroMovement.y = Player->getSpeed();
-		HeroMovement.x = Player->getSpeed();
+		HeroMovement.y = moveSpeed;
+		HeroMovement.x = moveSpeed;
 		currentHeroAnimation = &HeroWalkRF;
-//		Player->setVX(1);
-//		Player->setVY(1);
+		Player->setVY(moveSpeed);
+		Player->setVX(moveSpeed);
 		noKeyWasPressed = false;
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
 		Player->setDirectionFacing('N');
-		HeroMovement.y = -Player->getSpeed();
+		HeroMovement.y = -moveSpeed;
 		HeroMovement.x = 0;
 		currentHeroAnimation = &HeroWalkUp;
-//		Player->setVX(0);
-//		Player->setVY(-1);
+		Player->setVY(-moveSpeed);
+		Player->setVX(0);
 		noKeyWasPressed = false;
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
 		Player->setDirectionFacing('S');
-		HeroMovement.y = Player->getSpeed();
+		HeroMovement.y = moveSpeed;
 		HeroMovement.x = 0;
 		currentHeroAnimation = &HeroWalkDown;
-//		Player->setVX(0);
-//		Player->setVY(1);
+		Player->setVY(moveSpeed);
+		Player->setVX(0);
 		noKeyWasPressed = false;
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
 		Player->setDirectionFacing('W');
 		HeroMovement.y = 0;
-		HeroMovement.x = -Player->getSpeed();
+		HeroMovement.x = -moveSpeed;
 		currentHeroAnimation = &HeroWalkLeft;
-//		Player->setVX(-1);
-//		Player->setVY(0);
+		Player->setVY(0);
+		Player->setVX(-moveSpeed);
 		noKeyWasPressed = false;
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
 		Player->setDirectionFacing('E');
 		HeroMovement.y = 0;
-		HeroMovement.x = Player->getSpeed();
+		HeroMovement.x = moveSpeed;
 		currentHeroAnimation = &HeroWalkRight;
-//		Player->setVX(1);
-//		Player->setVY(0);
+		Player->setVY(0);
+		Player->setVX(moveSpeed);
 		noKeyWasPressed = false;
 	} else{
 		HeroMovement.x = 0;
 		HeroMovement.y = 0;
-//		Player->setVX(0);
-//		Player->setVY(0);
+		Player->setVX(0);
+		Player->setVY(0);
 	}
 	WallLimit(animatedHeroSprite);
 //	ApproachDoor();
@@ -672,6 +762,9 @@ void ZeroGameEngine::ControlHero() {
     // update AnimatedSprite
     animatedHeroSprite.update(frameTime);
     Player->setXY(animatedHeroSprite.getPosition());
+    Player->update(frameTime.asSeconds());
+
+    std::cout << animatedHeroSprite.getFrameTime().asSeconds() << std::endl;
 }
 
 // Alters the sprite imaging for HP/MP on the HUD
@@ -762,6 +855,11 @@ void ZeroGameEngine::setHero(char cameFrom, Hero* player, AnimatedSprite& player
 		playerSprite.setPosition(9, 352);
 		break;
 	}
+}
+
+// Updates the timer in each object that is based on time
+void ZeroGameEngine::updateTimer(){
+
 }
 
 //// Current Implementaion for Hero

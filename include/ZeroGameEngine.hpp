@@ -21,6 +21,9 @@
 
 class ZeroGameEngine : public CollisionDet {
 public:
+
+	float timetest;
+
 	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver, Tutorial};
 	GameState _gameState;
 	sf::RenderWindow _mainWindow;
@@ -46,7 +49,6 @@ public:
 	sf::Texture HeroLFSprSht;
 	sf::Texture HeroRBSprSht;
 	sf::Texture HeroRFSprSht;
-
 	Animation HeroWalkUp;
 	Animation HeroWalkLeft;
 	Animation HeroWalkRight;
@@ -55,6 +57,16 @@ public:
 	Animation HeroWalkLF;
 	Animation HeroWalkRB;
 	Animation HeroWalkRF;
+
+	sf::Texture HeroShootSprSht;
+	Animation HeroShootUp;
+	Animation HeroShootLeft;
+	Animation HeroShootRight;
+	Animation HeroShootDown;
+	Animation HeroShootLB;
+	Animation HeroShootLF;
+	Animation HeroShootRB;
+	Animation HeroShootRF;
 
 	sf::Vector2f HeroMovement{0.f, 0.f};
     Animation* currentHeroAnimation;
@@ -109,58 +121,24 @@ public:
 
 	sf::Music BGM;
 
-
-
 //public:
-
-	// Constructor
-	ZeroGameEngine();
-
-	// Destructor
-	~ZeroGameEngine();
-
-	// Loads up all the starting sprites
-	void initSprites();
-
-	// Starts the game and enters the main loop
-	void Start();
-
-	// Returns bool that signals if game is ending
-	bool isExiting();
-
-	// Main Game loop and Menu Loop
-	void MenuLoop();
-
+	ZeroGameEngine();						// Constructor
+	~ZeroGameEngine();						// Destructor
+	void initSprites();						// Loads up all the starting sprites
+	void Start();							// Starts the game and enters the main loop
+	bool isExiting();						// Returns bool that signals if game is ending
+	void MenuLoop();						// Main Game loop and Menu Loop
 	void GameLoop();
-
-	// Update the gui, will need to take positions from the characters
-	void UpdateFrame();
-
-	// Takes a character, N | E | S | W , does what is necessary to display that door
-	void DrawDoors(Room* currentRoom);
-
-	// Takes a room and displays its content
-	void DrawRoom(Room* current);
-
-	// Uses Hero's attributes to draw the Hero's position, attributes
-	void DrawHero(Hero* hero);
-
+	void UpdateFrame();						// Update the gui, will need to take positions from the characters
+	void DrawDoors(Room* currentRoom);		// Takes a character, N | E | S | W , does what is necessary to display that door
+	void DrawRoom(Room* current);			// Takes a room and displays its content
+	void DrawHero(Hero* hero);				// Uses Hero's attributes to draw the Hero's position, attributes
 	void ControlMouse(sf::Event event); 	// Controls the mouses' basic controls
-
-	void ControlHero();		// Controls the Hero's basic movements
-
-
-
-	// Display HUD: Health Bar, enemy highlighting, etc. if state is Playing
-	//	Full Health Bar is 12 squares
-	//  Red = Health
-	//	Green = Shield
+	void ControlHero(sf::Event event);						// Controls the Hero's basic movements
 	void DrawHealthBar();
 	void DrawHealthBar(Hero* player);
-
-	// Resets the Heros position to be near the door the hero entered from
-	void setHero(char cameFrom, Hero* player, AnimatedSprite& playerSprite);
-
+	void setHero(char cameFrom, Hero* player, AnimatedSprite& playerSprite); // Set Hero position near the door entered from
+	void updateTimer();						// uses the vector of items, updates their timer
 
 
 };

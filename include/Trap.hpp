@@ -10,8 +10,9 @@
 
 #include <utility>
 #include <string>
+#include "Item.hpp"
 
-class Trap
+class Trap : public Item
 {
 private:
 

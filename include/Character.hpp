@@ -70,7 +70,7 @@ private:
 // Movement Objects Crap
 	sf::CircleShape shape;
 	float unitRadius{10.f};
-	sf::Vector2f velocity{0, 0};
+	sf::Vector2f velocity{0.f, 0.f};
 
 public:
 
@@ -80,6 +80,10 @@ public:
 
 	void update(){
 		shape.move(velocity);
+	}
+
+	void update(float time){
+		shape.move(velocity * time);
 	}
 
 	void setVX(float moveX){
@@ -123,7 +127,7 @@ public:
 		shape.setPosition(ScreenSizeX/2 - 50, ScreenSizeY - (ScreenSizeY/5));
 		shape.setRadius(unitRadius);
 		shape.setFillColor(sf::Color::Cyan);
-		shape.setOrigin(unitRadius, unitRadius);
+//		shape.setOrigin(unitRadius, unitRadius);
 	}
 
 	std::string StandingImage();		// Returns the location of the image
@@ -210,6 +214,11 @@ public:
 	void setXY(sf::Vector2f coordinate){
 		Coordinates.first = coordinate.x;
 		Coordinates.second = coordinate.y;
+	}
+
+	void setShapeXY(sf::Vector2f coordinate){
+		shape.setPosition(coordinate.x, coordinate.y);
+		shape.move(coordinate.x, coordinate.y);
 	}
 
 	void moveX(float add){
