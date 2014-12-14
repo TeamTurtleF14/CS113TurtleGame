@@ -56,6 +56,8 @@ void ZeroGameEngine::Start(){
 	tutorialSwitch = false;
 	showCredits = false;
 	HeroWon = false;
+    movingbullet = false;
+    bulletTimer = 0;
 
 	while (!isExiting()){
 //		 While there is no exit signal, go into the game loop
@@ -205,6 +207,15 @@ void ZeroGameEngine::initSprites(){
     speed = 80.f;
     noKeyWasPressed = true;
     frameTime = frameClock.restart();
+
+
+////// Bullet Crap
+    if (!blueBulletTexture.loadFromFile("images/Hero/HeroWeapons/spr_bullet_strip.png"))
+    	return;
+    BlueBullet.setSpriteSheet(blueBulletTexture);
+    BlueBullet.addFrame(sf::IntRect(0, 0, 39, 39));
+	animatedBlueBullet.setPosition(sf::Vector2f(animatedHeroSprite.getPosition()));
+
 
 // Hero Animation Crap End
 
@@ -509,13 +520,14 @@ void ZeroGameEngine::GameLoop(){
 				_gameState = GameOver;
 
 				ControlHero(currentEvent);			// Logic for controlling Hero
-				std::cout << animatedHeroSprite.getPosition().x << " " << animatedHeroSprite.getPosition().y << std::endl << std::endl;
+//				std::cout << animatedHeroSprite.getPosition().x << " " << animatedHeroSprite.getPosition().y << std::endl << std::endl;
 				ControlMouse(currentEvent);
 		}
 
-	    timetest += frameTime.asSeconds();
-	    if (timetest > 50)
-	    	std::cout << "START" << std::endl;
+//	    timetest += frameTime.asSeconds();
+//	    if (timetest > 50)
+//	    	std::cout << "START" << std::endl;
+//		std::cout << animatedHeroSprite.getPosition().x << " " << animatedHeroSprite.getPosition().y << std::endl;
 
 		_mainWindow.clear(sf::Color::Black);
 		_mainWindow.draw(BG);
@@ -526,6 +538,32 @@ void ZeroGameEngine::GameLoop(){
 //			DrawHero(Player);
 		_mainWindow.draw(animatedHeroSprite);
 		_mainWindow.draw(Player->getShape());
+//	///////////////////////////// Moving Bullet
+
+		if (movingbullet) {
+			if (bulletTimer<5){
+				std::cout << "one" << std::endl;
+				animatedBlueBullet.play(BlueBullet);
+				animatedBlueBullet.move(BulletMovement * frameTime.asSeconds());
+				animatedBlueBullet.update(frameTime);
+				bulletTimer += frameTime.asSeconds();
+				_mainWindow.draw(animatedBlueBullet);
+			} else {
+				std::cout << "two" << std::endl;
+				animatedBlueBullet.stop();
+				movingbullet = false;
+			}
+		} else {
+			std::cout << "three" << std::endl;
+			bulletTimer = 0;
+			animatedBlueBullet.setPosition(animatedHeroSprite.getPosition());
+		}
+		std::cout << bulletTimer << std::endl;
+
+//////////////////////////////////////// Moving Bullet Stuff End
+
+
+//		_mainWindow.draw(animatedBlueBullet);
 		_mainWindow.draw(mouseDrag);
 		_mainWindow.display();
 	}
@@ -630,48 +668,58 @@ void ZeroGameEngine::DrawHero(Hero* hero){
 void ZeroGameEngine::ControlHero(sf::Event event) {
 	float moveSpeed = Player->getSpeed();
 
+//	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::E)
+
 	if (event.type == sf::Event::KeyPressed &&
 			(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Left))){
 		HeroMovement.x = 0;
 		HeroMovement.y = 0;
+		HeroShoot("NW");
 		currentHeroAnimation = &HeroShootLB;
 		noKeyWasPressed = false;
 	} else if (event.type == sf::Event::KeyPressed &&
 			(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)))  {
 		HeroMovement.x = 0;
 		HeroMovement.y = 0;
+		HeroShoot("NE");
 		currentHeroAnimation = &HeroShootRB;
 		noKeyWasPressed = false;
 	} else if (event.type == sf::Event::KeyPressed &&
 			(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Keyboard::isKeyPressed(sf::Keyboard::Left))) {
 		HeroMovement.x = 0;
 		HeroMovement.y = 0;
+		HeroShoot("SW");
 		currentHeroAnimation = &HeroShootLF;
 		noKeyWasPressed = false;
 	} else if (event.type == sf::Event::KeyPressed &&
 			(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))) {
 		HeroMovement.x = 0;
 		HeroMovement.y = 0;
+		HeroShoot("SE");
 		currentHeroAnimation = &HeroShootRF;
 		noKeyWasPressed = false;
 	} else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
 		HeroMovement.x = 0;
 		HeroMovement.y = 0;
+		HeroShoot("N");
 		currentHeroAnimation = &HeroShootUp;
 		noKeyWasPressed = false;
 	} else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 		HeroMovement.x = 0;
 		HeroMovement.y = 0;
+		HeroShoot("E");
 		currentHeroAnimation = &HeroShootRight;
 		noKeyWasPressed = false;
 	} else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 		HeroMovement.x = 0;
 		HeroMovement.y = 0;
+		HeroShoot("W");
 		currentHeroAnimation = &HeroShootLeft;
 		noKeyWasPressed = false;
 	} else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 		HeroMovement.x = 0;
 		HeroMovement.y = 0;
+		HeroShoot("S");
 		currentHeroAnimation = &HeroShootDown;
 		noKeyWasPressed = false;
 	}
@@ -749,7 +797,7 @@ void ZeroGameEngine::ControlHero(sf::Event event) {
 	WallLimit(animatedHeroSprite);
 //	ApproachDoor();
 //	EnterRoom(current, Player);
-	std::cout << Player->getX() << "  " << Player->getY() << std::endl << std::endl;
+
 	animatedHeroSprite.play(*currentHeroAnimation);
     animatedHeroSprite.move(HeroMovement * frameTime.asSeconds());
 
@@ -759,12 +807,13 @@ void ZeroGameEngine::ControlHero(sf::Event event) {
         animatedHeroSprite.stop();
     }
     noKeyWasPressed = true;
+
     // update AnimatedSprite
     animatedHeroSprite.update(frameTime);
     Player->setXY(animatedHeroSprite.getPosition());
     Player->update(frameTime.asSeconds());
 
-    std::cout << animatedHeroSprite.getFrameTime().asSeconds() << std::endl;
+//    std::cout << animatedHeroSprite.getFrameTime().asSeconds() << std::endl;
 }
 
 // Alters the sprite imaging for HP/MP on the HUD
@@ -860,6 +909,37 @@ void ZeroGameEngine::setHero(char cameFrom, Hero* player, AnimatedSprite& player
 // Updates the timer in each object that is based on time
 void ZeroGameEngine::updateTimer(){
 
+}
+
+
+// Runs the things needed for display/shooting the hero's bullets
+void ZeroGameEngine::HeroShoot(std::string direction){
+	movingbullet = true;
+	if (direction=="N"){
+		BulletMovement.x = 0;
+		BulletMovement.y = -50.f;
+	} else if (direction=="E"){
+		BulletMovement.x = 50.f;
+		BulletMovement.y = 0;
+	} else if (direction=="S"){
+		BulletMovement.x = 0;
+		BulletMovement.y = 50.f;
+	} else if (direction=="W"){
+		BulletMovement.x = -50.f;
+		BulletMovement.y = 0;
+	} else if (direction=="NE"){
+		BulletMovement.x = 50.f;
+		BulletMovement.y = -50.f;
+	} else if (direction=="NW"){
+		BulletMovement.x = -50.f;
+		BulletMovement.y = -50.f;
+	} else if (direction=="SW"){
+		BulletMovement.x = -50.f;
+		BulletMovement.y = 50.f;
+	} else if (direction=="SE"){
+		BulletMovement.x = 50.f;
+		BulletMovement.y = 50.f;
+	}
 }
 
 //// Current Implementaion for Hero

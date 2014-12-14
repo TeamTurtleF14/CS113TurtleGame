@@ -74,7 +74,8 @@ private:
 
 public:
 
-	std::pair<float, float> Coordinates;	// Stores current position (X, Y) of the character
+//	std::pair<float, float> Coordinates;	// Stores current position (X, Y) of the character
+	sf::Vector2f Coordinates;
 
 	sf::CircleShape getShape() { return shape;}
 
@@ -204,16 +205,20 @@ public:
 ////////////////////////////////////////
 
 	void setX(float x){
-		Coordinates.first = x;
+		Coordinates.x = x;
 	}
 
 	void setY(float y){
-		Coordinates.second = y;
+		Coordinates.y = y;
 	}
 
 	void setXY(sf::Vector2f coordinate){
-		Coordinates.first = coordinate.x;
-		Coordinates.second = coordinate.y;
+		Coordinates.x = coordinate.x;
+		Coordinates.y = coordinate.y;
+	}
+
+	sf::Vector2f getXY(){
+		return Coordinates;
 	}
 
 	void setShapeXY(sf::Vector2f coordinate){
@@ -222,19 +227,19 @@ public:
 	}
 
 	void moveX(float add){
-		Coordinates.first += add;
+		Coordinates.x += add;
 	}
 
 	void moveY(float add){
-		Coordinates.second += add;
+		Coordinates.y += add;
 	}
 
 	float getX(){
-		return Coordinates.first;
+		return Coordinates.x;
 	}
 
 	float getY(){
-		return Coordinates.second;
+		return Coordinates.y;
 	}
 
 

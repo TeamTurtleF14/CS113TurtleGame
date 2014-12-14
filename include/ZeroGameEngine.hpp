@@ -35,7 +35,9 @@ public:
 	bool tutorialSwitch;
 	bool showCredits;
 	bool HeroWon;
-
+///////////////////////////////////////////////////////////////////////////
+//	Hero specific items: sprites for movements, attacks etc
+//////////
 	Hero* Player;
 
 	sf::Texture HeroImage;
@@ -70,10 +72,20 @@ public:
 
 	sf::Vector2f HeroMovement{0.f, 0.f};
     Animation* currentHeroAnimation;
-    AnimatedSprite animatedHeroSprite{sf::seconds(0.5), true, false};
+    AnimatedSprite animatedHeroSprite{sf::seconds(.8f), true, false};
 //   AnimatedSprite animatedHeroSprite{sf::seconds(0.05), true, false};
 
+    bool movingbullet;
+    float bulletTimer;
+    sf::Vector2f BulletMovement{0.f, 0.f};
+    sf::Texture blueBulletTexture;
+//    Animation* BlueBullet;
+    Animation BlueBullet;
+    AnimatedSprite animatedBlueBullet{sf::seconds(0.5), true, false};
 
+/////////////////////
+//    Hero related variables end
+/////////////////////////////////////////////////////////////////////////////
     sf::RectangleShape mouseDrag;
     sf::Vector2i mouseStart, mouseRelease, mouseRight, mouseRightRelease;
 
@@ -139,7 +151,7 @@ public:
 	void DrawHealthBar(Hero* player);
 	void setHero(char cameFrom, Hero* player, AnimatedSprite& playerSprite); // Set Hero position near the door entered from
 	void updateTimer();						// uses the vector of items, updates their timer
-
+	void HeroShoot(std::string direction);
 
 };
 
