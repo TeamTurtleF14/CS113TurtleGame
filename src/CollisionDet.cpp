@@ -7,6 +7,7 @@
 
 #include "CollisionDet.hpp"
 
+
 CollisionDet::CollisionDet(){
 	// Changed this if screen resolution needs to change
 	_xSize = 1080;
@@ -63,4 +64,36 @@ void CollisionDet::ApproachDoor(Room* current, Hero* Player){
 
 	if (posX > _xSize/2 - 100 && posX < _xSize/2 && posY < _ySize/32 +100)
 		std::cout << "HERO IS NEAR" << std::endl << std::endl;
+}
+
+void CollisionDet::GetBounds(AnimatedSprite sprite){
+
+}
+
+void CollisionDet::BulletHit(AnimatedSprite bullet, bool& ismoving) {
+//void CollisionDet::BulletHit(AnimatedSprite bullet, std::vector<AnimatedSprite> enemyList}){
+	float y = bullet.getPosition().y;
+	float x = bullet.getPosition().x;
+	if (y < 48){
+		bullet.stop();
+		ismoving = false;
+		std::cout << "stopped" << std::endl;
+	}
+	else if (y > 680){
+		bullet.stop();
+		ismoving = false;
+		std::cout << "stopped" << std::endl;
+	}
+	if (x < 0) {
+		bullet.stop();
+		ismoving = false;
+		std::cout << "stopped" << std::endl;
+	} else if (x > 1050){
+		bullet.stop();
+		ismoving = false;
+		std::cout << "stopped" << std::endl;
+	}
+//	for (std::vector<AnimatedSprite>::iterator sprite = enemyList.begin(); sprite != enemyList.end(); sprite++){
+//
+//	}
 }

@@ -542,19 +542,22 @@ void ZeroGameEngine::GameLoop(){
 
 		if (movingbullet) {
 			if (bulletTimer<5){
+				BulletHit(animatedBlueBullet, movingbullet);
 				std::cout << "one" << std::endl;
 				animatedBlueBullet.play(BlueBullet);
 				animatedBlueBullet.move(BulletMovement * frameTime.asSeconds());
 				animatedBlueBullet.update(frameTime);
 				bulletTimer += frameTime.asSeconds();
 				_mainWindow.draw(animatedBlueBullet);
+				std::cout << "bullet " << animatedBlueBullet.getGlobalBounds().height << " " << animatedBlueBullet.getGlobalBounds().width;
+				std::cout << " " << animatedBlueBullet.getGlobalBounds().top << " " << animatedBlueBullet.getGlobalBounds().left << std::endl;
 			} else {
 				std::cout << "two" << std::endl;
 				animatedBlueBullet.stop();
 				movingbullet = false;
 			}
 		} else {
-			std::cout << "three" << std::endl;
+//			std::cout << "three" << std::endl;
 			bulletTimer = 0;
 			animatedBlueBullet.setPosition(animatedHeroSprite.getPosition());
 		}
@@ -794,6 +797,7 @@ void ZeroGameEngine::ControlHero(sf::Event event) {
 		Player->setVX(0);
 		Player->setVY(0);
 	}
+
 	WallLimit(animatedHeroSprite);
 //	ApproachDoor();
 //	EnterRoom(current, Player);
@@ -812,7 +816,9 @@ void ZeroGameEngine::ControlHero(sf::Event event) {
     animatedHeroSprite.update(frameTime);
     Player->setXY(animatedHeroSprite.getPosition());
     Player->update(frameTime.asSeconds());
-
+//    animatedHeroSprite.setOrigin(0, 0);
+    std::cout << "position " <<animatedHeroSprite.getGlobalBounds().height << " " << animatedHeroSprite.getGlobalBounds().width;
+    std::cout << " " << animatedHeroSprite.getGlobalBounds().left << " " << animatedHeroSprite.getGlobalBounds().top << std::endl;
 //    std::cout << animatedHeroSprite.getFrameTime().asSeconds() << std::endl;
 }
 

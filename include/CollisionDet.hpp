@@ -25,17 +25,15 @@ public:
 
 	CollisionDet();
 
-	void WallLimit(AnimatedSprite& sprite);		// Sets the limiting bounds for where the player can move
-
-	void ApproachDoor(Room* current, Hero* Player);	// Detects if the Hero is near the door
-
-	// Logic for what happens when Hero approaches and enters a door
-	bool willEnterRoom(Room* current, Hero* Player);
-
-	// Transitions to next room
-	void transitionRoom(Room* current, Hero* Player);
-
+	void WallLimit(AnimatedSprite& sprite);				// Sets the limiting bounds for where the player can move
+	void ApproachDoor(Room* current, Hero* Player);		// Detects if the Hero is near the door
+	bool willEnterRoom(Room* current, Hero* Player);	// Logic for what happens when Hero approaches and enters a door
+	void transitionRoom(Room* current, Hero* Player);	// Transitions into the next room
 	char whichRoom(Room* current, Hero* player);
+	void GetBounds(AnimatedSprite sprite);				// Gets a sprite's bounds in a box
+	void BulletHit(AnimatedSprite bullet, std::vector<AnimatedSprite> enemyList);
+	void BulletHit(AnimatedSprite bullet, bool& isMoving);
+
 };
 
 
