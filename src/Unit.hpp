@@ -17,8 +17,6 @@ class Unit
 {
 public:
 
-	Unit();
-
 	Unit(float x, float y, float width, float height)
 		:x{x}, y{y}, width{width}, height{height}
 	{
@@ -28,7 +26,7 @@ public:
 	}
 
 	virtual ~Unit() = default;
-	void activate();
+	virtual void activate();
 	virtual void update();
 
 	void setX(float xVal);
@@ -62,7 +60,6 @@ private:
 	float height;
 	sf::Vector2f position;
 	bool active;
-	sf::Texture texture;
 
 };
 

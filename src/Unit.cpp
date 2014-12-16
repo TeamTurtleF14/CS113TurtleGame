@@ -1,7 +1,6 @@
 #include "Unit.hpp"
 
 
-
 void Unit::activate()
 {
 	active = !active;
