@@ -298,6 +298,13 @@ void ZeroGameEngine::initSprites(){
 
 //	Music Crap END
 
+//	Load Unit for Test
+
+
+
+//	Load Unit END
+
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -542,17 +549,14 @@ void ZeroGameEngine::GameLoop(){
 
 		if (movingbullet) {
 			if (bulletTimer<5){
-				BulletHit(animatedBlueBullet, movingbullet);
 				std::cout << "one" << std::endl;
 				animatedBlueBullet.play(BlueBullet);
 				animatedBlueBullet.move(BulletMovement * frameTime.asSeconds());
 				animatedBlueBullet.update(frameTime);
 				bulletTimer += frameTime.asSeconds();
 				_mainWindow.draw(animatedBlueBullet);
-				std::cout << "bullet " << animatedBlueBullet.getGlobalBounds().height << " " << animatedBlueBullet.getGlobalBounds().width;
-				std::cout << " " << animatedBlueBullet.getGlobalBounds().top << " " << animatedBlueBullet.getGlobalBounds().left << std::endl;
+				BulletHit(animatedBlueBullet, movingbullet);
 			} else {
-				std::cout << "two" << std::endl;
 				animatedBlueBullet.stop();
 				movingbullet = false;
 			}

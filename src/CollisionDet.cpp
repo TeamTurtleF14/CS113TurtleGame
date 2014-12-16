@@ -72,23 +72,22 @@ void CollisionDet::GetBounds(AnimatedSprite sprite){
 
 void CollisionDet::BulletHit(AnimatedSprite bullet, bool& ismoving) {
 //void CollisionDet::BulletHit(AnimatedSprite bullet, std::vector<AnimatedSprite> enemyList}){
-	float y = bullet.getPosition().y;
-	float x = bullet.getPosition().x;
+	float y = bullet.getPosition().y + (bullet.getGlobalBounds().height)/2;
+	float x = bullet.getPosition().x + (bullet.getGlobalBounds().width)/2;
 	if (y < 48){
 		bullet.stop();
 		ismoving = false;
-		std::cout << "stopped" << std::endl;
 	}
 	else if (y > 680){
 		bullet.stop();
 		ismoving = false;
 		std::cout << "stopped" << std::endl;
 	}
-	if (x < 0) {
+	if (x < 10) {
 		bullet.stop();
 		ismoving = false;
 		std::cout << "stopped" << std::endl;
-	} else if (x > 1050){
+	} else if (x > 1055){
 		bullet.stop();
 		ismoving = false;
 		std::cout << "stopped" << std::endl;

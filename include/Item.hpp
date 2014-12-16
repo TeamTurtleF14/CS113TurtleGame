@@ -28,13 +28,6 @@ public:
 
 	}
 
-	float getX() {
-		return coordinates.x;
-	}
-
-	float getY() {
-		return coordinates.y;
-	}
 
 	sf::Vector2f getPosition(){
 		return coordinates;
