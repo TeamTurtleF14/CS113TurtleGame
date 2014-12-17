@@ -20,15 +20,15 @@ bool CollisionDet::willEnterRoom(Room* current, Hero* Player) {
 	float posY = Player->getY();
 
 	if (posX > _xSize/2 - 100 && posX < _xSize/2){
-		if (posY < _ySize/32 + 32)
+		if (posY < _ySize/32 + 32 && (!current->isAvailable('N')))
 			return true;
-		else if (posY > _ySize - 90)
+		else if (posY > _ySize - 90 && (!current->isAvailable('S')))
 			return true;
 	}
 	if (posY > _ySize/2 - 60 && posY < _ySize/2 + 10 ){
-		if (posX < -10)
+		if (posX < -10 && (!current->isAvailable('W')))
 			return true;
-		else if (posX > _xSize - 70)
+		else if (posX > _xSize - 70 && (!current->isAvailable('E')))
 			return true;
 	}
 	return false;
