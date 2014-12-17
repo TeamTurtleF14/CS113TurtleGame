@@ -15,6 +15,7 @@ public:
 	enum UnitType{SM, AIr, AIb, AIg};
 	UnitType _unitType;
 
+	Images();
 	Images(int xSz, int ySz);
 	int notLoaded() const;
 	int loadImages();

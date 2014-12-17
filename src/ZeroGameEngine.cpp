@@ -124,7 +124,6 @@ void ZeroGameEngine::MenuLoop(){
 		case ZeroGameEngine::Playing:
 			//Run GameLoop Here
 			GameLoop();
-			//GameLoop(currentState);
 
 			//State is a struct with Attributes:
 				// vector of units

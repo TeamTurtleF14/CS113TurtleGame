@@ -1,5 +1,13 @@
 #include "Images.hpp"
 
+
+Images::Images()
+{
+	NotLoaded = loadImages();
+	std::cout << NotLoaded << std::endl;
+	loadSprites();
+}
+
 Images::Images(int xSz, int ySz)
 	: _xSize{xSz}, _ySize{ySz}
 {

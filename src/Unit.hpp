@@ -6,6 +6,9 @@
 #include <SFML/Graphics/Shape.hpp>
 #include <iostream>
 #include <cmath>
+#include <vector>
+#include "Animation.hpp"
+#include "AnimatedSprite.hpp"
 
 // base class for:
 // monster
@@ -16,18 +19,12 @@
 class Unit
 {
 public:
+	Unit();
+	Unit(float x, float y);
 
-	Unit(float x, float y, float width, float height)
-		:x{x}, y{y}, width{width}, height{height}
-	{
-		position.x = x;
-		position.y = y;
-		active = false;
-	}
+	void activate();
+	bool isActive() const;
 
-	virtual ~Unit() = default;
-	virtual void activate();
-	virtual void update();
 
 	void setX(float xVal);
 	void setY(float yVal);
@@ -43,6 +40,7 @@ public:
 	sf::Vector2f getPosition();
 
 	float distance(sf::Vector2f pos);
+	float distance(sf::Vector2i pos);
 
 	//boundaries
 	float left();
@@ -54,13 +52,12 @@ public:
 	bool contains(sf::Vector2f pos);
 
 private:
-	float x;
-	float y;
-	float width;
-	float height;
-	sf::Vector2f position;
-	bool active;
-
+	float _x;
+	float _y;
+	sf::Vector2f _position;
+	bool _active;
+	float _width;
+	float _height;
 };
 
 
