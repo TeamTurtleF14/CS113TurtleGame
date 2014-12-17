@@ -26,12 +26,14 @@ public:
 	Room* West;
 	Room* East;
 	bool isEnd;
+	bool isBeginning;
 
 	bool visited;
 	bool loaded;
+	char endExitDir;
 
-	Room(bool end=false)
-	:North(NULL), South(NULL), West(NULL), East(NULL), isEnd(end)
+	Room(bool end=false, bool beginning=false)
+	:North{NULL}, South{NULL}, West{NULL}, East{NULL}, isEnd{end}, isBeginning{beginning}, endExitDir{char()}
 	{
 		RoomDir.insert(std::pair<const char, int>('N', 0));
 		RoomDir.insert(std::pair<const char, int>('W', 1));

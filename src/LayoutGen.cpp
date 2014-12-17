@@ -103,7 +103,7 @@ bool LayoutGen::roomForwardCheck(Room* start, Room* next, int forward){
 	Room* prev = start;
 	for (int i = 1; i < forward; i++){
 		std::vector<Room*> tempContainer = current->OccupiedRoomVector();
-		if (current->isEnd)
+		if (current->isEnd || current->isBeginning)
 			return false;
 		for (int j = 0; j < (int)(tempContainer.size())-1; j++){
 			if (tempContainer[j]==prev){
@@ -149,7 +149,7 @@ bool LayoutGen::isinCoords(int x, int y){
 void LayoutGen::generateCriticalPath(){
 //	std::cout << RoomContainer.size() << std::endl;
 	Room* current = HeadRoom;
-	current->isEnd = true;
+	current->isBeginning = true;
 	//RoomContainer.push_back(current);
 	Room* next;
 	for (unsigned int i = 1; i < RoomCoords.size(); i++){

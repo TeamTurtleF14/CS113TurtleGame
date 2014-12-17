@@ -35,6 +35,26 @@ bool CollisionDet::willEnterRoom(Room* current, Hero* Player) {
 
 }
 
+bool CollisionDet::willEnterEnd(Room* current, Hero* Player) {
+	float posX = Player->getX();
+	float posY = Player->getY();
+
+	if (posX > _xSize/2 - 100 && posX < _xSize/2){
+		if (posY < _ySize/32 + 32 && (current->endExitDir=='N'))
+			return true;
+		else if (posY > _ySize - 90 && (current->endExitDir=='S'))
+			return true;
+	}
+	if (posY > _ySize/2 - 60 && posY < _ySize/2 + 10 ){
+		if (posX < -10 && (current->endExitDir=='W'))
+			return true;
+		else if (posX > _xSize - 70 && (current->endExitDir=='E'))
+			return true;
+	}
+	return false;
+
+}
+
 // Should only be called if the function above returns a 1, signals that he is near a room
 char CollisionDet::whichRoom(Room* current, Hero* player){
 	float posX = player->getX();

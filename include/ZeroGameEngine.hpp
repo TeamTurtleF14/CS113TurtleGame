@@ -160,7 +160,8 @@ public:
 	void MenuLoop();						// Main Game loop and Menu Loop
 	void GameLoop();
 	void UpdateFrame();						// Update the gui, will need to take positions from the characters
-	void DrawDoors(Room* currentRoom);		// Takes a character, N | E | S | W , does what is necessary to display that door
+	void DrawDoors(Room* currentRoom);		// Displays all doors that lead to other rooms
+	void DrawDoor(char side);				// Takes a character, N | E | S | W , does what is necessary to display that door
 	void DrawRoom(Room* current);			// Takes a room and displays its content
 	void DrawHero(Hero* hero);				// Uses Hero's attributes to draw the Hero's position, attributes
 	void ControlMouse(sf::Event event); 	// Controls the mouses' basic controls

@@ -28,6 +28,7 @@ public:
 	void WallLimit(AnimatedSprite& sprite);				// Sets the limiting bounds for where the player can move
 	void ApproachDoor(Room* current, Hero* Player);		// Detects if the Hero is near the door
 	bool willEnterRoom(Room* current, Hero* Player);	// Logic for what happens when Hero approaches and enters a door
+	bool willEnterEnd(Room* current, Hero* Player);		// Logic for entering the winning door
 	void transitionRoom(Room* current, Hero* Player);	// Transitions into the next room
 	char whichRoom(Room* current, Hero* player);
 	void GetBounds(AnimatedSprite sprite);				// Gets a sprite's bounds in a box
