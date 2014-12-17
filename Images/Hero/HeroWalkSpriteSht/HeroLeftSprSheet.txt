@@ -1,4 +1,0 @@
-HeroWalk_1l = 0 0 88 91
-HeroWalk_2l = 89 0 88 91
-HeroWalk_3l = 0 92 88 91
-HeroWalk_4l = 89 92 88 91
