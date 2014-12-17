@@ -35,8 +35,8 @@ private:
 	int ScreenSizeX;
 	int ScreenSizeY;
 
-	unsigned int HitPoints;
-	unsigned int HitPointsMax;
+	float HitPoints;
+	float HitPointsMax;
 
 	float Speed;
 	float velocityspr;
@@ -164,14 +164,14 @@ public:
 //	Character Attributes Below: HP, HP setting etc.
 //////////
 
-	unsigned int getCurrentHP() {
+	float getCurrentHP() {
 		return HitPoints;
 	}
 
 	// Change can be either negative or positive, needs checks to ensure current stays within
 	// bounds
 	// can be used to take damage, gain health, w/e
-	void changeCurrentHP(int change) {
+	void changeCurrentHP(float change) {
 		if ((HitPoints + change) <= 0){
 			HitPoints = 0;
 		} else if ((HitPoints + change) >= HitPointsMax){
@@ -181,12 +181,12 @@ public:
 		}
 	}
 
-	unsigned int getMaxHP() {
+	float getMaxHP() {
 		return HitPointsMax;
 	}
 
 	// Change can be negative or positive
-	void changeMaxHP(int change) {
+	void changeMaxHP(float change) {
 		HitPointsMax = HitPointsMax + change;
 	}
 

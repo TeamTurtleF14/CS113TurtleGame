@@ -31,6 +31,8 @@ ZeroGameEngine::ZeroGameEngine(){
 	_mainWindow;
 	_gameState = MainMenu;
 
+	HeroAlive = true;
+
 	initSprites();
 //	setHero('E', Player, animatedHeroSprite);
 	srand ( time(NULL) );
@@ -214,6 +216,13 @@ void ZeroGameEngine::initSprites(){
     HeroShootLB.addFrame(sf::IntRect(267, 0, 88, 91));
     HeroShootLB.addFrame(sf::IntRect(178, 92, 88, 91));
     HeroShootLB.addFrame(sf::IntRect(356, 0, 88, 91));
+
+    if (!HeroDeathSprSht.loadFromFile("images/Hero/HeroDying/HeroDeathSpriteSheet.png"))
+    	return;
+	HeroDeath.setSpriteSheet(HeroDeathSprSht);
+    for (int i = 0; i< 22; i++){
+    	HeroDeath.addFrame(sf::IntRect(70*i, 0, 70, 85));
+    }
 
 
     currentHeroAnimation = &HeroWalkUp;
@@ -632,9 +641,10 @@ void ZeroGameEngine::GameLoop(){
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
 				_gameState = GameOver;
 
+			if (HeroAlive){
 				ControlHero(currentEvent);			// Logic for controlling Hero
-//				std::cout << animatedHeroSprite.getPosition().x << " " << animatedHeroSprite.getPosition().y << std::endl << std::endl;
 				ControlMouse(currentEvent);
+			}
 		}
 
 //	    timetest += frameTime.asSeconds();
@@ -688,7 +698,7 @@ void ZeroGameEngine::GameLoop(){
 		}
 
 		_mainWindow.draw(animatedHeroSprite);
-		_mainWindow.draw(*Player);
+		_mainWindow.draw(*Player);					// Shields
 		_mainWindow.draw(Player->getShape());
 		std::cout << Player->getVelocity() << std::endl;
 
@@ -698,6 +708,20 @@ void ZeroGameEngine::GameLoop(){
 
 		_mainWindow.draw(mouseDrag);
 		_mainWindow.display();
+
+//		Player->changeCurrentHP(-50);
+		if (Player->getCurrentHP()<=0){
+			HeroAlive = false;
+			currentHeroAnimation = &HeroDeath;
+			animatedHeroSprite.play(*currentHeroAnimation);
+			animatedHeroSprite.update(frameTime);
+			animatedHeroSprite.setLooped(false);
+			if (!animatedHeroSprite.isPlaying()){
+				_gameState = GameOver;
+				HeroWon = false;
+			}
+		}
+
 		if (willEnterEnd(current, Player)){
 			HeroWon = true;
 			_gameState = GameOver;
@@ -849,6 +873,7 @@ void ZeroGameEngine::DrawHero(Hero* hero){
 void ZeroGameEngine::ControlHero(sf::Event event) {
 	float moveSpeed = Player->getVelocity();
 	Player->updateCooldown(frameTime.asSeconds());
+	animatedHeroSprite.setLooped(true);
 
 
 	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){

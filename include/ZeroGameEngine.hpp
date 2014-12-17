@@ -30,6 +30,7 @@
 class ZeroGameEngine : public CollisionDet {
 public:
 
+	bool HeroAlive;
 	int RoomsVisited;
 	float timetest;
 	std::vector<Item*> itemlist;
@@ -85,6 +86,9 @@ public:
 	Animation HeroShootLF;
 	Animation HeroShootRB;
 	Animation HeroShootRF;
+
+	sf::Texture HeroDeathSprSht;
+	Animation HeroDeath;
 
 	sf::Vector2f HeroMovement{0.f, 0.f};
     Animation* currentHeroAnimation;
