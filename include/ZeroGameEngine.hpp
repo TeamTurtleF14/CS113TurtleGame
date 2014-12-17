@@ -20,6 +20,7 @@
 #include "Item.hpp"
 #include "HeroBomb.hpp"
 #include "HeroMine.hpp"
+#include "HeroBullet.hpp"
 #include <stdlib.h>
 
 
@@ -83,6 +84,7 @@ public:
     AnimatedSprite animatedHeroSprite{sf::seconds(.8f), true, false};
 //   AnimatedSprite animatedHeroSprite{sf::seconds(0.05), true, false};
 
+    int bulletCount;
     bool movingbullet;
     float bulletTimer;
     sf::Vector2f BulletMovement{0.f, 0.f};
@@ -147,7 +149,7 @@ public:
 	void initSprites();						// Loads up all the starting sprites
 	void Start();							// Starts the game and enters the main loop
 	bool isExiting();						// Returns bool that signals if game is ending
-	void SoundManager(std::string sound_file);			// Plays music, takes directory
+	void SoundManager(std::string sound_file, bool bomb);			// Plays music, takes directory
 	void MenuLoop();						// Main Game loop and Menu Loop
 	void GameLoop();
 	void UpdateFrame();						// Update the gui, will need to take positions from the characters
@@ -160,7 +162,7 @@ public:
 	void DrawHealthBar(Hero* player);
 	void setHero(char cameFrom, Hero* player, AnimatedSprite& playerSprite); // Set Hero position near the door entered from
 	void updateTimer();						// uses the vector of items, updates their timer
-	void HeroShoot(std::string direction);
+	void HeroShoot(sf::Vector2f position, std::string direction);
 	void DropBomb(sf::Vector2f position, float damage);		// Drops the bomb at (x,y)
 	void DropMine(sf::Vector2f position, float damage);		// Drops the mine at position.(x,y)
 

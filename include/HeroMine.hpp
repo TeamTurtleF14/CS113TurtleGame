@@ -20,10 +20,10 @@ private:
 
 public:
 
-	HeroMine(float positionX, float positionY, float damage)
+	HeroMine(sf::Vector2f position, float damage)
 			: Item(10, 5)
 		{
-			setPosition(positionX, positionY);
+			setPosition(position);
 			if (!MineTexture.loadFromFile("images/Hero/HeroWeapons/mine.png"))
 				return;
 			Mine.setSpriteSheet(MineTexture);
@@ -57,7 +57,7 @@ public:
 		play(*currentAnimation);
 	}
 
-	void updateTimer(float frametime, std::vector<Unit> spritelist){
+	void checkDetonate(std::vector<Unit> spritelist){
 		float x = getPosition().x + (getGlobalBounds().width)/2;
 		float y = getPosition().y + (getGlobalBounds().height)/2;
 		if (switchSignal){

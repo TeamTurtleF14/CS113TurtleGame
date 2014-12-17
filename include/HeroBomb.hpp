@@ -21,10 +21,10 @@ private:
 
 public:
 
-	HeroBomb(float positionX, float positionY, float damage)
+	HeroBomb(sf::Vector2f position, float damage)
 		: Item(10, 5)
 	{
-		setPosition(positionX, positionY);
+		setPosition(position);
 		if (!BombTexture.loadFromFile("images/Hero/HeroWeapons/bomb.png"))
 			return;
 		Bomb.setSpriteSheet(BombTexture);
@@ -62,9 +62,9 @@ public:
 		play(*currentAnimation);
 	}
 
-	void updateTimer(float frametime){
+	void updateTimer(sf::Time frametime){
 //		std::cout << "asasdasdasdadaasdadsdassdasdkadqwkdhiawfiuahfilefhiewwehf" << std::endl;
-		frameTime += frametime;
+		frameTime += frametime.asSeconds();
 		std::cout << frameTime << std::endl;
 		if (switchSignal){
 			if (frameTime > switchTime){

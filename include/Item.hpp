@@ -32,7 +32,7 @@ public:
 //public:
 
 	Item(float TimeLimit, float switchTime)
-		:TimeLimit{TimeLimit}, switchTime{switchTime}, AnimatedSprite(sf::seconds(.8f), true, false)
+		:TimeLimit{TimeLimit}, switchTime{switchTime}, AnimatedSprite{sf::seconds(.8f), true, false}
 	{
 		frameTime = 0;
 	}
@@ -49,8 +49,8 @@ public:
 	}
 
 
-	virtual void updateTimer(float time){
-		frameTime += time;
+	virtual void updateTimer(sf::Time time){
+		frameTime += time.asSeconds();
 	}
 
 	virtual void checkDetonate(std::vector<AnimatedSprite> enemy){
@@ -58,7 +58,7 @@ public:
 	}
 
 	virtual void playSprite() {
-
+		play(*currentAnimation);
 	}
 
 	float getTime(){
