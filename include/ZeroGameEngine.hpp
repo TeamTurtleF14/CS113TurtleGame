@@ -25,6 +25,9 @@
 #include "Trap.hpp"
 #include "ArrowTrap.hpp"
 #include "SlowTrap.hpp"
+#include "Images.hpp"
+#include "AiUnit.hpp"
+#include "Unit.hpp"
 
 
 class ZeroGameEngine : public CollisionDet {
@@ -35,6 +38,19 @@ public:
 	float timetest;
 	std::vector<Item*> itemlist;
 	std::vector<Trap*> traplist;
+
+	std::vector<AiUnit*> aiUnits;
+	AiUnit Sp(wWidth, 30, Images::SPr, img.getSpawner(Images::SPr, Images::N));
+	//initial animations
+	Animation* SmAnimation = img.getWalk(Images::SM,Images::S);
+	AnimatedSprite animatedSm{sf::seconds(0.1), true, false};
+	animatedSm.setPosition(sf::Vector2f(wWidth/ 2, wHeight/2));
+	animatedSm.setOrigin(20.f,50.f);
+	bool noKeyWasPressed = true;
+	bool notSpawning = true;
+	bool notSpawningb = true;
+	bool notSpawningg = true;
+	int spawntime = 0;
 
 	sf::SoundBuffer buffer;
 	sf::Sound sound;

@@ -1,103 +1,123 @@
 #include "Unit.hpp"
 
-
-void Unit::activate()
+Unit::Unit()
 {
-	active = !active;
+	_x = 0;
+	_y = 0;
+	_height = 0;
+	_width = 0;
+	_position.x = _x;
+	_position.y = _y;
+	_active = false;
 }
 
-void Unit::update()
+Unit::Unit(float x, float y)
 {
+	_x = x;
+	_y = y;
+	_height = 0;
+	_width = 0;
+	_position.x = _x;
+	_position.y = _y;
+
 }
+
+
 
 void Unit::setX(float xVal)
 {
-	x = xVal;
+	_x = xVal;
 }
 
 
 void Unit::setY(float yVal)
 {
-	y = yVal;
+	_y = yVal;
 }
 
 
 float Unit::getX()
 {
-	return x;
+	return _x;
 }
 
 
 float Unit::getY()
 {
-	return y;
+	return _y;
 }
 
 
 void Unit::setWidth(float w)
 {
-	width = w;
+	_width = w;
 }
 
 
 void Unit::setHeight(float h)
 {
-	height = h;
+	_height = h;
 }
 
 
 void Unit::setPosition(sf::Vector2f pos)
 {
-	position = pos;
+	_position = pos;
 }
 
 
 float Unit::getWidth()
 {
-	return width;
+	return _width;
 }
 
 
 float Unit::getHeight()
 {
-	return height;
+	return _height;
 }
 
 
 sf::Vector2f Unit::getPosition()
 {
-	return position;
+	return _position;
 }
 
 
 float Unit::distance(sf::Vector2f pos)
 {
-	float d = std::sqrt(std::pow(x - pos.x, 2) + std::pow(y - pos.y, 2));
+	float d = std::sqrt(std::pow(_x - pos.x, 2) + std::pow(_y - pos.y, 2));
+	return d;
+}
+
+float Unit::distance(sf::Vector2i pos)
+{
+	float d = std::sqrt(std::pow(_x - pos.x, 2) + std::pow(_y - pos.y, 2));
 	return d;
 }
 
 //bounding box
 float Unit::left()
 {
-	return x - width/2;
+	return _x - _width/2;
 }
 
 
 float Unit::right()
 {
-	return x + width/2;
+	return _x + _width/2;
 }
 
 
 float Unit::top()
 {
-	return y - height/2;
+	return _y - _height/2;
 }
 
 
 float Unit::bottom()
 {
-	return y + height/2;
+	return _y + _height/2;
 }
 
 //checks if other bounding boxes collide with this bounding box
@@ -107,7 +127,7 @@ bool Unit::contains(Unit u)
 	||(left() <= u.right() && right() >= u.right() && top() <= u.top() && bottom() >= u.top())
 	||(left() <= u.left() && right() >= u.left() && top() <= u.bottom() && bottom() >= u.bottom())
 	||(left() <= u.right() && right() >= u.right() && top() <= u.bottom() && bottom() >= u.bottom())
-	||contains(u.position);
+	||contains(u._position);
 }
 
 //use for mouse clicks
