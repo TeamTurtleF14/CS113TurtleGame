@@ -159,7 +159,24 @@ void ZeroGameEngine::MenuLoop(){
 		return;
 	}
 }
+const double pi = std::acos(-1);
 
+sf::Vector2f drags(const sf::Window& window, sf::Vector2i mouseStart)
+{
+	sf::Vector2i mouseEnd;
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		mouseEnd = sf::Mouse::getPosition(window);
+	}
+	float widthDrag, heightDrag;
+	widthDrag = mouseEnd.x - mouseStart.x;
+	heightDrag = mouseEnd.y - mouseStart.y;
+
+	sf::Vector2f size(widthDrag, heightDrag);
+	return size;
+}
+float distance(sf::Vector2f start, sf::Vector2i end){
+	return std::sqrt(std::pow(end.y - start.y, 2) + std::pow(end.x - start.x, 2));}
 
 // main game loop // meat of the program
 void ZeroGameEngine::GameLoop()
@@ -172,7 +189,7 @@ void ZeroGameEngine::GameLoop()
 
     Animation* SmAnimation = img.getWalk(Images::SM,Images::S);
     AnimatedSprite animatedSm(sf::seconds(0.1), true, false);
-    animatedSm.setPosition(sf::Vector2f(wWidth/ 2, wHeight/2));
+    animatedSm.setPosition(sf::Vector2f(_xSize/ 2, _ySize/2));
     animatedSm.setOrigin(20.f,50.f);
 
 
@@ -288,7 +305,7 @@ void ZeroGameEngine::GameLoop()
 
            //============= LEFT DRAGS =============================================
 
-   		mouseDrag.setSize(drags(window, mouseStart));
+   		mouseDrag.setSize(drags(_mainWindow, mouseStart));
    		mouseDrag.setPosition(mouseStart.x, mouseStart.y);
    		mouseDrag.setFillColor(sf::Color(0,255,255,50)); //255 opacity = 100%
 

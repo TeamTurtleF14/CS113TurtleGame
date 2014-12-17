@@ -16,7 +16,11 @@
 #include "Animation.hpp"
 #include "AnimatedSprite.hpp"
 #include <cmath>
+#include <vector>
 #include "Images.hpp"
+#include "Unit.hpp"
+#include "AiUnit.hpp"
+
 
 class ZeroGameEngine {
 public:

@@ -18,16 +18,13 @@ float distance(sf::Vector2f start, sf::Vector2f end){
 	return std::sqrt(std::pow(end.y - start.y, 2) + std::pow(end.x - start.x, 2));}
 float distance(sf::Vector2i start, sf::Vector2f end){
 	return std::sqrt(std::pow(end.y - start.y, 2) + std::pow(end.x - start.x, 2));}
-float distance(sf::Vector2f start, sf::Vector2i end){
-	return std::sqrt(std::pow(end.y - start.y, 2) + std::pow(end.x - start.x, 2));}
+
 float distance(sf::Vector2i start, sf::Vector2i end){
 	return std::sqrt(std::pow(end.y - start.y, 2) + std::pow(end.x - start.x, 2));}
 
 bool collision(sf::Vector2f p1, int r1, sf::Vector2f p2, int r2){
 	return distance(p1, p2) < (r1 + r2);}
 bool collision(sf::Vector2i p1, int r1, sf::Vector2f p2, int r2){
-	return distance(p1, p2) < (r1 + r2);}
-bool collision(sf::Vector2f p1, int r1, sf::Vector2i p2, int r2){
 	return distance(p1, p2) < (r1 + r2);}
 bool collision(sf::Vector2i p1, int r1, sf::Vector2i p2, int r2){
 	return distance(p1, p2) < (r1 + r2);}
@@ -38,6 +35,7 @@ bool drawFirst(AiUnit a, AiUnit b)
 	return (a.getPosition().y < b.getPosition().y);
 }
 */
+/*
 sf::Vector2f drags(const sf::Window& window, sf::Vector2i mouseStart)
 {
 	sf::Vector2i mouseEnd;
@@ -53,7 +51,7 @@ sf::Vector2f drags(const sf::Window& window, sf::Vector2i mouseStart)
 	return size;
 }
 
-
+*/
 
 //if(distance(animatedAi2.getPosition(), mouseStart) < 20 && distance(animatedAi2.getPosition(), mouseRelease) < 20)
 
@@ -69,16 +67,16 @@ bool contains(sf::Vector2f pos)
 */
 
 
-/*
+
 int main(){
 	ZeroGameEngine* game = new ZeroGameEngine();
 	game->Start();
 	delete game;
 }
-*/
+
 
 //================= Thomas's Main w/ tests
-
+/*
 int main()
 {
 
@@ -451,3 +449,4 @@ int main()
     return 0;
 }
 
+*/
