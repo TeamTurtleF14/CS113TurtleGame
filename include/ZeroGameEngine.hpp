@@ -10,6 +10,7 @@
 #ifndef SRC_ZEROGAMEENGINE_HPP_
 #define SRC_ZEROGAMEENGINE_HPP_
 
+
 #include "LayoutGen.hpp"
 #include "Hero.hpp"
 #include <SFML/Graphics.hpp>
@@ -21,29 +22,115 @@
 #include "Unit.hpp"
 #include "AiUnit.hpp"
 
+#include <SFML/Audio.hpp>
+#include "CollisionDet.hpp"
+#include "Item.hpp"
+#include "HeroBomb.hpp"
+#include "HeroMine.hpp"
+#include "HeroBullet.hpp"
+#include <stdlib.h>
+#include "Trap.hpp"
+#include "ArrowTrap.hpp"
+#include "SlowTrap.hpp"
 
-class ZeroGameEngine {
+
+class ZeroGameEngine : public CollisionDet {
 public:
-	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting};
+
+	int RoomsVisited;
+	float timetest;
+	std::vector<Item*> itemlist;
+	std::vector<Trap*> traplist;
+
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
+//	sf::Sound soundGun;
+//	sf::Sound soundBomb;
+
+	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver, Tutorial};
 	GameState _gameState;
 	sf::RenderWindow _mainWindow;
-	int _xSize;
-	int _ySize;
+	float _xSize;
+	float _ySize;
 
+	sf::ConvexShape pauseCursor;
+	bool ptContinue;
+	bool tutorialSwitch;
+	bool showCredits;
+	bool HeroWon;
+///////////////////////////////////////////////////////////////////////////
+//	Hero specific items: sprites for movements, attacks etc
+//////////
 	Hero* Player;
+
+	sf::Texture HeroImage;
+	sf::Sprite HeroSpr;
+
+	sf::Texture HeroBackSprSht;
+	sf::Texture HeroForwardSprSht;
+	sf::Texture HeroRightSprSht;
+	sf::Texture HeroLeftSprSht;
+	sf::Texture HeroLBSprSht;
+	sf::Texture HeroLFSprSht;
+	sf::Texture HeroRBSprSht;
+	sf::Texture HeroRFSprSht;
+	Animation HeroWalkUp;
+	Animation HeroWalkLeft;
+	Animation HeroWalkRight;
+	Animation HeroWalkDown;
+	Animation HeroWalkLB;
+	Animation HeroWalkLF;
+	Animation HeroWalkRB;
+	Animation HeroWalkRF;
+
+	sf::Texture HeroShootSprSht;
+	Animation HeroShootUp;
+	Animation HeroShootLeft;
+	Animation HeroShootRight;
+	Animation HeroShootDown;
+	Animation HeroShootLB;
+	Animation HeroShootLF;
+	Animation HeroShootRB;
+	Animation HeroShootRF;
+
+	sf::Vector2f HeroMovement{0.f, 0.f};
+    Animation* currentHeroAnimation;
+    AnimatedSprite animatedHeroSprite{sf::seconds(.8f), true, false};
+//   AnimatedSprite animatedHeroSprite{sf::seconds(0.05), true, false};
+
+    int bulletCount;
+    bool movingbullet;
+    float bulletTimer;
+    sf::Vector2f BulletMovement{0.f, 0.f};
+    sf::Texture blueBulletTexture;
+//    Animation* BlueBullet;
+    Animation BlueBullet;
+    AnimatedSprite animatedBlueBullet{sf::seconds(0.5), true, false};
+
+/////////////////////
+//    Hero related variables end
+/////////////////////////////////////////////////////////////////////////////
+    sf::RectangleShape mouseDrag;
+    sf::Vector2i mouseStart, mouseRelease, mouseRight, mouseRightRelease;
+
+    sf::Clock frameClock;
+    float speed;
+    bool noKeyWasPressed;
+    sf::Time frameTime;
+
 
 	LayoutGen* LayoutMaker;
 	Room* Headroom;
 	Room* current;
 	std::string Doors;
-	std::vector<sf::Sprite> SpriteList;
-
-	sf::Texture HeroImage;
-	sf::Sprite HeroSpr;
+//	std::vector<sf::Sprite> SpriteList;
 
 	sf::Texture HealthBar;
 	sf::Sprite HealthBarSpr;
 
+//	sf::Sprite HealthBarSprC;
+
+	// Door Art Containers
 	sf::Texture NorthDoor;
 	sf::Texture EastDoor;
 	sf::Texture SouthDoor;
@@ -53,46 +140,51 @@ public:
 	sf::Sprite SouthDoorSpr;
 	sf::Sprite WestDoorSpr;
 
-//public:
+	// First is art for first bit in container, not first is the rest
+	sf::Texture HPBitFirst;
+	sf::Texture HPBit;
+	sf::Sprite HPBitFirstSpr;
+	sf::Sprite HPBitSpr;
 
-	// Constructor
-	ZeroGameEngine();
+	sf::Texture SPBitFirst;
+	sf::Texture SPBit;
+	sf::Sprite SPBitFirstSpr;
+	sf::Sprite SPBitSpr;
 
-	// Destructor
-	~ZeroGameEngine();
+//////////////////////
+////// END TEXTURE/SPRITES
+///////////////////////
 
-	// Starts the game and enters the main loop
-	void Start();
-
-	// Returns bool that signals if game is ending
-	bool isExiting();
+	sf::Music BGM;
 
 	// Main Game loop
 	void MenuLoop();
 
+//public:
+	ZeroGameEngine();						// Constructor
+	~ZeroGameEngine();						// Destructor
+	void initSprites();						// Loads up all the starting sprites
+	void Start();							// Starts the game and enters the main loop
+	bool isExiting();						// Returns bool that signals if game is ending
+	void SoundManager(std::string sound_file, bool bomb);			// Plays music, takes directory
+	void MenuLoop();						// Main Game loop and Menu Loop
+
 	void GameLoop();
-
-	// Update the gui, will need to take positions from the characters
-	void UpdateFrame();
-
-	// Takes a character, N | E | S | W , does what is necessary to display that door
-	void DrawDoors(Room* currentRoom);
-
-	// Takes a room and displays its content
-	void DrawRoom(Room* current);
-
-	// Uses Hero's attributes to draw the Hero's position, attributes
-	void DrawHero(Hero* hero);
-
-	void DrawHero();		// For Testing
-
-	// Display HUD: Health Bar, enemy highlighting, etc. if state is Playing
-	//	Full Health Bar is 12 squares
-	//  Red = Health
-	//	Green = Shield
+	void UpdateFrame();						// Update the gui, will need to take positions from the characters
+	void DrawDoors(Room* currentRoom);		// Takes a character, N | E | S | W , does what is necessary to display that door
+	void DrawRoom(Room* current);			// Takes a room and displays its content
+	void DrawHero(Hero* hero);				// Uses Hero's attributes to draw the Hero's position, attributes
+	void ControlMouse(sf::Event event); 	// Controls the mouses' basic controls
+	void ControlHero(sf::Event event);						// Controls the Hero's basic movements
 	void DrawHealthBar();
-//	void DrawHealthBar(Hero player);
-
+	void DrawHealthBar(Hero* player);
+	void setHero(char cameFrom, Hero* player, AnimatedSprite& playerSprite); // Set Hero position near the door entered from
+	void updateTimer();						// uses the vector of items, updates their timer
+	void HeroShoot(sf::Vector2f position, std::string direction);
+	void DropBomb(sf::Vector2f position, float damage);		// Drops the bomb at (x,y)
+	void DropMine(sf::Vector2f position, float damage);		// Drops the mine at position.(x,y)
+	void ClearRoom();										// Before Moving onto the next room, clears current of any trash
+	void RoomSetup();
 
 };
 
