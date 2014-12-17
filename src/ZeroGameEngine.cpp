@@ -31,6 +31,9 @@ ZeroGameEngine::ZeroGameEngine(){
 	_mainWindow;
 	_gameState = MainMenu;
 
+	animatedSm.setPosition(sf::Vector2f(wWidth/ 2, wHeight/2));
+	animatedSm.setOrigin(20.f,50.f);
+
 	HeroAlive = true;
 
 	initSprites();
