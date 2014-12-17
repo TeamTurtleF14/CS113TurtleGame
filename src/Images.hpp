@@ -12,7 +12,7 @@ class Images
 public:
 	enum Direction{N, E, S, W, NW, NE, SE, SW};
 	Direction _dir;
-	enum UnitType{SM, AIr, AIb, AIg};
+	enum UnitType{SM, AIr, AIb, AIg, SPr, SPb, SPg, DEDr, DEDb, DEDg, DED};
 	UnitType _unitType;
 
 	Images();
@@ -24,6 +24,7 @@ public:
 	Animation* getWalk(UnitType u, Direction d);
 	Animation* getAiAttack(Direction d);
 	Animation* getSpawner(UnitType u, Direction d);
+	Animation* getDeadAi();
 
 
 private:
@@ -51,6 +52,8 @@ private:
 	//Green
 	Animation WalkGreen_S, WalkGreen_N, WalkGreen_W, WalkGreen_E, WalkGreen_NW, WalkGreen_NE, WalkGreen_SE, WalkGreen_SW;
 	Animation SpawnGreen_N, SpawnGreen_E, SpawnGreen_W;
+
+	Animation AiDed;
 	sf::Sprite DestroyedGreen_N, DestroyedGreen_E, DestroyedGreen_W;
 //SM
 	Animation WalkDown, WalkUp, WalkLeft, WalkRight;

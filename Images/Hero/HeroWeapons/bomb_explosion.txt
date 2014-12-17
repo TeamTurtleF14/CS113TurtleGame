@@ -1,0 +1,4 @@
+bomb_explosion1 = 0 0 50 50
+bomb_explosion2 = 51 0 50 50
+bomb_explosion3 = 0 51 50 50
+bomb_explosion4 = 51 51 50 50

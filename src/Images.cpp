@@ -448,13 +448,17 @@ Animation* Images::getAiAttack(Direction d)
 	case SW:
 		return &Attack_SW;
 	}
+}
 
+Animation* Images::getDeadAi()
+{
+	return &AiDed;
 }
 
 Animation* Images::getSpawner(UnitType u, Direction d)
 {
 	switch(u){
-	case AIr:
+	case SPr:
 		if(d == N)
 			return &SpawnRed_N;
 		if(d == E)
@@ -463,7 +467,7 @@ Animation* Images::getSpawner(UnitType u, Direction d)
 			return &SpawnRed_W;
 		break;
 
-	case AIb:
+	case SPb:
 		if(d == N)
 			return &SpawnBlue_N;
 		if(d == E)
@@ -472,7 +476,7 @@ Animation* Images::getSpawner(UnitType u, Direction d)
 			return &SpawnBlue_W;
 		break;
 
-	case AIg:
+	case SPg:
 		if(d == N)
 			return &SpawnGreen_N;
 		if(d == E)
@@ -480,8 +484,31 @@ Animation* Images::getSpawner(UnitType u, Direction d)
 		if(d == W)
 			return &SpawnGreen_W;
 		break;
+
+	case DEDr:
+		if(d == N)
+			return &DestroyedRed_N;
+		if(d == E)
+			return &DestroyedRed_E;
+		if(d == E)
+			return &DestroyedRed_E;
+	case DEDb:
+		if(d == N)
+			return &DestroyedBlue_N;
+		if(d == E)
+			return &DestroyedBlue_E;
+		if(d == W)
+			return &DestroyedBlue_W;
+	case DEDg:
+		if(d == N)
+			return &DestroyedGreen_N;
+		if(d == E)
+			return &DestroyedGreen_E;
+		if(d == W)
+			return &DestroyedGreen_W;
 	}
 }
+
 
 
 

@@ -52,7 +52,7 @@ public:
 
 	bool isContained(sf::Vector2i start, sf::Vector2i end);
 
-
+	void SetHealth(int dmg, Animation* death);
 
 	//bool contains()
 

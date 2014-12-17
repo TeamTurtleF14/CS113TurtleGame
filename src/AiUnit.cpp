@@ -30,34 +30,64 @@ const double pi = std::acos(-1);
 AiUnit::AiUnit(float x, float y, Images::UnitType type, Animation* initAnimation)
 	:Unit{x, y}
 {
-	_dir = Images::S;
+
 	_type = type;
 	_Ai = initAnimation;
 
-    _AiSprite.setFrameTime(sf::seconds(0.05));
-    _AiSprite.pause();
-    _AiSprite.setLooped(false);
-    _AiSprite.setPosition(x,y);
-    _AiSprite.setOrigin(25.f,25.f);
+	if(_type == Images::AIr || type == Images::AIb || type == Images::AIg)
+	{	_dir = Images::S;
+    	_AiSprite.setFrameTime(sf::seconds(0.05));
+    	_AiSprite.pause();
+    	_AiSprite.setLooped(false);
+    	_AiSprite.setPosition(x,y);
+    	_AiSprite.setOrigin(25.f,25.f);
+	}
+	if(_type == Images::SPr || _type == Images::SPb || _type == Images::SPg )
+	{
+		_AiSprite.setFrameTime(sf::seconds(0.1));
+    	_AiSprite.pause();
+    	_AiSprite.setLooped(false);
+    	_AiSprite.setPosition(x,y);
+	}
 
     _velocity.x = 0.f;
     _velocity.y = 0.f;
 
     _NoKeyPressed = true;
     _active = false;
-    _radius = 20;
+
+
+    if (_type == Images::SPb){
+    	_MaxHP = 30;
+    	_speed = 0.f;
+    	_radius = 50;
+    }
+    if (_type == Images::SPr){
+    	_MaxHP = 30;
+    	_speed = 0.f;
+    	_radius = 50;
+    }
+    if (_type == Images::SPg){
+    	_MaxHP = 30;
+    	_speed = 0.f;
+    	_radius = 50;
+    }
+
 
     if (_type == Images::AIb){
     	_MaxHP = 2;
     	_speed = 55.f;
+    	_radius = 20;
     }
     if (_type == Images::AIr){
     	_MaxHP = 4;
     	_speed = 65.f;
+    	_radius = 20;
     }
     if (_type == Images::AIg){
     	_MaxHP = 3;
     	_speed = 60.f;
+    	_radius = 20;
     }
 
 }
@@ -315,6 +345,7 @@ void AiUnit::Move(sf::Vector2i target, sf::CircleShape& targetArea, Animation* a
 }
 
 
+
 void AiUnit::DetectSm(const AnimatedSprite& Sm, const std::vector<AiUnit*>& units, Animation* walkAnimation, Animation* attackAnimation)
 {
 	float a = angle(Sm.getPosition());
@@ -409,5 +440,23 @@ void AiUnit::DetectSm(const AnimatedSprite& Sm, const std::vector<AiUnit*>& unit
 		}
 	}
 }
+
+void AiUnit::SetHealth(int dmg, Animation* death)
+{
+	_HP -= dmg;
+	if(_HP <= 0)
+	{
+		if(_type == Images::AIr || _type == Images:: AIb || _type == Images::AIg)
+		{
+			_Ai = death;
+		}
+		else if(_type == Images::SPr || _type == Images::SPb || _type == Images::SPg)
+		{
+			_Ai = death;
+			_type = Images::DED;
+		}
+	}
+}
+
 
 

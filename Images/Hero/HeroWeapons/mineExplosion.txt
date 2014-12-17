@@ -1,0 +1,4 @@
+mineExplosion1 = 0 0 88 91
+mineExplosion2 = 89 0 88 91
+mineExplosion3 = 0 92 88 91
+mineExplosion4 = 89 92 88 91

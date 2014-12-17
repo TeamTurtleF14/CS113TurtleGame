@@ -18,13 +18,16 @@ float distance(sf::Vector2f start, sf::Vector2f end){
 	return std::sqrt(std::pow(end.y - start.y, 2) + std::pow(end.x - start.x, 2));}
 float distance(sf::Vector2i start, sf::Vector2f end){
 	return std::sqrt(std::pow(end.y - start.y, 2) + std::pow(end.x - start.x, 2));}
-
+float distance(sf::Vector2f start, sf::Vector2i end){
+	return std::sqrt(std::pow(end.y - start.y, 2) + std::pow(end.x - start.x, 2));}
 float distance(sf::Vector2i start, sf::Vector2i end){
 	return std::sqrt(std::pow(end.y - start.y, 2) + std::pow(end.x - start.x, 2));}
 
 bool collision(sf::Vector2f p1, int r1, sf::Vector2f p2, int r2){
 	return distance(p1, p2) < (r1 + r2);}
 bool collision(sf::Vector2i p1, int r1, sf::Vector2f p2, int r2){
+	return distance(p1, p2) < (r1 + r2);}
+bool collision(sf::Vector2f p1, int r1, sf::Vector2i p2, int r2){
 	return distance(p1, p2) < (r1 + r2);}
 bool collision(sf::Vector2i p1, int r1, sf::Vector2i p2, int r2){
 	return distance(p1, p2) < (r1 + r2);}
@@ -35,7 +38,6 @@ bool drawFirst(AiUnit a, AiUnit b)
 	return (a.getPosition().y < b.getPosition().y);
 }
 */
-/*
 sf::Vector2f drags(const sf::Window& window, sf::Vector2i mouseStart)
 {
 	sf::Vector2i mouseEnd;
@@ -51,7 +53,7 @@ sf::Vector2f drags(const sf::Window& window, sf::Vector2i mouseStart)
 	return size;
 }
 
-*/
+
 
 //if(distance(animatedAi2.getPosition(), mouseStart) < 20 && distance(animatedAi2.getPosition(), mouseRelease) < 20)
 
@@ -67,16 +69,16 @@ bool contains(sf::Vector2f pos)
 */
 
 
-
+/*
 int main(){
 	ZeroGameEngine* game = new ZeroGameEngine();
 	game->Start();
 	delete game;
 }
-
+*/
 
 //================= Thomas's Main w/ tests
-/*
+
 int main()
 {
 
@@ -89,6 +91,8 @@ int main()
 
     sf::RectangleShape mouseDrag;
     sf::CircleShape mouseClick;
+    std::vector<AiUnit*> aiUnits;
+    AiUnit Sp(wWidth, 30, Images::SPr, img.getSpawner(Images::SPr, Images::N));
 
 
 
@@ -98,32 +102,7 @@ int main()
     animatedSm.setPosition(sf::Vector2f(wWidth/ 2, wHeight/2));
     animatedSm.setOrigin(20.f,50.f);
 
-//================== spawners
-    Animation* SpAnimation = img.getSpawner(Images::AIr, Images::N);
-    AnimatedSprite animatedSp(sf::seconds(0.1), true, false);
-    animatedSp.setPosition(sf::Vector2f(wWidth/ 2, 30));
 
-    Animation* SpAnimationb = img.getSpawner(Images::AIb, Images::E);
-    AnimatedSprite animatedSpb(sf::seconds(0.1), true, false);
-    animatedSpb.setPosition(sf::Vector2f(wWidth - 100, wHeight/2));
-
-    Animation* SpAnimationg = img.getSpawner(Images::AIg, Images::W);
-    AnimatedSprite animatedSpg(sf::seconds(0.1), true, false);
-    animatedSpg.setPosition(sf::Vector2f(0, wHeight/2));
-
-
-
-
-    std::vector<AiUnit*> aiUnits;
-    std::vector<AiUnit*>::iterator it;
-    AiUnit Ai(wWidth/3, wHeight/3, Images::AIr, img.getWalk(Images::AIr, Images::S));
-    AiUnit Ai2(wWidth/2, wHeight/3, Images::AIb, img.getWalk(Images::AIb, Images::S));
-    AiUnit Ai3(wWidth/3, wHeight/2, Images::AIg, img.getWalk(Images::AIg, Images::S));
-    aiUnits.push_back(&Ai);
-    aiUnits.push_back(&Ai2);
-    aiUnits.push_back(&Ai3);
-
-    //add to class
     bool noKeyWasPressed = true;
     bool notSpawning = true;
     bool notSpawningb = true;
@@ -168,11 +147,7 @@ int main()
             	mouseRelease.x = event.mouseButton.x;
             	mouseRelease.y = event.mouseButton.y;
 
-            	if(distance(animatedSpg.getPosition(), mouseStart) < 50 && distance(animatedSpg.getPosition(), mouseRelease) < 50)
-         	 	{
-            		SpAnimationg = img.getSpawner(Images::AIg, Images::W);
-         	 		notSpawningg = false;
-         	 	}
+
 //==================================== loop through to check if in box ======================================
             	for(std::vector<AiUnit*>::size_type i = 0; i != aiUnits.size(); i++){
             		if(aiUnits[i]->getPosition().y > mouseRelease.y && aiUnits[i]->getPosition().y < mouseStart.y){
@@ -263,13 +238,6 @@ int main()
     	mouseClick.setPosition(mouseRightRelease.x, mouseRightRelease.y); //mouseClick.setFillColor(sf::Color(255,0,0,200));
 
 
-    	float shortest_d = 1080;
-    	for(std::vector<AiUnit>::size_type i = 0; i != aiUnits.size(); i++)
-    	{
-
-    	}
-
-
 		for(std::vector<AiUnit>::size_type i = 0; i != aiUnits.size(); i++)
 		{
 			if(aiUnits[i]->isActive())
@@ -284,15 +252,6 @@ int main()
 
 //===================== END MOUSE PRESSES =======================================
 
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-    {
-    	SpAnimation = img.getSpawner(Images::AIr, Images::N);
- 	 	notSpawning = false;
- 	 	SpAnimationb = img.getSpawner(Images::AIb, Images::E);
- 	 	notSpawningb = false;
-
-    }
 
 //================= KEY PRESSES =================================================
 
@@ -449,4 +408,3 @@ int main()
     return 0;
 }
 
-*/
