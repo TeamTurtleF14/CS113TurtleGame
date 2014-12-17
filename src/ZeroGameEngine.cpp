@@ -6,6 +6,7 @@
  */
 
 #include "ZeroGameEngine.hpp"
+#include <SFML/Audio.hpp>
 
 //ZeroGameEngine::GameState ZeroGameEngine::_gameState = Uninitialized;
 //ZeroGameEngine::GameState ZGE::_gameState = MainMenu;
@@ -500,7 +501,25 @@ void ZeroGameEngine::MenuLoop(){
 ///// END MenuLoop Start GameLoop
 /////////////////////////////////////////////////////////////////////////////////////
 
+// Takes in a sound file, and randomizes the pitch. May need to modify high and low bound.
+// setPitch should be a float number between high and low. Also need to make sure the 
+// buffer and sound playing works.
+// Also make sure to add <SFML/Audio.hpp>
 
+void ZeroGameEngine::SoundManager(sound_file){
+	float high = 1.2;
+	float low = 0.8;
+	
+	sf::SoundBuffer buffer;
+	buffer.loadFromFile(sound_file);
+	
+	sf::Sound sound;
+	sound.setBuffer(buffer);
+	
+	sound.setPitch((std::rand() * (high-low)) + low)
+	
+	stream.play();
+}
 
 void ZeroGameEngine::GameLoop(){
 	sf::Texture Background;
