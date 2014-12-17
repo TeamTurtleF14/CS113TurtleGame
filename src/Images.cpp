@@ -279,17 +279,17 @@ void Images::loadSprites()
 
 //===Destroyed Spawners ===============================================================
 //====blue
-	DestroyedBlue_N.setTexture(Destroyed); DestroyedBlue_N.setTextureRect(sf::IntRect(0,0,100,100));
-	DestroyedBlue_E.setTexture(Destroyed); DestroyedBlue_E.setTextureRect(sf::IntRect(100,0,100,100));
-	DestroyedBlue_W.setTexture(Destroyed); DestroyedBlue_W.setTextureRect(sf::IntRect(200,0,100,100));
+	DestroyedBlue_N.setSpriteSheet(Destroyed); DestroyedBlue_N.addFrame(sf::IntRect(0,0,100,100));
+	DestroyedBlue_E.setSpriteSheet(Destroyed); DestroyedBlue_E.addFrame(sf::IntRect(100,0,100,100));
+	DestroyedBlue_W.setSpriteSheet(Destroyed); DestroyedBlue_W.addFrame(sf::IntRect(200,0,100,100));
 //====red
-	DestroyedRed_N.setTexture(Destroyed); DestroyedRed_N.setTextureRect(sf::IntRect(300,100,100,100));
-	DestroyedRed_E.setTexture(Destroyed); DestroyedRed_E.setTextureRect(sf::IntRect(400,100,100,100));
-	DestroyedRed_W.setTexture(Destroyed); DestroyedRed_W.setTextureRect(sf::IntRect(500,100,100,100));
+	DestroyedRed_N.setSpriteSheet(Destroyed); DestroyedRed_N.addFrame(sf::IntRect(300,100,100,100));
+	DestroyedRed_E.setSpriteSheet(Destroyed); DestroyedRed_E.addFrame(sf::IntRect(400,100,100,100));
+	DestroyedRed_W.setSpriteSheet(Destroyed); DestroyedRed_W.addFrame(sf::IntRect(500,100,100,100));
 //====green
-	DestroyedGreen_N.setTexture(Destroyed); DestroyedGreen_N.setTextureRect(sf::IntRect(600,200,100,100));
-	DestroyedGreen_E.setTexture(Destroyed); DestroyedGreen_E.setTextureRect(sf::IntRect(700,200,100,100));
-	DestroyedGreen_W.setTexture(Destroyed); DestroyedGreen_W.setTextureRect(sf::IntRect(800,200,100,100));
+	DestroyedGreen_N.setSpriteSheet(Destroyed); DestroyedGreen_N.addFrame(sf::IntRect(600,200,100,100));
+	DestroyedGreen_E.setSpriteSheet(Destroyed); DestroyedGreen_E.addFrame(sf::IntRect(700,200,100,100));
+	DestroyedGreen_W.setSpriteSheet(Destroyed); DestroyedGreen_W.addFrame(sf::IntRect(800,200,100,100));
 
 
 
@@ -484,7 +484,6 @@ Animation* Images::getSpawner(UnitType u, Direction d)
 		if(d == W)
 			return &SpawnGreen_W;
 		break;
-
 	case DEDr:
 		if(d == N)
 			return &DestroyedRed_N;
@@ -492,6 +491,7 @@ Animation* Images::getSpawner(UnitType u, Direction d)
 			return &DestroyedRed_E;
 		if(d == E)
 			return &DestroyedRed_E;
+		break;
 	case DEDb:
 		if(d == N)
 			return &DestroyedBlue_N;
@@ -499,6 +499,7 @@ Animation* Images::getSpawner(UnitType u, Direction d)
 			return &DestroyedBlue_E;
 		if(d == W)
 			return &DestroyedBlue_W;
+		break;
 	case DEDg:
 		if(d == N)
 			return &DestroyedGreen_N;
@@ -506,10 +507,9 @@ Animation* Images::getSpawner(UnitType u, Direction d)
 			return &DestroyedGreen_E;
 		if(d == W)
 			return &DestroyedGreen_W;
+		break;
 	}
 }
-
-
 
 
 

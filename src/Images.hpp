@@ -44,17 +44,17 @@ private:
 	Animation WalkRed_S, WalkRed_N, WalkRed_W, WalkRed_E, WalkRed_NW, WalkRed_NE, WalkRed_SE, WalkRed_SW;
 	Animation Attack_S, Attack_N, Attack_W, Attack_E, Attack_NW, Attack_NE, Attack_SE, Attack_SW;
 	Animation SpawnRed_N, SpawnRed_E, SpawnRed_W;
-	sf::Sprite DestroyedRed_N, DestroyedRed_E, DestroyedRed_W;
+	Animation DestroyedRed_N, DestroyedRed_E, DestroyedRed_W;
 	//Blue
 	Animation WalkBlue_S, WalkBlue_N, WalkBlue_W, WalkBlue_E, WalkBlue_NW, WalkBlue_NE, WalkBlue_SE, WalkBlue_SW;
 	Animation SpawnBlue_N, SpawnBlue_E, SpawnBlue_W;
-	sf::Sprite DestroyedBlue_N, DestroyedBlue_E, DestroyedBlue_W;
+	Animation DestroyedBlue_N, DestroyedBlue_E, DestroyedBlue_W;
 	//Green
 	Animation WalkGreen_S, WalkGreen_N, WalkGreen_W, WalkGreen_E, WalkGreen_NW, WalkGreen_NE, WalkGreen_SE, WalkGreen_SW;
 	Animation SpawnGreen_N, SpawnGreen_E, SpawnGreen_W;
 
 	Animation AiDed;
-	sf::Sprite DestroyedGreen_N, DestroyedGreen_E, DestroyedGreen_W;
+	Animation DestroyedGreen_N, DestroyedGreen_E, DestroyedGreen_W;
 //SM
 	Animation WalkDown, WalkUp, WalkLeft, WalkRight;
 
