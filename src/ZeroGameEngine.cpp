@@ -498,6 +498,11 @@ void ZeroGameEngine::MenuLoop(){
 
 			break;
 
+		case ZeroGameEngine::Transition:
+			// Generate monsters here, put them into the monster/trap/(w/e) lists to be drawn
+
+			break;
+
 		case ZeroGameEngine::Exiting:
 			// Exit the game
 			//=====================
@@ -569,13 +574,13 @@ void ZeroGameEngine::GameLoop(){
 		Player->playHero();
 
 		_mainWindow.draw(BG);
-		_mainWindow.draw(*Player);
 		// Draw other crap here, before display is called
 		for (std::vector<Item*>::iterator item = itemlist.begin(); item != itemlist.end(); item++){
 			_mainWindow.draw(**item);
 		}
 
 		_mainWindow.draw(animatedHeroSprite);
+		_mainWindow.draw(*Player);
 		_mainWindow.draw(Player->getShape());
 //	///////////////////////////// Moving Bullet
 		DrawDoors(current);
@@ -641,9 +646,9 @@ void ZeroGameEngine::DrawDoors(Room* currentRoom){
 // Updates what is seen in the window
 void ZeroGameEngine::UpdateFrame(){
 //	_mainWindow.clear();
-	for (std::vector<sf::Sprite>::iterator spr = SpriteList.begin(); spr!=SpriteList.end(); spr++){
-		; // do stuff here, render the image w/e
-	}
+//	for (std::vector<sf::Sprite>::iterator spr = SpriteList.begin(); spr!=SpriteList.end(); spr++){
+//		; // do stuff here, render the image w/e
+//	}
 //	_mainWindow.display();
 }
 
@@ -989,40 +994,43 @@ void ZeroGameEngine::updateTimer(){
 
 // Runs the things needed for display/shooting the hero's bullets
 void ZeroGameEngine::HeroShoot(sf::Vector2f position, std::string direction){
-//	movingbullet = true;
+	float x = position.x;
+	float y = position.y;
+	float height = animatedHeroSprite.getGlobalBounds().height;
+	float width = animatedHeroSprite.getGlobalBounds().width;
 	if (bulletCount > 0){
 		--bulletCount;
 		SoundManager("sounds/LaserShot.wav");
 		if (direction=="N"){
-			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{0, -50.f});
+			HeroBullet* bullet = new HeroBullet(x + width/2, y, 4, sf::Vector2f{0, -50.f});
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		} else if (direction=="E"){
-			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{50.f, 0});
+			HeroBullet* bullet = new HeroBullet(x + width, y + height/2, 4, sf::Vector2f{50.f, 0});
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		} else if (direction=="S"){
-			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{0, 50.f});
+			HeroBullet* bullet = new HeroBullet(x + width/2 - 35, y + height, 4, sf::Vector2f{0, 50.f});
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		} else if (direction=="W"){
-			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{-50.f, 0});
+			HeroBullet* bullet = new HeroBullet(x, y + height/2, 4, sf::Vector2f{-50.f, 0});
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		} else if (direction=="NE"){
-			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{50.f, -50.f});
+			HeroBullet* bullet = new HeroBullet(x + width, y, 4, sf::Vector2f{50.f, -50.f});
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		} else if (direction=="NW"){
-			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{-50.f, -50.f});
+			HeroBullet* bullet = new HeroBullet(x, y, 4, sf::Vector2f{-50.f, -50.f});
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		} else if (direction=="SW"){
-			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{-50.f, 50.f});
+			HeroBullet* bullet = new HeroBullet(x, y + height, 4, sf::Vector2f{-50.f, 50.f});
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		} else if (direction=="SE"){
-			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{50.f, 50.f});
+			HeroBullet* bullet = new HeroBullet(x + width, y + height, 4, sf::Vector2f{50.f, 50.f});
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		}
@@ -1042,6 +1050,14 @@ void ZeroGameEngine::DropMine(sf::Vector2f position, float damage){
 	HeroMine* mine = new HeroMine(position, damage);
 	mine->playSprite();
 	itemlist.push_back(mine);
+}
+
+void ZeroGameEngine::ClearRoom(){
+	for (std::vector<Item*>::iterator item = itemlist.begin(); item != itemlist.end(); ++item){
+		delete *item;
+	}
+	itemlist.clear();
+
 }
 
 //// Current Implementaion for Hero

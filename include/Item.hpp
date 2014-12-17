@@ -65,6 +65,10 @@ public:
 		play(*currentAnimation);
 	}
 
+	virtual void CheckWall() {
+
+	}
+
 	float getTime(){
 		return frameTime;
 	}
@@ -78,6 +82,8 @@ public:
 			return true;
 		return false;
 	}
+
+
 
 };
 

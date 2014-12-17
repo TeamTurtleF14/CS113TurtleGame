@@ -35,7 +35,7 @@ public:
 //	sf::Sound soundGun;
 //	sf::Sound soundBomb;
 
-	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver, Tutorial};
+	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver, Tutorial, Transition};
 	GameState _gameState;
 	sf::RenderWindow _mainWindow;
 	float _xSize;
@@ -111,7 +111,7 @@ public:
 	Room* Headroom;
 	Room* current;
 	std::string Doors;
-	std::vector<sf::Sprite> SpriteList;
+//	std::vector<sf::Sprite> SpriteList;
 
 	sf::Texture HealthBar;
 	sf::Sprite HealthBarSpr;
@@ -167,6 +167,7 @@ public:
 	void HeroShoot(sf::Vector2f position, std::string direction);
 	void DropBomb(sf::Vector2f position, float damage);		// Drops the bomb at (x,y)
 	void DropMine(sf::Vector2f position, float damage);		// Drops the mine at position.(x,y)
+	void ClearRoom();										// Before Moving onto the next room, clears current of any trash
 
 };
 

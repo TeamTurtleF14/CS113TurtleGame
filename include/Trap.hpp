@@ -21,33 +21,21 @@ private:
 	std::string ImageLocation;
 
 	unsigned int HitPoints;
-	float Speed;
 	unsigned int Attack;
 	unsigned int HitPointsMax;
-	unsigned int ShieldPoints;
-	unsigned int ShieldPointsMax;
+//	unsigned int ShieldPoints;
+//	unsigned int ShieldPointsMax;
 //	float MovementSpeed;
-	unsigned int AttackDamage;
-	unsigned int AttackSpeed;
-	unsigned int Armor;
-//	float InvulnerablityTime;
+	float AttackDamage;
+	float AttackSpeed;
 
 	//Space Marine character Variables.
 
 	float AttackCoolDown;
 
-	float AbilityCooldown1Current;
-	float AbilityCooldown1Max;
-	float AbilityCooldown2Current;
-	float AbilityCooldown2Max;
-	float AbilityCooldown3Current;
-	float AbilityCooldown3Max;
-	float AbilityCooldown4Current;
-	float AbilityCooldown4Max;
-
 	//AI-specific character variables.
 
-	float Energy;
+	float EnergyCurrent;
 	float EnergyMaximum;
 	float EnergyRechargeRate;
 
@@ -61,12 +49,25 @@ private:
 public:
 	std::pair<int, int> Coordinates;	// Stores current position (X, Y) of the character
 
-	virtual std::string StandingImage();		// Returns the location of the image
+	Trap(std::string direction, float Speed, float Damage)
+		: DirectionFacing{direction}, AttackSpeed{Speed}, EnergyMaximum{100},
+		  EnergyCurrent{EnergyMaximum}, EnergyRechargeRate{1}, AttackDamage{Damage}
+	{
+
+	}
+
+	virtual std::string StandingImage(){
+		// Returns the location of the image
+	}
 
 	// This version can take input, first should be preferred
-	virtual std::string StandingImage(std::string Direction);
+	virtual std::string StandingImage(std::string Direction){
 
-	virtual std::string AttackImage();
+	}
+
+	virtual std::string AttackImage(){
+
+	}
 
 
 	int getX(){
@@ -95,7 +96,11 @@ public:
 //		DirectionMoving = Direction;
 //	}
 
+	virtual sf::FloatRect getSettingBounds(){
+		// By Default
+		return sf::FloatRect(-20, 48, 1015, 635);
 
+	}
 
 
 };

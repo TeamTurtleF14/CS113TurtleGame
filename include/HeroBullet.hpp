@@ -19,10 +19,10 @@ private:
 
 public:
 
-	HeroBullet(sf::Vector2f position, float damage, sf::Vector2f movement)
+	HeroBullet(float x, float y, float damage, sf::Vector2f movement)
 		: Item(4, 0), BulletMovement{movement}
 	{
-		setPosition(position);
+		setPosition(x, y);
 		if (!BulletTexture.loadFromFile("images/Hero/HeroWeapons/spr_bullet_strip.png"))
 			return;
 		Bullet.setSpriteSheet(BulletTexture);
@@ -35,24 +35,6 @@ public:
 		switchTime = 1;
 	}
 
-//	if (movingbullet) {
-//		if (bulletTimer<5){
-//			std::cout << "one" << std::endl;
-//			animatedBlueBullet.play(BlueBullet);
-//			animatedBlueBullet.move(BulletMovement * frameTime.asSeconds());
-//			animatedBlueBullet.update(frameTime);
-//			bulletTimer += frameTime.asSeconds();
-//			_mainWindow.draw(animatedBlueBullet);
-//			BulletHit(animatedBlueBullet, movingbullet);
-//		} else {
-//			animatedBlueBullet.stop();
-//			movingbullet = false;
-//		}
-//	} else {
-////			std::cout << "three" << std::endl;
-//		bulletTimer = 0;
-//		animatedBlueBullet.setPosition(animatedHeroSprite.getPosition());
-//	}
 
 	void updateTimer(sf::Time frametime){
 		frameTime += frametime.asSeconds();

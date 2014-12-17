@@ -26,6 +26,7 @@ public:
 	Room* West;
 	Room* East;
 	bool isEnd;
+
 	bool visited;
 
 	Room(bool end=false)
