@@ -314,6 +314,9 @@ void ZeroGameEngine::initSprites(){
 
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 void ZeroGameEngine::SoundManager(std::string sound_file, bool bomb=false){
 	float high = 1.2;
 	float low = 0.8;
@@ -575,8 +578,13 @@ void ZeroGameEngine::GameLoop(){
 
 	sf::Sprite BG;
 //	Background.setRepeated(true);
-	if (!Background.loadFromFile("images/Backgrounds/Blue_Background-wall.jpg"))
-		return;
+	if (current->isEnd){
+		if (!Background.loadFromFile("images/Backgrounds/Purple_Background-wall.jpg"))
+			return;
+	}else {
+		if (!Background.loadFromFile("images/Backgrounds/Blue_Background-wall.jpg"))
+			return;
+	}
 	Background.setRepeated(true);
 	BG.setTexture(Background);
 	BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
@@ -690,11 +698,27 @@ void ZeroGameEngine::GameLoop(){
 
 		_mainWindow.draw(mouseDrag);
 		_mainWindow.display();
-		if (willEnterRoom(current, Player)){
+		if (willEnterEnd(current, Player)){
+			HeroWon = true;
+			_gameState = GameOver;
+		}else if (willEnterRoom(current, Player)){
 			char direction = whichRoom(current, Player);
 			current = current->getFromChar(direction);
 			setHero(direction, Player, animatedHeroSprite);
 			sf::sleep(sf::seconds(1));
+			if (current->isEnd){
+				if (!Background.loadFromFile("images/Backgrounds/Purple_Background-wall.jpg"))
+					return;
+				Background.setRepeated(true);
+				BG.setTexture(Background);
+				BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
+			} else {
+				if (!Background.loadFromFile("images/Backgrounds/Blue_Background-wall.jpg"))
+					return;
+				Background.setRepeated(true);
+				BG.setTexture(Background);
+				BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
+			}
 		}
 //		delete test;
 	}
@@ -719,6 +743,31 @@ void ZeroGameEngine::DrawDoors(Room* currentRoom){
 	if (!current->isAvailable('S')){
 //	if (current->isAvailable('S')){		//testing
 		_mainWindow.draw(SouthDoorSpr);
+	}
+	if (currentRoom->isEnd){
+		DrawDoor(currentRoom->AvailableRoomString()[0]);
+		currentRoom->endExitDir = currentRoom->AvailableRoomString()[0];
+	}
+}
+
+void ZeroGameEngine::DrawDoor(char side){
+	switch (side){
+	case 'N':
+		_mainWindow.draw(NorthDoorSpr);
+		return;
+		break;
+	case 'E':
+		_mainWindow.draw(EastDoorSpr);
+		return;
+		break;
+	case 'S':
+		_mainWindow.draw(WestDoorSpr);
+		return;
+		break;
+	case 'W':
+		_mainWindow.draw(SouthDoorSpr);
+		return;
+		break;
 	}
 }
 
