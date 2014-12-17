@@ -33,6 +33,9 @@ public:
 				return;
 			MineBlowUp.setSpriteSheet(DetonateMine);
 			MineBlowUp.addFrame(sf::IntRect(0, 0, 88, 91));
+			MineBlowUp.addFrame(sf::IntRect(89, 0, 88, 91));
+			MineBlowUp.addFrame(sf::IntRect(0, 92, 88, 91));
+			MineBlowUp.addFrame(sf::IntRect(89, 92, 88, 91));
 
 			currentAnimation = &Mine;
 

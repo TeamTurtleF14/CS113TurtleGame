@@ -10,10 +10,12 @@
 #include <vector>
 #include <stdlib.h>
 #include <algorithm>
+#include <ctime>
 
 // LayoutGen constructor
 LayoutGen::LayoutGen() {
 	// Initialize some variables
+	srand( time(NULL));
 	NumRooms = 20;	// # of rooms for entire level
 	CriticalPathRooms = 10;	// # of rooms from from start to end, including entrance/exit
 	AdditionalRooms = NumRooms - CriticalPathRooms;	// # of rooms outside of Crit Path

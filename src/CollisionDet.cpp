@@ -21,22 +21,37 @@ bool CollisionDet::willEnterRoom(Room* current, Hero* Player) {
 
 	if (posX > _xSize/2 - 100 && posX < _xSize/2){
 		if (posY < _ySize/32 + 32)
-			std::cout << "Enter NORTH" << std::endl << std::endl;
+			return true;
 		else if (posY > _ySize - 90)
-			std::cout << "Enter SOUTH" << std::endl << std::endl;
+			return true;
 	}
 	if (posY > _ySize/2 - 60 && posY < _ySize/2 + 10 ){
 		if (posX < -10)
-			std::cout << "Enter WEST" << std::endl << std::endl;
+			return true;
 		else if (posX > _xSize - 70)
-			std::cout << "Enter EAST" << std::endl << std::endl;
+			return true;
 	}
+	return false;
 
 }
 
 // Should only be called if the function above returns a 1, signals that he is near a room
 char CollisionDet::whichRoom(Room* current, Hero* player){
+	float posX = player->getX();
+	float posY = player->getY();
 
+	if (posX > _xSize/2 - 100 && posX < _xSize/2){
+		if (posY < _ySize/32 + 32)
+			return 'N';
+		else if (posY > _ySize - 90)
+			return 'S';
+	}
+	if (posY > _ySize/2 - 60 && posY < _ySize/2 + 10 ){
+		if (posX < -10)
+			return 'W';
+		else if (posX > _xSize - 70)
+			return 'E';
+	}
 }
 
 // Current Implementaion for Hero

@@ -8,6 +8,7 @@
 #include "ZeroGameEngine.hpp"
 #include <iostream>
 #include <typeinfo>
+#include <ctime>
 
 //ZeroGameEngine::GameState ZeroGameEngine::_gameState = Uninitialized;
 //ZeroGameEngine::GameState ZGE::_gameState = MainMenu;
@@ -32,6 +33,7 @@ ZeroGameEngine::ZeroGameEngine(){
 
 	initSprites();
 //	setHero('E', Player, animatedHeroSprite);
+	srand ( time(NULL) );
 
 }
 
@@ -335,7 +337,7 @@ void ZeroGameEngine::MenuLoop(){
 	sf::Texture Background;
 	Background.setRepeated(true);
 	sf::Sprite BG;
-	int load;
+	int load = 0;
 //	int trapnum;
 
 
@@ -348,11 +350,27 @@ void ZeroGameEngine::MenuLoop(){
 
 		case ZeroGameEngine::MainMenu:
 			// Display the Main Menu stuff
+			showCredits = false;
 			if (!BGM.openFromFile("sounds/music/GadzooksOpening.wav"))
 				return;
 			BGM.setLoop(true);
 			if (BGM.getStatus()!=sf::Music::Playing)
 				BGM.play();
+
+			//=====================
+			if (currentEvent.type == sf::Event::Closed)
+				_gameState = Exiting;
+			if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::Escape)
+            	_gameState = Exiting;
+			if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::Return){
+				//State currentState;
+				_gameState = Playing;
+//				if (tutorialSwitch)
+//					_gameState = Playing;
+//				else
+//					_gameState = Tutorial;
+			}
+			//=====================
 
 			if (!Background.loadFromFile("images/Backgrounds/titleScreen.png"))
 				return;
@@ -362,22 +380,6 @@ void ZeroGameEngine::MenuLoop(){
 			_mainWindow.clear(sf::Color::Black);
 			_mainWindow.draw(BG);
 			_mainWindow.display();
-
-
-
-			//=====================
-			if (currentEvent.type == sf::Event::Closed)
-				_gameState = Exiting;
-			if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::Escape)
-            	_gameState = Exiting;
-			if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::Return){
-				//State currentState;
-				if (tutorialSwitch)
-					_gameState = Playing;
-				else
-					_gameState = Tutorial;
-			}
-			//=====================
 
 			break;
 
@@ -445,16 +447,27 @@ void ZeroGameEngine::MenuLoop(){
 
 		case ZeroGameEngine::GameOver:
 			//
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+				if (showCredits){
+					_gameState = MainMenu;
+				}
+				else{
+					showCredits = true;
+				}
+			}
 			if (showCredits){
 				if (!Background.loadFromFile("images/Backgrounds/CreditScreen.png"))
-					if (BGM.getStatus()==sf::Music::Playing)
-						BGM.stop();
-				if (!BGM.openFromFile("sounds/music/Winner_Winner.wav")){
 					return;
+//					if (BGM.getStatus()==sf::Music::Playing)
+//						BGM.stop();
+				if (!load){
+					if (!BGM.openFromFile("sounds/music/Winner_Winner.wav")){
+						return;
+					}
+					BGM.setLoop(true);
+					if (BGM.getStatus()!=sf::Music::Playing)
+						BGM.play();
 				}
-				BGM.setLoop(true);
-				if (BGM.getStatus()!=sf::Music::Playing)
-					BGM.play();
 //				return;
 			} else if (HeroWon){
 				if (!Background.loadFromFile("images/Backgrounds/Player1_WinsScreen.png"))
@@ -468,13 +481,6 @@ void ZeroGameEngine::MenuLoop(){
 			_mainWindow.clear();
 			_mainWindow.draw(BG);
 			_mainWindow.display();
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
-				if (showCredits)
-					_gameState = MainMenu;
-				else
-					showCredits = true;
-				break;
-			}
 
 			break;
 
@@ -491,7 +497,8 @@ void ZeroGameEngine::MenuLoop(){
 
 			if (currentEvent.type == sf::Event::Closed)
 				_gameState = Exiting;
-
+			if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::Escape)
+            	_gameState = Exiting;
 			if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::Return){
 				if (tutorialSwitch){
 //					_gameState = Transition;
@@ -544,12 +551,14 @@ void ZeroGameEngine::RoomSetup(){
 	int x;
 	int y;
 //	std::cout << trapnum << std::endl;
-
+//	srand ( time(NULL) );
 	for (unsigned int i = 0; i < trapnum; ++i){
 		x = (rand() % (int)(_xSize -70))+ 10;
 		y = (rand() % (int)(_ySize - 90) + ((int)_ySize/32 + 32));
+//		std::cout << x << " " << y << std::endl;
 //		ArrowTrap* trap = new ArrowTrap(100.f, 80.f);
 		SlowTrap* trap = new SlowTrap(x, y);
+//		std::cout << trap->getPosition().x << " " << trap->getPosition().y << "ppp" <<  std::endl;
 		trap->playSprite();
 		traplist.push_back(trap);
 	}
@@ -562,7 +571,7 @@ void ZeroGameEngine::RoomSetup(){
 void ZeroGameEngine::GameLoop(){
 	sf::Texture Background;
 	// When changing rooms, have it reset
-	RoomSetup();
+//	RoomSetup();
 
 	sf::Sprite BG;
 //	Background.setRepeated(true);
@@ -572,12 +581,11 @@ void ZeroGameEngine::GameLoop(){
 	BG.setTexture(Background);
 	BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
 
-//	if (!BGM.openFromFile("sounds/music/ANewDevelopment.wav"))
-//		return;
-//	BGM.setLoop(true);
-//	if (BGM.getStatus()!=sf::Music::Playing){
-//		BGM.play();
-//	}
+	if (!BGM.openFromFile("sounds/music/ANewDevelopment.wav"))
+		return;
+	BGM.setLoop(true);
+	if (BGM.getStatus()!=sf::Music::Playing)
+		BGM.play();
 
 	std::string music2[2] = {"sounds/music/ANewDevelopment.wav", "sounds/music/OfBitsAndNibbles.wav"};
 	if (BGM.getStatus()!=sf::Music::Playing){
@@ -586,13 +594,26 @@ void ZeroGameEngine::GameLoop(){
 		BGM.setLoop(false);
 	}
 
+	if (!BGM.openFromFile("sounds/music/ANewDevelopment.wav")){
+		return;
+	}
+	BGM.setLoop(true);
+	if (BGM.getStatus()!=sf::Music::Playing)
+		BGM.play();
+
 	while (_gameState == Playing){
 		sf::Event currentEvent;
 		if (!current->loaded){
 			current->loaded = true;
-			current->visited = false;
 			RoomSetup();
+			std::cout << "setup " << std::endl;
 		}
+//		if (!BGM.openFromFile("sounds/music/ANewDevelopment.wav")){
+//			return;
+//		}
+//		BGM.setLoop(true);
+//		if (BGM.getStatus()!=sf::Music::Playing)
+//			BGM.play();
 		while (_mainWindow.pollEvent(currentEvent)){
 			if (currentEvent.type == sf::Event::Closed){
 				_gameState = Exiting;
@@ -618,24 +639,11 @@ void ZeroGameEngine::GameLoop(){
 		Player->playHero();
 
 		_mainWindow.draw(BG);
+		DrawDoors(current);
 		// Draw other crap here, before display is called
 		for (std::vector<Item*>::iterator item = itemlist.begin(); item != itemlist.end(); item++){
 			_mainWindow.draw(**item);
 		}
-
-		_mainWindow.draw(animatedHeroSprite);
-		_mainWindow.draw(*Player);
-		_mainWindow.draw(Player->getShape());
-		std::cout << Player->getVelocity() << std::endl;
-//	///////////////////////////// Moving Bullet
-		DrawDoors(current);
-//		DrawHealthBar();
-		DrawHealthBar(Player);
-//			DrawHero(Player);
-
-//////////////////////////////////////// Moving Bullet Stuff End
-//		HeroBomb* test = new HeroBomb(100, 100, 0);
-//		test->playSprite();
 
 
 //		_mainWindow.draw(animatedBlueBullet);
@@ -671,8 +679,23 @@ void ZeroGameEngine::GameLoop(){
 			}
 		}
 
+		_mainWindow.draw(animatedHeroSprite);
+		_mainWindow.draw(*Player);
+		_mainWindow.draw(Player->getShape());
+		std::cout << Player->getVelocity() << std::endl;
+
+		//		DrawHealthBar();
+		DrawHealthBar(Player);
+		//			DrawHero(Player);
+
 		_mainWindow.draw(mouseDrag);
 		_mainWindow.display();
+		if (willEnterRoom(current, Player)){
+			char direction = whichRoom(current, Player);
+			current = current->getFromChar(direction);
+			setHero(direction, Player, animatedHeroSprite);
+			sf::sleep(sf::seconds(1));
+		}
 //		delete test;
 	}
 //	return;
@@ -682,18 +705,19 @@ void ZeroGameEngine::GameLoop(){
 void ZeroGameEngine::DrawDoors(Room* currentRoom){
 //	std::cout << current->OccupiedRoomString() << std::endl;
 	if (!current->isAvailable('N')){
+//	if (current->isAvailable('N')){
 		_mainWindow.draw(NorthDoorSpr);
 	}
-//	if (!current->isAvailable('E')){
-	if (current->isAvailable('E')){		//testing
+	if (!current->isAvailable('E')){
+//	if (current->isAvailable('E')){		//testing
 		_mainWindow.draw(EastDoorSpr);
 	}
-//	if (!current->isAvailable('W')){
-	if (current->isAvailable('W')){		// testing
+	if (!current->isAvailable('W')){
+//	if (current->isAvailable('W')){		// testing
 		_mainWindow.draw(WestDoorSpr);
 	}
-//	if (!current->isAvailable('S')){
-	if (current->isAvailable('S')){		//testing
+	if (!current->isAvailable('S')){
+//	if (current->isAvailable('S')){		//testing
 		_mainWindow.draw(SouthDoorSpr);
 	}
 }
@@ -1025,8 +1049,8 @@ void ZeroGameEngine::setHero(char cameFrom, Hero* player, AnimatedSprite& player
 		break;
 	case 'E':	// Come from the East Door
 		player->setDirectionFacing('E');
-		player->setXY(sf::Vector2f(984, 352));
-		playerSprite.setPosition(984, 352);
+		player->setXY(sf::Vector2f(9, 352));
+		playerSprite.setPosition(9, 352);
 		break;
 	case 'S': 	// Should have from the North Door
 		player->setDirectionFacing('S');
@@ -1035,8 +1059,8 @@ void ZeroGameEngine::setHero(char cameFrom, Hero* player, AnimatedSprite& player
 		break;
 	case 'W':	// Come from the West door
 		player->setDirectionFacing('W');
-		player->setXY(sf::Vector2f(9, 352));
-		playerSprite.setPosition(9, 352);
+		player->setXY(sf::Vector2f(984, 352));
+		playerSprite.setPosition(984, 352);
 		break;
 	}
 }

@@ -36,17 +36,15 @@ public:
 			return;
 		BombBlowUp.setSpriteSheet(DetonateBomb);
 		BombBlowUp.addFrame(sf::IntRect(0, 0, 50, 50));
-//		BombBlowUp.addFrame(sf::IntRect(0, 0, 119, 118));
-//		BombBlowUp.addFrame(sf::IntRect(119, 0, 119, 118));
-//		BombBlowUp.addFrame(sf::IntRect(238, 0, 119, 118));
-//		BombBlowUp.addFrame(sf::IntRect(357, 0, 119, 118));
-//		BombBlowUp.addFrame(sf::IntRect(476, 0, 119, 118));
+		BombBlowUp.addFrame(sf::IntRect(51, 0, 50, 50));
+		BombBlowUp.addFrame(sf::IntRect(0, 51, 50, 50));
+		BombBlowUp.addFrame(sf::IntRect(51, 51, 50, 50));
 
 		currentAnimation = &Bomb;
 
 		frameTime = 0;
 		switchSignal = false;
-		switchTime = 1.5;
+		switchTime = 5;
 		blowup = false;
 		startSound();
 	}
@@ -76,6 +74,7 @@ public:
 				blowup = 1;
 				sound.setPlayingOffset(sf::seconds(5.f));
 			}
+			update(frametime);
 			if (sound.getStatus()!=sound.Playing)
 				sound.play();
 			if (frameTime > switchTime){

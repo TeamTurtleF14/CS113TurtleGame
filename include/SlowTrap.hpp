@@ -23,10 +23,10 @@ public:
 		: Trap("S", 100, 80)
 	{
 		setPosition(x, y);
-		if (!SlowTrapTexture.loadFromFile("images/Traps/SlowTrap.jpg"))
+		if (!SlowTrapTexture.loadFromFile("images/Traps/SlowTrap.png"))
 			return;
 		SlowTrapAnimated.setSpriteSheet(SlowTrapTexture);
-		SlowTrapAnimated.addFrame(sf::IntRect(0, 0, 50, 50));
+		SlowTrapAnimated.addFrame(sf::IntRect(0, 0, 100, 100));
 
 		currentAnimation = &SlowTrapAnimated;
 
@@ -41,7 +41,7 @@ public:
 
 	void updateTimer(sf::Time frametime, Hero* player){
 		if (!switchSignal){
-			if (player->distance(getPosition()) < 80){
+			if (player->distance(sf::Vector2f(getPosition().x + 25, getPosition().y + 25)) < 100){
 				switchSignal = true;
 			}
 		} else {

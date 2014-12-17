@@ -121,7 +121,7 @@ public:
 	sf::Texture HealthBar;
 	sf::Sprite HealthBarSpr;
 
-	sf::Sprite HealthBarSprC;
+//	sf::Sprite HealthBarSprC;
 
 	// Door Art Containers
 	sf::Texture NorthDoor;
