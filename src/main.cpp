@@ -282,8 +282,6 @@ int main()
 			{
 				aiUnits[i]->DetectSm(animatedSm, aiUnits, img.getWalk(aiUnits[i]->getType(), aiUnits[i]->getDir()), img.getAiAttack(aiUnits[i]->getDir()));
 			}
-
-
 		}
 
 //===================== END MOUSE PRESSES =======================================

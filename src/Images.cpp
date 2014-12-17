@@ -72,6 +72,30 @@ int Images::loadImages()
 		return 1;
 	}
 
+	if (!HealthBar.loadFromFile("NewImages/BlueHealthBar.png"))
+		return 1;
+
+	if (!EnergyBar.loadFromFile("NewImages/Energy Container.png"))
+		return 1;
+
+	if (!HPBitFirst.loadFromFile("NewImages/FirstRedHealthBarPiece.png"))
+		return 1;
+
+	if (!HPBit.loadFromFile("NewImages/RestOfRedHealthBarPieces.png"))
+		return 1;
+
+	if (!SPBitFirst.loadFromFile("NewImages/FirstBlueHealthBarPiece.png"))
+		return 1;
+
+	if (!SPBit.loadFromFile("NewImages/RestOfBlueHealthPiece.png"))
+		return 1;
+
+	if (!EBitFirst.loadFromFile("NewImages/FirstGreenHealthBarPiece.png"))
+			return 1;
+
+	if (!EBit.loadFromFile("NewImages/RestOfGreenHealthBarPieces.png"))
+			return 1;
+
 	return 0;
 }
 
@@ -282,6 +306,15 @@ void Images::loadSprites()
     WalkRight.setSpriteSheet(SmWalk);
     for(int i = 0; i < 4; i++){
 		WalkRight.addFrame(sf::IntRect(i*40, 210, 40, 70));}
+
+
+	HealthBarSpr.setTexture(HealthBar);
+	HPBitFirstSpr.setTexture(HPBitFirst);
+	HPBitSpr.setTexture(HPBit);
+	SPBitFirstSpr.setTexture(SPBitFirst);
+	SPBitSpr.setTexture(SPBit);
+
+
 
 }
 
