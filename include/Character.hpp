@@ -14,6 +14,7 @@
 #include <SFML/Graphics.hpp>
 #include "Animation.hpp"
 #include "AnimatedSprite.hpp"
+#include <cmath>
 
 class Character
 {
@@ -38,6 +39,7 @@ private:
 	unsigned int HitPointsMax;
 
 	float Speed;
+	float velocityspr;
 	unsigned int Attack;
 	unsigned int ShieldPoints;
 	unsigned int ShieldPointsMax;		// Should be normally 12, no?
@@ -224,6 +226,7 @@ public:
 	}
 
 	void setXY(sf::Vector2f coordinate){
+		velocityspr = Speed;
 		Coordinates.x = coordinate.x;
 		Coordinates.y = coordinate.y;
 	}
@@ -264,6 +267,14 @@ public:
 
 	float getSpeed(){
 		return Speed;
+	}
+
+	float getVelocity(){
+		return velocityspr;
+	}
+
+	void setVelocity(float movementspeed){
+		velocityspr = movementspeed;
 	}
 
 	void setSpeed(float speed){
@@ -331,6 +342,12 @@ public:
 
 	void useABL4(){
 		ABLCooldown4Current = 0;
+	}
+
+	float distance(sf::Vector2f pos)
+	{
+		float d = sqrt(pow(Coordinates.x - pos.x, 2) + pow(Coordinates.y - pos.y, 2));
+		return d;
 	}
 
 

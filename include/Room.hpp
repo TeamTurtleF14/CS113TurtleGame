@@ -28,6 +28,7 @@ public:
 	bool isEnd;
 
 	bool visited;
+	bool loaded;
 
 	Room(bool end=false)
 	:North(NULL), South(NULL), West(NULL), East(NULL), isEnd(end)
@@ -37,6 +38,7 @@ public:
 		RoomDir.insert(std::pair<const char, int>('S', 2));
 		RoomDir.insert(std::pair<const char, int>('E', 3));
 		visited = false;
+		loaded = false;
 	}
 
 	// sets the next room

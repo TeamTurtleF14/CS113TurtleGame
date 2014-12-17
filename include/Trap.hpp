@@ -16,6 +16,7 @@ class Trap : public Item
 {
 private:
 
+public:
 	//Trap Base class
 
 	std::string ImageLocation;
@@ -46,7 +47,7 @@ private:
 
 
 
-public:
+//public:
 	std::pair<int, int> Coordinates;	// Stores current position (X, Y) of the character
 
 	Trap(std::string direction, float Speed, float Damage)
@@ -78,7 +79,7 @@ public:
 		return Coordinates.second;
 	}
 
-	char getDirectionFacing(){
+	std::string getDirectionFacing(){
 		return DirectionFacing;
 	}
 
@@ -101,6 +102,14 @@ public:
 		return sf::FloatRect(-20, 48, 1015, 635);
 
 	}
+
+	virtual void updateTimer(sf::Time frameTime, Hero* player){
+		return;
+	}
+
+//	virtual void playSprite() {
+//		play(*currentAnimation);
+//	}
 
 
 };

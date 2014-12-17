@@ -12,6 +12,7 @@
 #include "Animation.hpp"
 #include <SFML/Audio.hpp>
 
+
 // Base class for all objects on field that are stationary.
 // Hero's bombs, mines, traps, etc
 // Will contain the nesscessary crap to draw the objects as well
@@ -39,6 +40,11 @@ public:
 		:TimeLimit{TimeLimit}, switchTime{switchTime}, AnimatedSprite{sf::seconds(.8f), true, false}
 	{
 		frameTime = 0;
+	}
+
+	Item()
+		: AnimatedSprite{sf::seconds(.8f), true, false}
+	{
 	}
 
 

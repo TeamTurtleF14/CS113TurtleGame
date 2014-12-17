@@ -11,7 +11,7 @@
 #include "Arrow.hpp"
 #include "Item.hpp"
 
-class ArrowTrap : public Trap{
+class ArrowTrap : public Trap {
 private:
 
 //	float frameTime;							// a float that signals how many frames have been updated, keeps track of
@@ -21,7 +21,7 @@ private:
 
 	sf::Texture ArrowTrapTexture;
 //	sf::Texture DetonateBomb;
-	Animation ArrowTrap;
+	Animation ArrowTrapAnimated;
 //	Animation BombBlowUp;
 	bool blowup;
 
@@ -30,16 +30,20 @@ private:
 
 public:
 
-	ArrowTrap(float Speed, float damage, )
-		: Trap("S", Speed, damage)
+	ArrowTrap(float x, float y)
+		: Trap("S", 100, 80)
 	{
 //		setPosition(position);					// reset within constuctor
-		if (!ArrowTrapTexture.loadFromFile("images/Traps/ArrowTrap.jpg"))
+		if (!ArrowTrapTexture.loadFromFile("images/Traps/ArrowTrap.png"))
 			return;
-		ArrowTrap.setSpriteSheet(ArrowTrapTexture);
-		ArrowTrap.addFrame(sf::IntRect(0, 0, 100, 100));
+		ArrowTrapAnimated.setSpriteSheet(ArrowTrapTexture);
+		ArrowTrapAnimated.addFrame(sf::IntRect(0, 0, 100, 100));
 
-		currentAnimation = &ArrowTrap;
+		currentAnimation = &ArrowTrapAnimated;
+
+		float random = (rand() % 800) + 100;
+
+		setPosition(random, 10);
 
 		frameTime = 0;
 	}
@@ -55,13 +59,13 @@ public:
 	}
 
 	void updateTimer(sf::Time frametime){
-		if (!arrow->isPlaying())
-			stop();
-		else
+		if (arrowOut){
 			arrow->playSprite();
+		}
 		if ("clicked"){
 //			fire
-			if (EnergyCurrent==EnergyMaximum){
+//			if (EnergyCurrent==EnergyMaximum){
+			if (EnergyCurrent > EnergyMaximum){
 				fireArrow();
 			}
 		} else {
@@ -75,9 +79,14 @@ public:
 
 	void fireArrow(){
 		arrowOut = true;
-		arrow = new Arrow(getPosition());
+		float x = getPosition().x + getGlobalBounds().width/2;
+		float y = getPosition().y + getGlobalBounds().height;
+		arrow = new Arrow(x, y, AttackDamage, AttackSpeed);
 	}
 
+	sf::FloatRect getSettingBounds(){
+		return sf::FloatRect(0, 0, 100, 950);
+	}
 
 
 };

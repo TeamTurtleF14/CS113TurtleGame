@@ -14,13 +14,13 @@ class Arrow: public Item {
 private:
 
 	sf::Texture ArrowTexture;
-	Animation Arrow;
+	Animation Bolt;
 	sf::Vector2f ArrowMovement;
 
 public:
 
-	Arrow(sf::Vector2f position, float damage, float speed)
-		: ArrowMovement{0, 100.f}								// for now assume that arrows will only go south
+	Arrow(float x, float y, float damage, float speed)
+		: ArrowMovement{0, 100.f}, Item()							// for now assume that arrows will only go south
 	{
 	}
 

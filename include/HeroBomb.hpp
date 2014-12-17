@@ -31,14 +31,16 @@ public:
 		Bomb.setSpriteSheet(BombTexture);
 		Bomb.addFrame(sf::IntRect(0, 0, 88, 91));
 
-		if (!DetonateBomb.loadFromFile("images/Hero/HeroWeapons/Explosion-Sprite-Sheet.png"))
+//		if (!DetonateBomb.loadFromFile("images/Hero/HeroWeapons/Explosion-Sprite-Sheet.png"))
+		if (!DetonateBomb.loadFromFile("images/Hero/HeroWeapons/bomb_explosion.png"))
 			return;
 		BombBlowUp.setSpriteSheet(DetonateBomb);
-		BombBlowUp.addFrame(sf::IntRect(0, 0, 119, 118));
-		BombBlowUp.addFrame(sf::IntRect(119, 0, 119, 118));
-		BombBlowUp.addFrame(sf::IntRect(238, 0, 119, 118));
-		BombBlowUp.addFrame(sf::IntRect(357, 0, 119, 118));
-		BombBlowUp.addFrame(sf::IntRect(476, 0, 119, 118));
+		BombBlowUp.addFrame(sf::IntRect(0, 0, 50, 50));
+//		BombBlowUp.addFrame(sf::IntRect(0, 0, 119, 118));
+//		BombBlowUp.addFrame(sf::IntRect(119, 0, 119, 118));
+//		BombBlowUp.addFrame(sf::IntRect(238, 0, 119, 118));
+//		BombBlowUp.addFrame(sf::IntRect(357, 0, 119, 118));
+//		BombBlowUp.addFrame(sf::IntRect(476, 0, 119, 118));
 
 		currentAnimation = &Bomb;
 

@@ -20,6 +20,8 @@ ZeroGameEngine::ZeroGameEngine(){
 
 	timetest = 0;
 
+	RoomsVisited = 0;
+
 	Player = new Hero(1200, 1200, 6, 12, _xSize, _ySize);
 
 	LayoutMaker = new LayoutGen();
@@ -39,10 +41,15 @@ ZeroGameEngine::~ZeroGameEngine(){
 	delete currentHeroAnimation;
 	delete Player;
 	delete LayoutMaker;
-	for (std::vector<Item*>::iterator item = itemlist.begin(); item != itemlist.end(); item++){
+	for (std::vector<Item*>::iterator item = itemlist.begin(); item != itemlist.end(); ++item){
 		delete *item;
 	}
 	itemlist.clear();
+
+	for (std::vector<Trap*>::iterator trap = traplist.begin(); trap != traplist.end(); ++trap){
+		delete *trap;
+	}
+	traplist.clear();
 
 }
 
@@ -63,7 +70,7 @@ void ZeroGameEngine::Start(){
 	showCredits = false;
 	HeroWon = false;
     movingbullet = false;
-    bulletTimer = 0;
+//    bulletTimer = 0;
     bulletCount = 3;
 
 	while (!isExiting()){
@@ -328,6 +335,8 @@ void ZeroGameEngine::MenuLoop(){
 	sf::Texture Background;
 	Background.setRepeated(true);
 	sf::Sprite BG;
+	int load;
+//	int trapnum;
 
 
 	while (_mainWindow.pollEvent(currentEvent)){
@@ -484,8 +493,10 @@ void ZeroGameEngine::MenuLoop(){
 				_gameState = Exiting;
 
 			if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::Return){
-				if (tutorialSwitch)
+				if (tutorialSwitch){
+//					_gameState = Transition;
 					_gameState = Playing;
+				}
 				else
 					tutorialSwitch = true;
 			}
@@ -495,11 +506,6 @@ void ZeroGameEngine::MenuLoop(){
 			_mainWindow.clear();
 			_mainWindow.draw(BG);
 			_mainWindow.display();
-
-			break;
-
-		case ZeroGameEngine::Transition:
-			// Generate monsters here, put them into the monster/trap/(w/e) lists to be drawn
 
 			break;
 
@@ -519,11 +525,44 @@ void ZeroGameEngine::MenuLoop(){
 ///// END MenuLoop Start GameLoop
 /////////////////////////////////////////////////////////////////////////////////////
 
+void ZeroGameEngine::RoomSetup(){
+	if (!current->visited){
+		++RoomsVisited;
+		current->visited = true;
+	}
+	for (std::vector<Item*>::iterator item = itemlist.begin(); item != itemlist.end(); ++item){
+		delete *item;
+	}
+	itemlist.clear();
+
+	for (std::vector<Trap*>::iterator trap = traplist.begin(); trap!= traplist.end(); ++trap) {
+		delete *trap;
+	}
+	traplist.clear();
+
+	int trapnum = (rand() % ((int)sqrt(RoomsVisited))) + 1 ;
+	int x;
+	int y;
+//	std::cout << trapnum << std::endl;
+
+	for (unsigned int i = 0; i < trapnum; ++i){
+		x = (rand() % (int)(_xSize -70))+ 10;
+		y = (rand() % (int)(_ySize - 90) + ((int)_ySize/32 + 32));
+//		ArrowTrap* trap = new ArrowTrap(100.f, 80.f);
+		SlowTrap* trap = new SlowTrap(x, y);
+		trap->playSprite();
+		traplist.push_back(trap);
+	}
+
+
+}
+
 
 
 void ZeroGameEngine::GameLoop(){
 	sf::Texture Background;
 	// When changing rooms, have it reset
+	RoomSetup();
 
 	sf::Sprite BG;
 //	Background.setRepeated(true);
@@ -549,6 +588,11 @@ void ZeroGameEngine::GameLoop(){
 
 	while (_gameState == Playing){
 		sf::Event currentEvent;
+		if (!current->loaded){
+			current->loaded = true;
+			current->visited = false;
+			RoomSetup();
+		}
 		while (_mainWindow.pollEvent(currentEvent)){
 			if (currentEvent.type == sf::Event::Closed){
 				_gameState = Exiting;
@@ -582,6 +626,7 @@ void ZeroGameEngine::GameLoop(){
 		_mainWindow.draw(animatedHeroSprite);
 		_mainWindow.draw(*Player);
 		_mainWindow.draw(Player->getShape());
+		std::cout << Player->getVelocity() << std::endl;
 //	///////////////////////////// Moving Bullet
 		DrawDoors(current);
 //		DrawHealthBar();
@@ -613,9 +658,19 @@ void ZeroGameEngine::GameLoop(){
 				++item;
 			}
 		}
-//		std::cout << typeid(test).name() << std::endl;
-//		if (typeid(*test)==typeid(HeroBomb))
-//			std::cout << "11111111111111111111111" << std::endl;
+
+		for (std::vector<Trap*>::iterator trap = traplist.begin(); trap != traplist.end();){
+			if (!(**trap).isPlaying()){
+				delete *trap;
+				trap = traplist.erase(trap);
+			} else {
+				(**trap).playSprite();
+				_mainWindow.draw(**trap);
+				(**trap).updateTimer(frameTime, Player);
+				++trap;
+			}
+		}
+
 		_mainWindow.draw(mouseDrag);
 		_mainWindow.display();
 //		delete test;
@@ -719,7 +774,7 @@ void ZeroGameEngine::DrawHero(Hero* hero){
 }
 
 void ZeroGameEngine::ControlHero(sf::Event event) {
-	float moveSpeed = Player->getSpeed();
+	float moveSpeed = Player->getVelocity();
 	Player->updateCooldown(frameTime.asSeconds());
 
 

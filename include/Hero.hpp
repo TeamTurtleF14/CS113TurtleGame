@@ -30,6 +30,7 @@ public:
 	}
 
 	Hero(unsigned int startHP, unsigned int maxHP, unsigned int startSP, unsigned int maxSP, int SizeX, int SizeY)
+//	: Character(startHP, maxHP, 0, maxSP, SizeX, SizeY), AnimatedSprite{sf::seconds(.8f), true, false}
 		: Character(startHP, maxHP, startSP, maxSP, SizeX, SizeY), AnimatedSprite{sf::seconds(.8f), true, false}
 	{
 		setPosition((SizeX/2 - 50), SizeY - (SizeY/5));
@@ -63,10 +64,10 @@ public:
 
 	bool isShield(){
 		if (getCurrentSP()>0){
-			std::cout << "true" << std::endl;
+//			std::cout << "true" << std::endl;
 			return true;
 		}
-		std::cout << "end" << std::endl;
+//		std::cout << "end" << std::endl;
 		return false;
 	}
 

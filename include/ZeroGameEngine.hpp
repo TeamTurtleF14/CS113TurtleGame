@@ -22,20 +22,25 @@
 #include "HeroMine.hpp"
 #include "HeroBullet.hpp"
 #include <stdlib.h>
+#include "Trap.hpp"
+#include "ArrowTrap.hpp"
+#include "SlowTrap.hpp"
 
 
 class ZeroGameEngine : public CollisionDet {
 public:
 
+	int RoomsVisited;
 	float timetest;
 	std::vector<Item*> itemlist;
+	std::vector<Trap*> traplist;
 
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
 //	sf::Sound soundGun;
 //	sf::Sound soundBomb;
 
-	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver, Tutorial, Transition};
+	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver, Tutorial};
 	GameState _gameState;
 	sf::RenderWindow _mainWindow;
 	float _xSize;
@@ -168,6 +173,7 @@ public:
 	void DropBomb(sf::Vector2f position, float damage);		// Drops the bomb at (x,y)
 	void DropMine(sf::Vector2f position, float damage);		// Drops the mine at position.(x,y)
 	void ClearRoom();										// Before Moving onto the next room, clears current of any trash
+	void RoomSetup();
 
 };
 
