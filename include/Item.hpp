@@ -9,6 +9,7 @@
 #define INCLUDE_ITEM_HPP_
 
 #include "AnimatedSprite.hpp"
+#include "Animation.hpp"
 
 // Base class for all objects on field that are stationary.
 // Hero's bombs, mines, traps, etc
@@ -17,33 +18,47 @@
 class Item : public AnimatedSprite
 {
 private:
-	sf::Vector2f coordinates{0.f, 0.f};			// Items such as Hero's bombs, mines, traps shouldnt change
-	float frameTime;							// a float that signals how many frames have been updated, keeps track of
 
 public:
+//	sf::Vector2f coordinates{0.f, 0.f};			// Items such as Hero's bombs, mines, traps shouldnt change
+	float frameTime;							// a float that signals how many frames have been updated, keeps track of
+	float TimeLimit;							// Time before taking action e.g: time until blow up
+	float switchTime;							// Time between action (blowing up) and being deleted, stop()
+	bool switchSignal;
 
-	Item(float setX, float setY)
-		: coordinates {setX, setY}
+//public:
+	Animation* currentAnimation;
+
+//public:
+
+	Item(float TimeLimit, float switchTime)
+		:TimeLimit{TimeLimit}, switchTime{switchTime}, AnimatedSprite(sf::seconds(.8f), true, false)
 	{
+		frameTime = 0;
+	}
+
+
+	Animation* getAnimation(){
+		return currentAnimation;
+	}
+
+
+
+	bool withinBounds(){
 
 	}
 
 
-	sf::Vector2f getPosition(){
-		return coordinates;
-	}
-
-	void setXY(float X, float Y){
-		coordinates.x = X;
-		coordinates.y = Y;
-	}
-
-	bool withinBounds(sf::Vector2f position){
-
-	}
-
-	void updateTime(float time){
+	virtual void updateTimer(float time){
 		frameTime += time;
+	}
+
+	virtual void checkDetonate(std::vector<AnimatedSprite> enemy){
+
+	}
+
+	virtual void playSprite() {
+
 	}
 
 	float getTime(){
@@ -52,6 +67,12 @@ public:
 
 	void resetTimer() {
 		frameTime = 0;
+	}
+
+	bool sendDamage(){
+		if (switchSignal)
+			return true;
+		return false;
 	}
 
 };

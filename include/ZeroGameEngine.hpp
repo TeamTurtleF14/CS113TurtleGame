@@ -17,12 +17,20 @@
 //#include "AnimatedSprite.hpp"
 #include <SFML/Audio.hpp>
 #include "CollisionDet.hpp"
+#include "Item.hpp"
+#include "HeroBomb.hpp"
+#include "HeroMine.hpp"
+#include <stdlib.h>
 
 
 class ZeroGameEngine : public CollisionDet {
 public:
 
 	float timetest;
+	std::vector<Item*> itemlist;
+
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
 
 	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver, Tutorial};
 	GameState _gameState;
@@ -139,6 +147,7 @@ public:
 	void initSprites();						// Loads up all the starting sprites
 	void Start();							// Starts the game and enters the main loop
 	bool isExiting();						// Returns bool that signals if game is ending
+	void SoundManager(std::string sound_file);			// Plays music, takes directory
 	void MenuLoop();						// Main Game loop and Menu Loop
 	void GameLoop();
 	void UpdateFrame();						// Update the gui, will need to take positions from the characters
@@ -152,6 +161,8 @@ public:
 	void setHero(char cameFrom, Hero* player, AnimatedSprite& playerSprite); // Set Hero position near the door entered from
 	void updateTimer();						// uses the vector of items, updates their timer
 	void HeroShoot(std::string direction);
+	void DropBomb(sf::Vector2f position, float damage);		// Drops the bomb at (x,y)
+	void DropMine(sf::Vector2f position, float damage);		// Drops the mine at position.(x,y)
 
 };
 

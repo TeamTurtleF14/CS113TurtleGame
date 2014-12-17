@@ -49,6 +49,8 @@ public:
 		}
 	}
 
+
+
 //	std::string StandingImage(){
 //		switch (DirectionFacing){
 //		case 'N':

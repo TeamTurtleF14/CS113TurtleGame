@@ -6,6 +6,8 @@
  */
 
 #include "ZeroGameEngine.hpp"
+#include <iostream>
+#include <typeinfo>
 
 //ZeroGameEngine::GameState ZeroGameEngine::_gameState = Uninitialized;
 //ZeroGameEngine::GameState ZGE::_gameState = MainMenu;
@@ -37,7 +39,9 @@ ZeroGameEngine::~ZeroGameEngine(){
 	delete currentHeroAnimation;
 	delete Player;
 	delete LayoutMaker;
-
+	for (std::vector<Item*>::iterator item = itemlist.begin(); item != itemlist.end(); item++){
+		delete *item;
+	}
 }
 
 
@@ -307,6 +311,19 @@ void ZeroGameEngine::initSprites(){
 
 }
 
+void ZeroGameEngine::SoundManager(std::string sound_file){
+	float high = 1.2;
+	float low = 0.8;
+	if (!buffer.loadFromFile(sound_file))
+		return;
+	sound.setBuffer(buffer);
+	float random = (rand() % 5)+ 8;
+	sound.setPitch(random/10);
+	sound.setVolume(100);
+	if (sound.getStatus()!=sound.Playing)
+		sound.play();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////
 
 void ZeroGameEngine::MenuLoop(){
@@ -425,7 +442,15 @@ void ZeroGameEngine::MenuLoop(){
 			//
 			if (showCredits){
 				if (!Background.loadFromFile("images/Backgrounds/CreditScreen.png"))
+					if (BGM.getStatus()==sf::Music::Playing)
+						BGM.stop();
+				if (!BGM.openFromFile("sounds/music/Winner_Winner.wav")){
 					return;
+				}
+				BGM.setLoop(true);
+				if (BGM.getStatus()!=sf::Music::Playing)
+					BGM.play();
+//				return;
 			} else if (HeroWon){
 				if (!Background.loadFromFile("images/Backgrounds/Player1_WinsScreen.png"))
 					return;
@@ -507,11 +532,18 @@ void ZeroGameEngine::GameLoop(){
 	BG.setTexture(Background);
 	BG.setTextureRect(sf::IntRect(0, 0, _xSize, _ySize));
 
-	if (!BGM.openFromFile("sounds/music/ANewDevelopment.wav"))
-		return;
-	BGM.setLoop(true);
+//	if (!BGM.openFromFile("sounds/music/ANewDevelopment.wav"))
+//		return;
+//	BGM.setLoop(true);
+//	if (BGM.getStatus()!=sf::Music::Playing){
+//		BGM.play();
+//	}
+
+	std::string music2[2] = {"sounds/music/ANewDevelopment.wav", "sounds/music/OfBitsAndNibbles.wav"};
 	if (BGM.getStatus()!=sf::Music::Playing){
+		BGM.openFromFile(music2[(std::rand() % 2)]);
 		BGM.play();
+		BGM.setLoop(false);
 	}
 
 	while (_gameState == Playing){
@@ -523,7 +555,7 @@ void ZeroGameEngine::GameLoop(){
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				_gameState = Paused;
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
 				_gameState = GameOver;
 
 				ControlHero(currentEvent);			// Logic for controlling Hero
@@ -537,16 +569,20 @@ void ZeroGameEngine::GameLoop(){
 //		std::cout << animatedHeroSprite.getPosition().x << " " << animatedHeroSprite.getPosition().y << std::endl;
 
 		_mainWindow.clear(sf::Color::Black);
+		Player->updateCooldown(frameTime.asSeconds());
 		_mainWindow.draw(BG);
 		// Draw other crap here, before display is called
+		for (std::vector<Item*>::iterator item = itemlist.begin(); item != itemlist.end(); item++){
+			_mainWindow.draw(**item);
+		}
+
+		_mainWindow.draw(animatedHeroSprite);
+		_mainWindow.draw(Player->getShape());
+//	///////////////////////////// Moving Bullet
 		DrawDoors(current);
 //		DrawHealthBar();
 		DrawHealthBar(Player);
 //			DrawHero(Player);
-		_mainWindow.draw(animatedHeroSprite);
-		_mainWindow.draw(Player->getShape());
-//	///////////////////////////// Moving Bullet
-
 		if (movingbullet) {
 			if (bulletTimer<5){
 				std::cout << "one" << std::endl;
@@ -568,11 +604,34 @@ void ZeroGameEngine::GameLoop(){
 		std::cout << bulletTimer << std::endl;
 
 //////////////////////////////////////// Moving Bullet Stuff End
+//		HeroBomb* test = new HeroBomb(100, 100, 0);
+//		test->playSprite();
 
 
-//		_mainWindow.draw(animatedBlueBullet);
+		_mainWindow.draw(animatedBlueBullet);
+		for (std::vector<Item*>::iterator item = itemlist.begin(); item != itemlist.end();){
+			if (!(**item).isPlaying()){
+				delete *item;
+				item = itemlist.erase(item);
+			} else if (typeid(**item)==typeid(HeroMine)){
+				(**item).playSprite();
+				_mainWindow.draw(**item);
+				std::cout << "HeroMine" << std::endl;
+//				(**item).checkDetonate();
+				++item;
+			} else {
+				(**item).playSprite();
+				_mainWindow.draw(**item);
+				(**item).updateTimer(frameTime.asSeconds());
+				++item;
+			}
+		}
+//		std::cout << typeid(test).name() << std::endl;
+//		if (typeid(*test)==typeid(HeroBomb))
+//			std::cout << "11111111111111111111111" << std::endl;
 		_mainWindow.draw(mouseDrag);
 		_mainWindow.display();
+//		delete test;
 	}
 //	return;
 }
@@ -674,8 +733,32 @@ void ZeroGameEngine::DrawHero(Hero* hero){
 
 void ZeroGameEngine::ControlHero(sf::Event event) {
 	float moveSpeed = Player->getSpeed();
+	Player->updateCooldown(frameTime.asSeconds());
 
-//	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::E)
+
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+		// Bomb
+		HeroMovement.x = 0;
+		HeroMovement.y = 0;
+		if (Player->readyABL1()){
+			Player->useABL1();
+			DropBomb(animatedHeroSprite.getPosition(), 0);
+		}
+		else
+			;
+	}
+
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
+		// Mine
+		HeroMovement.x = 0;
+		HeroMovement.y = 0;
+		if (Player->readyABL2()){
+			Player->useABL2();
+			DropMine(animatedHeroSprite.getPosition(), 0);
+		}
+		else
+			;
+	}
 
 	if (event.type == sf::Event::KeyPressed &&
 			(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Left))){
@@ -821,8 +904,8 @@ void ZeroGameEngine::ControlHero(sf::Event event) {
     Player->setXY(animatedHeroSprite.getPosition());
     Player->update(frameTime.asSeconds());
 //    animatedHeroSprite.setOrigin(0, 0);
-    std::cout << "position " <<animatedHeroSprite.getGlobalBounds().height << " " << animatedHeroSprite.getGlobalBounds().width;
-    std::cout << " " << animatedHeroSprite.getGlobalBounds().left << " " << animatedHeroSprite.getGlobalBounds().top << std::endl;
+//    std::cout << "position " <<animatedHeroSprite.getGlobalBounds().height << " " << animatedHeroSprite.getGlobalBounds().width;
+//    std::cout << " " << animatedHeroSprite.getGlobalBounds().left << " " << animatedHeroSprite.getGlobalBounds().top << std::endl;
 //    std::cout << animatedHeroSprite.getFrameTime().asSeconds() << std::endl;
 }
 
@@ -925,6 +1008,7 @@ void ZeroGameEngine::updateTimer(){
 // Runs the things needed for display/shooting the hero's bullets
 void ZeroGameEngine::HeroShoot(std::string direction){
 	movingbullet = true;
+	SoundManager("sounds/LaserShot.wav");
 	if (direction=="N"){
 		BulletMovement.x = 0;
 		BulletMovement.y = -50.f;
@@ -950,6 +1034,18 @@ void ZeroGameEngine::HeroShoot(std::string direction){
 		BulletMovement.x = 50.f;
 		BulletMovement.y = 50.f;
 	}
+}
+
+void ZeroGameEngine::DropBomb(sf::Vector2f position, float damage){
+	HeroBomb* bomb = new HeroBomb(position.x, position.y, damage);
+	bomb->playSprite();
+	itemlist.push_back(bomb);
+}
+
+void ZeroGameEngine::DropMine(sf::Vector2f position, float damage){
+	HeroMine* mine = new HeroMine(position.x, position.y, damage);
+	mine->playSprite();
+	itemlist.push_back(mine);
 }
 
 //// Current Implementaion for Hero

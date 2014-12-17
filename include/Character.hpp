@@ -49,7 +49,7 @@ private:
 
 	//Space Marine character Variables.
 	// ABL = Ability
-	float ABLCooldown1Current;
+	float ABLCooldown1Current;					// Bomb
 	float ABLCooldown1Max;
 	float ABLCooldown2Current;
 	float ABLCooldown2Max;
@@ -129,6 +129,17 @@ public:
 		shape.setRadius(unitRadius);
 		shape.setFillColor(sf::Color::Cyan);
 //		shape.setOrigin(unitRadius, unitRadius);
+
+		ABLCooldown1Max = 40;
+		ABLCooldown2Max = 60;
+		ABLCooldown3Max = 80;
+		ABLCooldown4Max = 100;
+
+		ABLCooldown1Current = ABLCooldown1Max;					// Bomb
+		ABLCooldown2Current = ABLCooldown2Max;
+		ABLCooldown3Current = ABLCooldown3Max;
+		ABLCooldown4Current = ABLCooldown4Max;
+
 	}
 
 	std::string StandingImage();		// Returns the location of the image
@@ -257,6 +268,69 @@ public:
 
 	void setSpeed(float speed){
 		Speed = speed;
+	}
+
+	void updateCooldown(float frametime){
+		if (ABLCooldown1Current < ABLCooldown1Max)
+			ABLCooldown1Current += frametime;
+		else
+			ABLCooldown1Current = ABLCooldown1Max;
+
+		if (ABLCooldown2Current < ABLCooldown2Max)
+			ABLCooldown2Current += frametime;
+		else
+			ABLCooldown2Current = ABLCooldown2Max;
+
+		if (ABLCooldown2Current < ABLCooldown2Max)
+			ABLCooldown2Current += frametime;
+		else
+			ABLCooldown2Current = ABLCooldown2Max;
+
+		if (ABLCooldown2Current < ABLCooldown2Max)
+			ABLCooldown2Current += frametime;
+		else
+			ABLCooldown2Current = ABLCooldown2Max;
+
+	}
+
+	bool readyABL1(){
+		if (ABLCooldown1Current == ABLCooldown1Max)
+			return true;
+		return false;
+	}
+
+	bool readyABL2(){
+		if (ABLCooldown2Current == ABLCooldown2Max)
+			return true;
+		return false;
+	}
+
+	bool readyABL3(){
+		if (ABLCooldown3Current == ABLCooldown3Max)
+			return true;
+		return false;
+	}
+
+	bool readyABL4(){
+		if (ABLCooldown4Current == ABLCooldown4Max)
+			return true;
+		return false;
+	}
+
+	void useABL1(){
+		ABLCooldown1Current = 0;
+	}
+
+	void useABL2(){
+		ABLCooldown2Current = 0;
+	}
+
+	void useABL3(){
+		ABLCooldown3Current = 0;
+	}
+
+	void useABL4(){
+		ABLCooldown4Current = 0;
 	}
 
 
