@@ -1,4 +1,0 @@
-HeroDiagonalWalk_1l = 0 0 88 91
-HeroDiagonalWalk_2l = 89 0 88 91
-HeroDiagonalWalk_3l = 0 92 88 91
-HeroDiagonalWalk_4l = 89 92 88 91
