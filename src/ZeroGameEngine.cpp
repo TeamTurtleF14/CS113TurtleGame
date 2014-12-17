@@ -42,6 +42,8 @@ ZeroGameEngine::~ZeroGameEngine(){
 	for (std::vector<Item*>::iterator item = itemlist.begin(); item != itemlist.end(); item++){
 		delete *item;
 	}
+	itemlist.clear();
+
 }
 
 
@@ -209,18 +211,9 @@ void ZeroGameEngine::initSprites(){
 //    animatedHeroSprite {sf::seconds(0.05), true, false};
     animatedHeroSprite.setPosition(sf::Vector2f(_xSize/2 - 50, _ySize - (_ySize/5)));
 
-    speed = 80.f;
+//    speed = 80.f;
     noKeyWasPressed = true;
     frameTime = frameClock.restart();
-
-
-////// Bullet Crap
-    if (!blueBulletTexture.loadFromFile("images/Hero/HeroWeapons/spr_bullet_strip.png"))
-    	return;
-    BlueBullet.setSpriteSheet(blueBulletTexture);
-    BlueBullet.addFrame(sf::IntRect(0, 0, 39, 39));
-	animatedBlueBullet.setPosition(sf::Vector2f(animatedHeroSprite.getPosition()));
-
 
 // Hero Animation Crap End
 
@@ -320,12 +313,12 @@ void ZeroGameEngine::SoundManager(std::string sound_file, bool bomb=false){
 	sound.setBuffer(buffer);
 	float random = (rand() % 5)+ 8;
 	sound.setPitch(random/10);
-	sound.setVolume(100);
 	if (bomb)
 		sound.setPlayingOffset(sf::seconds(1.8f));
 	if (sound.getStatus()!=sound.Playing)
 		sound.play();
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -573,7 +566,10 @@ void ZeroGameEngine::GameLoop(){
 
 		_mainWindow.clear(sf::Color::Black);
 		Player->updateCooldown(frameTime.asSeconds());
+		Player->playHero();
+
 		_mainWindow.draw(BG);
+		_mainWindow.draw(*Player);
 		// Draw other crap here, before display is called
 		for (std::vector<Item*>::iterator item = itemlist.begin(); item != itemlist.end(); item++){
 			_mainWindow.draw(**item);
@@ -602,7 +598,7 @@ void ZeroGameEngine::GameLoop(){
 			} else if (typeid(**item)==typeid(HeroMine)){
 				(**item).playSprite();
 				_mainWindow.draw(**item);
-				std::cout << "HeroMine" << std::endl;
+//				std::cout << "HeroMine" << std::endl;
 //				(**item).checkDetonate();
 				++item;
 			} else {
@@ -888,7 +884,7 @@ void ZeroGameEngine::ControlHero(sf::Event event) {
     // update AnimatedSprite
     animatedHeroSprite.update(frameTime);
     Player->setXY(animatedHeroSprite.getPosition());
-    Player->update(frameTime.asSeconds());
+    Player->updateShape(frameTime.asSeconds());
 //    animatedHeroSprite.setOrigin(0, 0);
 //    std::cout << "position " <<animatedHeroSprite.getGlobalBounds().height << " " << animatedHeroSprite.getGlobalBounds().width;
 //    std::cout << " " << animatedHeroSprite.getGlobalBounds().left << " " << animatedHeroSprite.getGlobalBounds().top << std::endl;
@@ -1010,7 +1006,7 @@ void ZeroGameEngine::HeroShoot(sf::Vector2f position, std::string direction){
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		} else if (direction=="W"){
-			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{50.f, 0});
+			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{-50.f, 0});
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		} else if (direction=="NE"){
@@ -1022,7 +1018,7 @@ void ZeroGameEngine::HeroShoot(sf::Vector2f position, std::string direction){
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		} else if (direction=="SW"){
-			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{50.f, 50.f});
+			HeroBullet* bullet = new HeroBullet(position, 4, sf::Vector2f{-50.f, 50.f});
 			bullet->playSprite();
 			itemlist.push_back(bullet);
 		} else if (direction=="SE"){
@@ -1039,7 +1035,7 @@ void ZeroGameEngine::DropBomb(sf::Vector2f position, float damage){
 	HeroBomb* bomb = new HeroBomb(position, damage);
 	bomb->playSprite();
 	itemlist.push_back(bomb);
-	SoundManager("sounds/TimeBomb.wav", true);
+//	SoundManager("sounds/TimeBomb.wav", true);
 }
 
 void ZeroGameEngine::DropMine(sf::Vector2f position, float damage){

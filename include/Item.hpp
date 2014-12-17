@@ -10,6 +10,7 @@
 
 #include "AnimatedSprite.hpp"
 #include "Animation.hpp"
+#include <SFML/Audio.hpp>
 
 // Base class for all objects on field that are stationary.
 // Hero's bombs, mines, traps, etc
@@ -25,6 +26,9 @@ public:
 	float TimeLimit;							// Time before taking action e.g: time until blow up
 	float switchTime;							// Time between action (blowing up) and being deleted, stop()
 	bool switchSignal;
+
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
 
 //public:
 	Animation* currentAnimation;

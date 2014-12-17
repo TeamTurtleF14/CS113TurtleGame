@@ -17,6 +17,7 @@ private:
 	sf::Texture DetonateBomb;
 	Animation Bomb;
 	Animation BombBlowUp;
+	bool blowup;
 
 
 public:
@@ -43,7 +44,9 @@ public:
 
 		frameTime = 0;
 		switchSignal = false;
-		switchTime = 1;
+		switchTime = 1.5;
+		blowup = false;
+		startSound();
 	}
 
 //	Animation* getAnimation(){
@@ -63,13 +66,19 @@ public:
 	}
 
 	void updateTimer(sf::Time frametime){
-//		std::cout << "asasdasdasdadaasdadsdassdasdkadqwkdhiawfiuahfilefhiewwehf" << std::endl;
 		frameTime += frametime.asSeconds();
-		std::cout << frameTime << std::endl;
+		if (sound.getStatus()!=sound.Playing)
+			sound.play();
 		if (switchSignal){
+			if (!blowup){
+				blowup = 1;
+				sound.setPlayingOffset(sf::seconds(5.f));
+			}
+			if (sound.getStatus()!=sound.Playing)
+				sound.play();
 			if (frameTime > switchTime){
-//				std::cout << "STOPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP" << std::endl;
 				stop();
+				sound.stop();
 			}
 		} else {
 			if (frameTime > TimeLimit){
@@ -78,6 +87,13 @@ public:
 				switchSignal = true;
 			}
 		}
+	}
+
+	void startSound(){
+		if (!buffer.loadFromFile("sounds/TimeBomb.wav"))
+			return;
+		sound.setBuffer(buffer);
+		sound.setPlayingOffset(sf::seconds(0.f));
 	}
 
 //	void stopSprite(){

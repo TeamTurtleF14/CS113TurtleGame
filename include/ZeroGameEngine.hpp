@@ -32,6 +32,8 @@ public:
 
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
+//	sf::Sound soundGun;
+//	sf::Sound soundBomb;
 
 	enum GameState {Uninitialized, Paused, MainMenu, Playing, Exiting, GameOver, Tutorial};
 	GameState _gameState;

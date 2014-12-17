@@ -57,7 +57,7 @@ public:
 	void updateTimer(sf::Time frametime){
 		frameTime += frametime.asSeconds();
 		if (frameTime > TimeLimit || (!isPlaying())){
-			std::cout << "stopping <" << std::endl;
+//			std::cout << "stopping <" << std::endl;
 			stop();
 		} else if (frameTime < TimeLimit){
 //			play();

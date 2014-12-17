@@ -11,12 +11,16 @@
 
 #include "Character.hpp"
 
-class Hero: public Character {
+class Hero: public Character, public AnimatedSprite {
 
 private:
-
+	sf::Texture ShieldTexture;
+	Animation Shield;
+	bool ShieldUP;
 
 public:
+
+
 
 	int number;
 
@@ -26,13 +30,21 @@ public:
 	}
 
 	Hero(unsigned int startHP, unsigned int maxHP, unsigned int startSP, unsigned int maxSP, int SizeX, int SizeY)
-		: Character(startHP, maxHP, startSP, maxSP, SizeX, SizeY)
+		: Character(startHP, maxHP, startSP, maxSP, SizeX, SizeY), AnimatedSprite{sf::seconds(.8f), true, false}
 	{
+		setPosition((SizeX/2 - 50), SizeY - (SizeY/5));
+
+		if (!ShieldTexture.loadFromFile("images/Forcefield/Forcefield1B.png"))
+			return;
+		Shield.setSpriteSheet(ShieldTexture);
+		Shield.addFrame(sf::IntRect(0, 0, 88, 91));
+
 		DirectionFacing = 'N';
 		setX(SizeX/2 - 50);
 		setY(SizeY - (SizeY/5));
 		number = 0;
 		setSpeed(40.f);
+		ShieldUP = true;
 	}
 
 	// Returns the image location to render the Hero just standing
@@ -49,77 +61,29 @@ public:
 		}
 	}
 
+	bool isShield(){
+		if (getCurrentSP()>0){
+			std::cout << "true" << std::endl;
+			return true;
+		}
+		std::cout << "end" << std::endl;
+		return false;
+	}
+
+	void updateHero(){
+		playHero();
+	}
+
+	void playHero(){
+		if (isShield()){
+			setPosition(getXY());
+			play(Shield);
+		}
+		else
+			stop();
+	}
 
 
-//	std::string StandingImage(){
-//		switch (DirectionFacing){
-//		case 'N':
-//			switch (number){
-//			case 0:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/BackWalk/HeroWalk_1b.png";
-//			case 1:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/BackWalk/HeroWalk_2b.png";
-//			case 2:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/BackWalk/HeroWalk_3b.png";
-//			case 3:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/BackWalk/HeroWalk_4b.png";
-//			default:
-//				return "images/Hero/HeroMovement/BackWalk/HeroWalk_1b.png";
-//			}
-//		case 'S':
-//			switch (number){
-//			case 0:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/ForwardWalk/HeroWalk_1f.png";
-//			case 1:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/ForwardWalk/HeroWalk_2f.png";
-//			case 2:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/ForwardWalk/HeroWalk_3f.png";
-//			case 3:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/ForwardWalk/HeroWalk_4f.png";
-//			default:
-//				return "images/Hero/HeroMovement/ForwardWalk/HeroWalk_1f.png";
-//			}
-//		case 'W':
-//			switch (number){
-//			case 0:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/LeftWalk/HeroWalk_1l.png";
-//			case 1:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/LeftWalk/HeroWalk_2l.png";
-//			case 2:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/LeftWalk/HeroWalk_3l.png";
-//			case 3:
-//				changeAnimationLevel();
-//				return "images/Hero/HeroMovement/LeftWalk/HeroWalk_4l.png";
-//			default:
-//				return "images/Hero/HeroMovement/LeftWalk/HeroWalk_1l.png";
-//			}
-//		case 'E':
-//			changeAnimationLevel();
-//			switch (number){
-//			case 0:
-//				return "images/Hero/HeroMovement/RightWalk/HeroWalk_1r.png";
-//			case 1:
-//				return "images/Hero/HeroMovement/RightWalk/HeroWalk_2r.png";
-//			case 2:
-//				return "images/Hero/HeroMovement/RightWalk/HeroWalk_3r.png";
-//			case 3:
-//				return "images/Hero/HeroMovement/RightWalk/HeroWalk_4r.png";
-//			default:
-//				return "images/Hero/HeroMovement/RightWalk/HeroWalk_1r.png";
-//			}
-//		}
-//	}
 
 
 };

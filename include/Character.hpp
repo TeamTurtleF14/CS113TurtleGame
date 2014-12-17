@@ -79,11 +79,11 @@ public:
 
 	sf::CircleShape getShape() { return shape;}
 
-	void update(){
+	void updateShape(){
 		shape.move(velocity);
 	}
 
-	void update(float time){
+	void updateShape(float time){
 		shape.move(velocity * time);
 	}
 
